@@ -15,7 +15,7 @@ MonoBehaviour:
   selectedInterfaceTab: 0
   gridExists: 1
   previousBuildToolIndex: -1
-  selectedBuildToolIndex: -1
+  selectedBuildToolIndex: 0
   selectedPrefabIndex: 32
   prefabPath: Assets/FSP/Platformer/Models/Prefabs
   selectedPrefabPaletteFolderIndex: 0

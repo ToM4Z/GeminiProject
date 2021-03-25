@@ -9,27 +9,12 @@ public class PlayerInput : MonoBehaviour
     private CharacterController _charController;
     public float speed = 6f;
     public float gravity = -9.8f;
-    public Vector3 jump;
-    public float jumpForce = 2.0f;
-
-    public bool isGrounded;
-    Rigidbody rb;
-
+    public float jumpHeight = 1f;
+    
     void Start()
     {
         _charController = GetComponent<CharacterController>();
-        rb = GetComponent<Rigidbody>();
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
-    }
 
-    void OnCollisionStay()
-    {
-        isGrounded = true;
-    }
-
-    void OnCollisionExit()
-    {
-        isGrounded = false;
     }
 
     void Update()
@@ -39,14 +24,20 @@ public class PlayerInput : MonoBehaviour
         Vector3 movement = new Vector3(deltaX, 0, deltaZ);
         movement = Vector3.ClampMagnitude(movement, speed);
 
+        movement.y = gravity;
+        
         movement *= Time.deltaTime;
+
+        if (Input.GetButtonDown("Jump") && _charController.isGrounded)
+            movement.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
+
         movement = transform.TransformDirection(movement);
+
+        
+
         _charController.Move(movement);
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
-            isGrounded = false;
-        }
+        
+
     }
 }
