@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5fd28d118e3f54681cbd57341ebc04, type: 3}
   m_Name: InterfaceState
   m_EditorClassIdentifier: 
-  selectedInterfaceTab: 1
+  selectedInterfaceTab: 0
   gridExists: 1
   previousBuildToolIndex: -1
-  selectedBuildToolIndex: 0
-  selectedPrefabIndex: 3
+  selectedBuildToolIndex: -1
+  selectedPrefabIndex: 32
   prefabPath: Assets/FSP/Platformer/Models/Prefabs
   selectedPrefabPaletteFolderIndex: 0
   prefabPaletteColumnCount: 6
   previousPaintToolIndex: -1
   selectedPaintToolIndex: -1
   selectedMaterialIndex: -1
-  materialPath: Assets/FSP/Modular Pixel Forest/Materials
+  materialPath: Assets/FSP/Platformer/Models/Materials
   selectedMaterialPaletteFolderIndex: 0
   materialPaletteColumnCount: 3
