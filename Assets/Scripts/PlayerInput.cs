@@ -6,38 +6,38 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerInput : MonoBehaviour
 {
-    private CharacterController _charController;
-    public float speed = 6f;
-    public float gravity = -9.8f;
-    public float jumpHeight = 1f;
-    
-    void Start()
-    {
-        _charController = GetComponent<CharacterController>();
+    private CharacterController controller;
+    private Vector3 playerVelocity;
+    private bool groundedPlayer;
+    public float playerSpeed = 2.0f;
+    public float jumpHeight = 1.0f;
+    public float gravityValue = -9.81f;
 
+    private void Start()
+    {
+        controller = gameObject.GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        float deltaX = Input.GetAxis("Horizontal") * speed;
-        float deltaZ = Input.GetAxis("Vertical") * speed;
-        Vector3 movement = new Vector3(deltaX, 0, deltaZ);
-        movement = Vector3.ClampMagnitude(movement, speed);
+        groundedPlayer = controller.isGrounded;
 
-        movement.y = gravity;
-        
-        movement *= Time.deltaTime;
+        if (groundedPlayer && playerVelocity.y < 0){
+            playerVelocity.y = 0f;
+        }
 
-        if (Input.GetButtonDown("Jump") && _charController.isGrounded)
-            movement.y += Mathf.Sqrt(jumpHeight * -2f * gravity);
+        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        move = Vector3.ClampMagnitude(move, playerSpeed);
+        move = transform.TransformDirection(move);
+        controller.Move(move * Time.deltaTime * playerSpeed);
 
-        movement = transform.TransformDirection(movement);
+        // Changes the height position of the player..
+        if (Input.GetButtonDown("Jump") && groundedPlayer)
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+        }
 
-        
-
-        _charController.Move(movement);
-
-        
-
+        playerVelocity.y += gravityValue * Time.deltaTime;
+        controller.Move(playerVelocity * Time.deltaTime);
     }
 }
