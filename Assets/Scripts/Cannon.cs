@@ -17,7 +17,7 @@ public class Cannon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //baseRotonda.Rotate(0,0,1);
+        baseRotonda.Rotate(0,0,1);
         //canna.Rotate(0,0,1);
     }
 }
