@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public int playerLives = 3;
     public int hp = 5;
-    public int goldCoinCount = 0;
+    public int normalGearCount = 0;
     void Start()
     {
         
@@ -18,11 +18,15 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    public void increaseGoldCoins(){
-        goldCoinCount++;
-        if (goldCoinCount == 100){
+    public void increaseNormalGear(){
+        normalGearCount++;
+        if (normalGearCount == 100){
             playerLives++;
-            goldCoinCount = 0;
+            normalGearCount = 0;
         }
+    }
+
+    public void Damage(int dam){
+
     }
 }
