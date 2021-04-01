@@ -16,6 +16,7 @@ public class Cannon_Ball : MonoBehaviour
     void Update()
     {
         transform.Translate(0,0,speed * Time.deltaTime);
+        Destroy (gameObject, 10);
     }
 
     void OnTriggerEnter(Collider other) {
