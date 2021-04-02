@@ -21,13 +21,15 @@ public abstract class IAEnemy : MonoBehaviour
     protected EStatus status, oldStatus;
     protected Rigidbody rig;
     protected Transform player;
+    protected bool attacking;
+    protected Coroutine attackCoroutine;
 
     protected FOVDetection fov;
 
     protected virtual void Start()
     {
         rig = GetComponent<Rigidbody>();
-        fov = this.GetComponentInChildren<FOVDetection>();
+        fov = GetComponentInChildren<FOVDetection>();
     }
 
     protected void ChangeStatus(EStatus s)
@@ -44,10 +46,10 @@ public abstract class IAEnemy : MonoBehaviour
 
         ChangeStatus(EStatus.WARNED);
         player = _target;
-        StartCoroutine("isPlayerVisibleYet", 5f);
+        //StartCoroutine("isPlayerVisibleYet", 5f);
     }
 
-    private IEnumerator isPlayerVisibleYet(float delay)
+    /*private IEnumerator isPlayerVisibleYet(float delay)
     {
         bool exit = false;
         while (!exit)
@@ -63,7 +65,7 @@ public abstract class IAEnemy : MonoBehaviour
                 exit = true;
             }
         }
-    }
+    }*/
 
     public void hitted()
     {

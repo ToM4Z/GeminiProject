@@ -9,15 +9,15 @@ public class FOVDetection : MonoBehaviour
     public float viewRadius;                        // raggio del fov
     public LayerMask targetMask;                    // i layer che indica come nemici
     public LayerMask obstacleMask;                  // i layer che indica come ostacoli
+                                                    
+    [HideInInspector]
+    public List<Transform> visibleTargets = new List<Transform>();     // lista dei nemici individuati, pubblica cosi che l'editor può disegnarli
 
-    [HideInInspector]                               // lista dei nemici individuati, pubblica cosi che l'editor può disegnarli
-    public List<Transform> visibleTargets = new List<Transform>();
-
-    private IAEnemy enemy;
-
+    private IAEnemy enemy;                          // script dell'IA del nemico
+    
     void Start()
     {
-        enemy = this.gameObject.GetComponentInParent<IAEnemy>();
+        enemy = GetComponentInParent<IAEnemy>();
         StartCoroutine("FindTargetsWithDelay", .1f);
     }
 
@@ -62,7 +62,7 @@ public class FOVDetection : MonoBehaviour
             Vector3 dirToTarget = (target.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
-                if (toggleSeeThroughObstacles || !Physics.Raycast(transform.position, dirToTarget, Vector3.Distance(transform.position, target.position), obstacleMask))
+                if (toggleSeeThroughObstacles || !Physics.Raycast(transform.position, dirToTarget, distanceTo(target), obstacleMask))
                 {
                     visibleTargets.Add(target);
                 }
@@ -83,5 +83,10 @@ public class FOVDetection : MonoBehaviour
     {
         FindVisibleTargets();
         return visibleTargets.Count == 1;
+    }
+
+    public float distanceTo(Transform target)
+    {
+        return Vector3.Distance(transform.position, target.position);
     }
 }
