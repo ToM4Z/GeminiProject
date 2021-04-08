@@ -32,9 +32,9 @@ public class Cannon : MonoBehaviour
         Ray ray = new Ray(baseRotonda.position, baseRotonda.up);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit)){
-            Debug.Log(hit.transform.position);
+            //Debug.Log(hit.transform.position);
             GameObject hitObject = hit.transform.gameObject;
-            Debug.Log(hit.collider.gameObject.name);
+            //Debug.Log(hit.collider.gameObject.name);
                 if (hitObject.GetComponent<PlayerController>()) {
                     if (canShoot){             
                         _cannonBall = Instantiate(cannonBallPrefab) as GameObject;
