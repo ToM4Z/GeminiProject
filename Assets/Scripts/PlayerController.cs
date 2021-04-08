@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public int playerLives = 3;
     public int hp = 5;
     public int normalGearCount = 0;
+    public int bonusGearCount = 0;
     void Start()
     {
         
@@ -24,6 +25,10 @@ public class PlayerController : MonoBehaviour
             playerLives++;
             normalGearCount = 0;
         }
+    }
+
+    public void increaseBonusGear(){
+        bonusGearCount++;
     }
 
     public void Damage(int dam){
