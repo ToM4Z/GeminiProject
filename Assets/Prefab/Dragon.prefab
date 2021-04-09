@@ -6205,7 +6205,7 @@ GameObject:
   - component: {fileID: 8285312597438316165}
   - component: {fileID: 8285312597438316164}
   - component: {fileID: 8285312597438316167}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Dragon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6274,6 +6274,9 @@ MonoBehaviour:
   speedRotate: 60
   obstacleRange: 5
   distanceToWalk: 10
+  attackTime: 4.5
+  pauseToAttackTime: 3
+  targetPathPoint: {x: 0, y: 0, z: 0}
 --- !u!1 &8285312597447988994
 GameObject:
   m_ObjectHideFlags: 0
