@@ -130,19 +130,4 @@ public class IAEnemyFollowPathAttackLookAt : IAEnemy
 
     }
 
-    /*void OnParticleTrigger()
-    {
-        print("particle collision");
-
-        //Get all particles that entered a box collider
-        List<ParticleSystem.Particle> enteredParticles = new List<ParticleSystem.Particle>();
-        int enterCount = particle.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, enteredParticles);
-
-        foreach (ParticleSystem.Particle particle in enteredParticles)
-        {
-            if(player.gameObject.GetComponent<Collider>().bounds.Contains(particle.position))
-                Debug.Log("player hitted by fire dragon");
-        }
-
-    }*/
 }
