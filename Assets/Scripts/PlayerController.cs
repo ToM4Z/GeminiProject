@@ -31,6 +31,10 @@ public class PlayerController : MonoBehaviour
         bonusGearCount++;
     }
 
+    public void increaseHP(){
+        hp++;
+    }
+
     public void Damage(int dam){
 
     }
