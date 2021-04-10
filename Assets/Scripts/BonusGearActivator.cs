@@ -35,11 +35,12 @@ public class BonusGearActivator : MonoBehaviour
     }
 
     public void spawnBonusGears(){
-        
+        Debug.Log("Ou");
         _particle = Instantiate(particlePrefab) as GameObject;
         _particle.transform.position = this.gameObject.transform.position;
         for (int i = 0; i < this.gameObject.transform.childCount; i++) {
             Transform spawner = this.gameObject.transform.GetChild(i);
+            Debug.Log(i);
             _bonusGear = Instantiate(bonusGearPrefab) as GameObject;
             GearBonus gb = _bonusGear.GetComponent<GearBonus>();
             gb.setTime(timeStay);
