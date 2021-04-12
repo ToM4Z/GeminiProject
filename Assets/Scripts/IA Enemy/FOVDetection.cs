@@ -10,14 +10,14 @@ public class FOVDetection : MonoBehaviour
     public LayerMask targetMask;                    // i layer che indica come nemici
     public LayerMask obstacleMask;                  // i layer che indica come ostacoli
                                                     
-    [HideInInspector]
-    public List<Transform> visibleTargets = new List<Transform>();     // lista dei nemici individuati, pubblica cosi che l'editor può disegnarli
-
     private IAEnemy enemy;                          // script dell'IA del nemico
+    private bool playerVisible = false;
+    private GameObject player;
     
     void Start()
     {
-        enemy = GetComponentInParent<IAEnemy>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        enemy = GetComponent<IAEnemy>();
         StartCoroutine("FindTargetsWithDelay", .1f);
     }
 
@@ -29,7 +29,7 @@ public class FOVDetection : MonoBehaviour
 
             if (isPlayerVisible())
             {
-                enemy.Warned(visibleTargets[0]);
+                enemy.SetWarned();
             }
         }
     }
@@ -39,11 +39,10 @@ public class FOVDetection : MonoBehaviour
      */
     /*void Update()
     {
-        FindVisibleTargets();
         
         if(isPlayerVisible())
         {
-            enemy.Warned(visibleTargets[0]);
+            enemy.Warned();
         }
     }*/
 
@@ -51,9 +50,8 @@ public class FOVDetection : MonoBehaviour
         Ogni volta che devo cercare nuovi nemici
         pulisco la lista dei nemici rilevati
      */
-    public void FindVisibleTargets()                
+    public bool isPlayerVisible()                
     {
-        visibleTargets.Clear();
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
         
         for (int i = 0; i < targetsInViewRadius.Length; i++)
@@ -64,10 +62,11 @@ public class FOVDetection : MonoBehaviour
             {
                 if (toggleSeeThroughObstacles || !Physics.Raycast(transform.position, dirToTarget, distanceTo(target), obstacleMask))
                 {
-                    visibleTargets.Add(target);
+                    return playerVisible = true;
                 }
             }
         }
+        return playerVisible = false;
     }
 
     public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
@@ -79,14 +78,27 @@ public class FOVDetection : MonoBehaviour
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
-    public bool isPlayerVisible()
-    {
-        FindVisibleTargets();
-        return visibleTargets.Count == 1;
-    }
-
     public float distanceTo(Transform target)
     {
         return Vector3.Distance(transform.position, target.position);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, viewRadius);
+
+        Vector3 fovLine1 = Quaternion.AngleAxis(viewAngle/2, transform.up) * transform.forward * viewRadius;
+        Vector3 fovLine2 = Quaternion.AngleAxis(-viewAngle/2, transform.up) * transform.forward * viewRadius;
+
+        Gizmos.color = Color.black;
+        Gizmos.DrawRay(transform.position, fovLine1);
+        Gizmos.DrawRay(transform.position, fovLine2);
+
+        if (player && playerVisible)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, (player.transform.position - transform.position).normalized * viewRadius);
+        }
     }
 }

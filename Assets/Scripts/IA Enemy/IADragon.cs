@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IADragon : IAEMovePattern
+public class IADragon : IAEnemy
 {
     private Transform fireT;
     private ParticleSystem fire;
@@ -17,6 +17,7 @@ public class IADragon : IAEMovePattern
         fire = GetComponentInChildren<ParticleSystem>();
         fireT = fire.gameObject.transform;
         fire.Stop();
+        
     }
 
     protected override void attack()
@@ -25,7 +26,10 @@ public class IADragon : IAEMovePattern
         {
             if(pauseTiming == 0f)
             {
-                fireT.LookAt(player.position);
+                Vector3 posToFire = player.position;
+                posToFire.y += 0.5f;
+                fireT.LookAt(posToFire);
+
                 attackTiming -= Time.deltaTime;
                 if (attackTiming <= 0f)
                 {
@@ -71,7 +75,7 @@ public class IADragon : IAEMovePattern
             return;
 
         attackCoroutine = StartCoroutine(AttackForTimeAndPauseFor());
-    }*/
+    }
 
     IEnumerator AttackForTimeAndPauseFor()
     {
@@ -92,5 +96,5 @@ public class IADragon : IAEMovePattern
 
         attacking = false;
 
-    } 
+    } */
 }

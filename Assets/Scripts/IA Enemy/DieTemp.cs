@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class DieTemp : MonoBehaviour
 {
-    NIAEnemy ia;
+    IAEnemy ia;
 
     private void Start()
     {
-        ia = GetComponent<NIAEnemy>();
+        ia = GetComponent<IAEnemy>();
         StartCoroutine("FindTargetsWithDelay", 5f);
     }
 

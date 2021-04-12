@@ -3,16 +3,10 @@ using UnityEngine;
 
 public class PatrolPath : MonoBehaviour
 {
-    [Tooltip("Enemies that will be assigned to this path on Start")]
-    public NIAEnemy enemy;
 
     [Tooltip("The Nodes making up the path")]
     public List<Transform> PathNodes = new List<Transform>();
 
-    void Start()
-    {
-        enemy.patrolPath = this;
-    }
 
     public float GetDistanceToNode(Vector3 origin, int destinationNodeIndex)
     {
