@@ -20,9 +20,11 @@ public class IAEnemyFollowPathAttackLookAt : IAEnemy
         particle.Stop();
 
         ChangeStatus(EStatus.GO);
-        targetPathPoint = transform.position;
-        targetPathPoint.z += distanceToWalk;
-        oldRotY = 0;
+        //targetPathPoint = transform.position;
+        targetPathPoint = transform.position + transform.forward * distanceToWalk;
+        //targetPathPoint.z += distanceToWalk;
+        oldRotY = transform.eulerAngles.y;
+        print($"{transform.position} , {targetPathPoint}");
     }
 
 
@@ -65,8 +67,10 @@ public class IAEnemyFollowPathAttackLookAt : IAEnemy
                         {
                             rig.MoveRotation(Quaternion.Euler(0, 180, 0));
                             ChangeStatus(EStatus.GO);
-                            targetPathPoint.z -= distanceToWalk;
+                            targetPathPoint = transform.position + transform.forward * distanceToWalk;
+                            //targetPathPoint.z -= distanceToWalk;
                             oldRotY = 180;
+                            print($"{transform.position} , {targetPathPoint}");
                         }
                     }
                     else
@@ -77,8 +81,10 @@ public class IAEnemyFollowPathAttackLookAt : IAEnemy
                         {
                             rig.MoveRotation(Quaternion.Euler(0, 0, 0));
                             ChangeStatus(EStatus.GO);
-                            targetPathPoint.z += distanceToWalk;
+                            targetPathPoint = transform.position + transform.forward * distanceToWalk;
+                            //targetPathPoint.z += distanceToWalk;
                             oldRotY = 0;
+                            print($"{transform.position} , {targetPathPoint}");
                         }
                     }
                 }
