@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5375293576590670426}
   - component: {fileID: 5375293576590670425}
   - component: {fileID: 5375293576590670404}
-  - component: {fileID: 5375293576590670405}
   m_Layer: 0
   m_Name: MovingPlatform
   m_TagString: Untagged
@@ -101,6 +100,7 @@ MonoBehaviour:
   distance: 5
   type: 0
   Player: {fileID: 0}
+  PlayerController: {fileID: 0}
 --- !u!65 &5375293576590670404
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -114,16 +114,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.25, y: 0.41899943, z: 2.2500002}
   m_Center: {x: -0.5, y: -0.5837883, z: 0.5}
---- !u!65 &5375293576590670405
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5375293576590670407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.25, y: 1.2057452, z: 2.2500002}
-  m_Center: {x: -0.5, y: -1.3971274, z: 0.5}
