@@ -36,6 +36,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Damage(int dam){
-
+        print("aia");
     }
 }
