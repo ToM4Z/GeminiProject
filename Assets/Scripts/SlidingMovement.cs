@@ -23,7 +23,7 @@ public class SlidingMovement : MonoBehaviour
     private bool triggerPopUp;
     private float TimePassed;
     public MeshCollider childWithColl;
-    public bool platformActivated;
+    public bool platformActivated = true;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +31,6 @@ public class SlidingMovement : MonoBehaviour
         this.platformDirection = LeftOrRight.Right;
         this.start_position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         this.TimePassed = 0;
-        this.platformActivated = true;
     }
 
     // Update is called once per frame
