@@ -5850,7 +5850,6 @@ GameObject:
   - component: {fileID: 1890820883587066583}
   - component: {fileID: 1890820883587066581}
   - component: {fileID: 1890820883587066582}
-  - component: {fileID: 1890820883587066585}
   m_Layer: 7
   m_Name: Dragon
   m_TagString: Untagged
@@ -5940,11 +5939,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 1
   distanceFromPlayer: 3
-  enablePatrol: 1
   enableMoveToPlayer: 1
+  patrolPath: {fileID: 0}
   PathReachingRadius: 0.5
   maxDistancePatrol: 6
-  patrolPath: {fileID: 0}
+  animator: {fileID: 2286909578350839305}
   attackTime: 4.5
   pauseToAttackTime: 3
 --- !u!114 &1890820883587066582
@@ -5962,24 +5961,6 @@ MonoBehaviour:
   toggleSeeThroughObstacles: 0
   viewAngle: 225
   viewRadius: 5.27
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 64
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 1
---- !u!114 &1890820883587066585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1890820883587066576}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4480fddd78eed524db0265ca19c111e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1890820883738309387
 GameObject:
   m_ObjectHideFlags: 0
@@ -6019,7 +6000,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1890820883764995743}
-  - component: {fileID: 1890820883764995744}
+  - component: {fileID: 2286909578350839305}
   m_Layer: 0
   m_Name: Mesh
   m_TagString: Untagged
@@ -6045,22 +6026,25 @@ Transform:
   m_Father: {fileID: 1890820883587066580}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!111 &1890820883764995744
-Animation:
+--- !u!95 &2286909578350839305
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1890820883764995742}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 4f28bad15d4a6874f9771a5722af55d7, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 4f28bad15d4a6874f9771a5722af55d7, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1162d6e7cca70c24caf85f5578bc2a6e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1890820883849827304
 GameObject:
   m_ObjectHideFlags: 0
