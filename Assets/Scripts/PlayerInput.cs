@@ -10,6 +10,7 @@ public class PlayerInput : MonoBehaviour
     public float terminalVelocity = -10.0f;
     public float minFall = -1.5f;
     public float gravity = -9.81f;
+    public Animator anim;
 
     private CharacterController charController;
     private float _vertSpeed;
@@ -18,13 +19,17 @@ public class PlayerInput : MonoBehaviour
     {
         charController = GetComponent<CharacterController>();
         _vertSpeed = minFall;
+        anim = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
+        anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
+
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
         movement = transform.TransformDirection(movement);
+        
 
         if (charController.isGrounded)
         {
@@ -43,31 +48,7 @@ public class PlayerInput : MonoBehaviour
 
         movement *= Time.deltaTime;
         charController.Move(movement);
+
     }
-
-    //private Vector3 playerVelocity;
-    //public bool groundedPlayer;
-    /*void Update()
-    {
-        groundedPlayer = charController.isGrounded;
-
-        if (groundedPlayer && playerVelocity.y < 0){
-            playerVelocity.y = 0f;
-        }
-
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        move = Vector3.ClampMagnitude(move, playerSpeed);
-        move = transform.TransformDirection(move);
-        charController.Move(move * Time.deltaTime * playerSpeed);
-
-        // Changes the height position of the player..
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
-        {
-            Debug.Log("jump");
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
-        }
-
-        playerVelocity.y += gravityValue * Time.deltaTime;
-        charController.Move(playerVelocity * Time.deltaTime);
-    }*/
+   
 }
