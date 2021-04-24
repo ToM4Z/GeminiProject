@@ -12,6 +12,7 @@ public class SpitDragon : MonoBehaviour
     void Start()
     {
         particle = GetComponent<ParticleSystem>();
+        particle.trigger.AddCollider(PlayerController.instance.GetComponent<Transform>());
     }
 
     // there is no need to check if the gameobject that triggered the particles is the player
@@ -21,6 +22,6 @@ public class SpitDragon : MonoBehaviour
         int insideCount = particle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, new List<ParticleSystem.Particle>());
 
         if (insideCount > 40)
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().Damage(1);
+            PlayerController.instance.Damage(1);
     }
 }

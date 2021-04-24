@@ -24,7 +24,7 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        anim.SetFloat("Vertical", Input.GetAxis("Vertical"));
+        //anim.SetFloat("Speed", Input.GetAxis("Vertical"));
 
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);

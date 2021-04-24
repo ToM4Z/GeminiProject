@@ -3832,8 +3832,7 @@ ParticleSystem:
     exit: 0
     colliderQueryMode: 0
     radiusScale: 1
-    primitives:
-    - {fileID: 0}
+    primitives: []
   SubModule:
     serializedVersion: 2
     enabled: 0
@@ -5938,14 +5937,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  distanceFromPlayer: 3
+  attackTime: 4.5
+  pauseBetweenAttacksTime: 3
+  lostViewTime: 2
+  minDistanceToAttack: 3
   enableMoveToPlayer: 1
+  moveWhileAttack: 0
   patrolPath: {fileID: 0}
   PathReachingRadius: 0.5
   maxDistancePatrol: 6
-  animator: {fileID: 2286909578350839305}
-  attackTime: 4.5
-  pauseToAttackTime: 3
 --- !u!114 &1890820883587066582
 MonoBehaviour:
   m_ObjectHideFlags: 0
