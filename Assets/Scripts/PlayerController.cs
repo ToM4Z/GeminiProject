@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    #region Singleton
+
+    public static PlayerController instance;
+    
+    void Awake()
+    {
+        instance = this;
+    }
+
+    #endregion
+
+
     public int playerLives = 3;
     public int hp = 5;
     public int normalGearCount = 0;

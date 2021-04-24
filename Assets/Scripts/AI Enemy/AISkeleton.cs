@@ -30,6 +30,6 @@ public class AISkeleton : AIEnemy
     protected override void duringAttack()
     {
         if (hands[0].EnteredTrigger || hands[1].EnteredTrigger)
-            player.GetComponent<PlayerController>().Damage(1);
+            PlayerController.instance.Damage(1);
     }
 }
