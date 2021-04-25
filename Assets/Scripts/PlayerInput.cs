@@ -14,6 +14,7 @@ public class PlayerInput : MonoBehaviour
 
     private CharacterController charController;
     private float _vertSpeed;
+    private bool crouch = false;
 
     private void Start()
     {
@@ -24,22 +25,27 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
-        //anim.SetFloat("Speed", Input.GetAxis("Vertical"));
 
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
         movement = transform.TransformDirection(movement);
-        
 
         if (charController.isGrounded)
         {
             if (Input.GetButtonDown("Jump"))
+            {
                 _vertSpeed = jumpSpeed;
+                anim.SetTrigger("Jump");
+            }
             else
                 _vertSpeed = minFall;
+
+            if (Input.GetKeyDown(KeyCode.C))
+                crouch = !crouch;
         }
         else
         {
+            crouch = false;
             _vertSpeed += gravity * 5 * Time.deltaTime;
             if (_vertSpeed < terminalVelocity)
                 _vertSpeed = terminalVelocity;
@@ -49,6 +55,11 @@ public class PlayerInput : MonoBehaviour
         movement *= Time.deltaTime;
         charController.Move(movement);
 
+        anim.SetFloat("MoveV", Input.GetAxis("Vertical"), 1f, Time.deltaTime * 10f);
+        anim.SetFloat("MoveH", Input.GetAxis("Horizontal"), 1f, Time.deltaTime * 10f);
+        anim.SetBool("IsOnGround", charController.isGrounded);
+        anim.SetBool("Crouch", crouch);
     }
-   
+
+
 }
