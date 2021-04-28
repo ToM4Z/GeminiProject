@@ -35,11 +35,12 @@ public class Cannon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Cannon will shoot every cooldown time 
         if (mode == ShootMode.stopped){
             if (canShoot){             
                 Shoot();
             }
-        }
+        }//Cannon will shoot when the raycast collides with the player
         else if (mode == ShootMode.raycast){
             Debug.DrawLine(transform.position, transform.forward * 50, Color.red);
             Ray ray = new Ray(baseRotonda.position, baseRotonda.up);
@@ -49,6 +50,7 @@ public class Cannon : MonoBehaviour
                 GameObject hitObject = hit.transform.gameObject;
                 Debug.Log(hit.collider.gameObject.name);
                     if (hitObject.GetComponent<PlayerController>()) {
+                        //If 
                         if (canShoot){             
                             Shoot();
                         }
@@ -61,6 +63,7 @@ public class Cannon : MonoBehaviour
         //canna.Rotate(0,0,1);
     }
 
+    //Instantation of the cannonball
     public void Shoot(){
         _cannonBall = Instantiate(cannonBallPrefab) as GameObject;
         _cannonBall.transform.position = puntoSparo.position;
@@ -70,6 +73,7 @@ public class Cannon : MonoBehaviour
         StartCoroutine(CooldownShoot());
     }
 
+        //This coroutine let the cannon shoot every X seconds time
         private IEnumerator CooldownShoot(){
         canShoot = false;
         yield return new WaitForSeconds(cooldown);

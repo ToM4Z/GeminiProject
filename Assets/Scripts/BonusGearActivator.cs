@@ -23,6 +23,7 @@ public class BonusGearActivator : MonoBehaviour
         
     }
     void OnTriggerEnter(Collider other) {
+        //It will be activated only the first time that the player jumps under it
         anim.Play("BonusBlockActivation");
         if(firstTime){
             PlayerController player = other.GetComponent<PlayerController>();
@@ -35,14 +36,18 @@ public class BonusGearActivator : MonoBehaviour
     }
 
     public void spawnBonusGears(){
-        Debug.Log("Ou");
+
+        //Activate a particle to make nicer the activation
         _particle = Instantiate(particlePrefab) as GameObject;
         _particle.transform.position = this.gameObject.transform.position;
+
+        //Loop on all childs, that are the spawner of the Bonus Gears
         for (int i = 0; i < this.gameObject.transform.childCount; i++) {
+            //Take the position of the spawner and give it to the position of the Bonus Gear prefab
             Transform spawner = this.gameObject.transform.GetChild(i);
-            Debug.Log(i);
             _bonusGear = Instantiate(bonusGearPrefab) as GameObject;
             GearBonus gb = _bonusGear.GetComponent<GearBonus>();
+            //It will stay only for a short time, because it's a bonus
             gb.setTime(timeStay);
             _bonusGear.transform.position = spawner.position;
         }

@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cannon_Ball : MonoBehaviour
+public class Collectable_Bomb : MonoBehaviour
 {
     // Start is called before the first frame update
-    public float speed = 0.1f;
-    public int damage = 1;
     void Start()
     {
         
@@ -15,16 +13,15 @@ public class Cannon_Ball : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0,0,speed * Time.deltaTime);
-        Destroy (gameObject, 10);
+        
     }
 
     void OnTriggerEnter(Collider other) {
         PlayerController player = other.GetComponent<PlayerController>();
         //Check if the other object is a PlayerController
         if (player != null) {
-            //If it is the player, damage it
-            player.Damage(damage);
+            //If it is the player, increase its Bomb Counter
+            //player.increaseBomb();
         }
 
         Destroy(this.gameObject);

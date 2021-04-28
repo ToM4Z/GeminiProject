@@ -18,12 +18,14 @@ public class Gear : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         PlayerController player = other.GetComponent<PlayerController>();
-        //Check if the other object is a PlayerCharacter.
+        //Check if the other object is a PlayerController
         if (player != null) {
+            //If it is the player, increase Gear Counter
             player.increaseNormalGear();
+            Destroy(this.gameObject);
         }
 
-        Destroy(this.gameObject);
+        
         
     }
 }

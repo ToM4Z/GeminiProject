@@ -20,12 +20,14 @@ public class GearBonus : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         PlayerController player = other.GetComponent<PlayerController>();
-        //Check if the other object is a PlayerCharacter.
+        //Check if the other object is a PlayerController
         if (player != null) {
+            //If it is the player, increas its Bonus Gear Counter
             player.increaseBonusGear();
+            Destroy(this.gameObject);
         }
 
-        Destroy(this.gameObject);
+        
         
     }
 
