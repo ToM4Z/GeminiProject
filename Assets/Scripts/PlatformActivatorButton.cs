@@ -11,6 +11,8 @@ public class PlatformActivatorButton : MonoBehaviour
     {
         anim = GetComponentInChildren<Animation>();
         GameObject goParent = transform.parent.gameObject;
+
+        //We need the controller of the moving platforms in order to activate them
         movingPlatformController = goParent.GetComponentInChildren<MovingPlatformController>();
     }
 
@@ -21,6 +23,7 @@ public class PlatformActivatorButton : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
+        //It will be activated only the first time that the player touches it
         if(firstTime){
             PlayerController player = other.GetComponent<PlayerController>();
             if (player != null) {

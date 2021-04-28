@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MovingPlatformController : MonoBehaviour
 {
+    //This class is used to activate all the slider platform that are child to the controller
     public SlidingMovement[] slidingMovement;
     void Start()
     {
@@ -17,6 +18,8 @@ public class MovingPlatformController : MonoBehaviour
     }
 
     public void ActivatePlatforms(){
+
+        //Looping on all childs, I activate them
         for (int i = 0; i < slidingMovement.Length; i++) {
             slidingMovement[i].SetPlatformActivated(true);
         }

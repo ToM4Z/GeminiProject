@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BatteryHP : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     public float speedSpin = 1.0f;
     void Start()
     {
@@ -19,8 +19,9 @@ public class BatteryHP : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
         PlayerController player = other.GetComponent<PlayerController>();
-        //Check if the other object is a PlayerCharacter.
+        //Check if the other object is a PlayerController
         if (player != null) {
+            //If it is the player, increase its HP
             player.increaseHP();
         }
 
