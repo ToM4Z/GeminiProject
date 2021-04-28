@@ -60,7 +60,7 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        anim.SetBool("Jump", true);
+                        anim.SetTrigger("Jump");
 
                         status = Status.FALLING;
                         break;
@@ -102,7 +102,7 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        anim.SetBool("Jump", true);
+                        anim.SetTrigger("Jump");
                         anim.SetBool("Crouch", false);
 
                         status = Status.FALLING;
@@ -130,10 +130,10 @@ public class PlayerInput : MonoBehaviour
 
                     if (charController.isGrounded)
                     {
-                        // SE URTO UN OGGETTO CHE FA RIMBALZARE RISALTO SUBITO
+                        // SE ATTERRO SU UN OGGETTO 'GOMMOSO', RIMBALZO PIU' IN ALTO
+                        anim.ResetTrigger("Jump");
 
                         status = Status.IDLE;
-                        anim.SetBool("Jump", false);
                         break;
                     }
 
@@ -143,12 +143,33 @@ public class PlayerInput : MonoBehaviour
             case Status.SLIDE:
                 {
                     actualSlideSpeed -= Mathf.Lerp(0f, slideSpeed, 0.015f);
-                    print(actualSlideSpeed);
+
                     if (actualSlideSpeed < 0)
                     {
+                        anim.ResetTrigger("Slide");
                         status = Status.IDLE;
                         break;
                     }
+
+                    if (!charController.isGrounded)
+                    {
+                        anim.ResetTrigger("Slide");
+                        status = Status.FALLING;
+                        break;
+                    }
+
+                    if (Input.GetButtonDown("Jump"))
+                    {
+                        _vertSpeed = jumpSpeed;
+                        anim.ResetTrigger("Slide");
+                        anim.SetTrigger("Jump");
+
+                        status = Status.FALLING;
+                        break;
+                    }
+                    else
+                        _vertSpeed = minFall;
+
                     movement = directionSlide * actualSlideSpeed;
 
                     break;
