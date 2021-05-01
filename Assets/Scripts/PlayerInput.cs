@@ -53,6 +53,7 @@ public class PlayerInput : MonoBehaviour
 
                     if (!charController.isGrounded)
                     {
+                        anim.Play("Falling");
                         status = Status.FALLING;
                         break;
                     }
@@ -60,8 +61,8 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        anim.SetTrigger("Jump");
-
+                        //anim.SetTrigger("Jump");
+                        anim.Play("Jump start");
                         status = Status.FALLING;
                         break;
                     }
@@ -77,10 +78,11 @@ public class PlayerInput : MonoBehaviour
                             break;
                         }
                         else
-                        {
+                        if(Input.GetAxis("Vertical") > 0){
                             directionSlide = movement.normalized;
                             status = Status.SLIDE;
-                            anim.SetTrigger("Slide");
+                            //anim.SetTrigger("Slide");
+                            anim.Play("Slide");
 
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
@@ -94,6 +96,7 @@ public class PlayerInput : MonoBehaviour
 
                     if (!charController.isGrounded)
                     {
+                        anim.Play("Falling");
                         status = Status.FALLING;
                         anim.SetBool("Crouch", false);
                         break;
@@ -102,7 +105,8 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        anim.SetTrigger("Jump");
+                        //anim.SetTrigger("Jump");
+                        anim.Play("Jump start");
                         anim.SetBool("Crouch", false);
 
                         status = Status.FALLING;
@@ -131,7 +135,7 @@ public class PlayerInput : MonoBehaviour
                     if (charController.isGrounded)
                     {
                         // SE ATTERRO SU UN OGGETTO 'GOMMOSO', RIMBALZO PIU' IN ALTO
-                        anim.ResetTrigger("Jump");
+                        //anim.ResetTrigger("Jump");
 
                         status = Status.IDLE;
                         break;
@@ -142,18 +146,20 @@ public class PlayerInput : MonoBehaviour
                 }
             case Status.SLIDE:
                 {
-                    actualSlideSpeed -= Mathf.Lerp(0f, slideSpeed, 0.015f);
+                    // DA MIGLIORARE
+                    actualSlideSpeed -= Mathf.Lerp(0f, slideSpeed, 0.08f);
 
                     if (actualSlideSpeed < 0)
                     {
-                        anim.ResetTrigger("Slide");
+                        //anim.ResetTrigger("Slide");
                         status = Status.IDLE;
                         break;
                     }
 
                     if (!charController.isGrounded)
                     {
-                        anim.ResetTrigger("Slide");
+                        anim.Play("Falling");
+                        //anim.ResetTrigger("Slide");
                         status = Status.FALLING;
                         break;
                     }
@@ -161,8 +167,9 @@ public class PlayerInput : MonoBehaviour
                     if (Input.GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        anim.ResetTrigger("Slide");
-                        anim.SetTrigger("Jump");
+                        //anim.SetTrigger("Jump");
+                        anim.Play("Jump start");
+                        //anim.SetTrigger("Jump");
 
                         status = Status.FALLING;
                         break;
