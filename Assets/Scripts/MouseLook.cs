@@ -29,7 +29,7 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
-        if(axes == RotationAxes.MouseX)
+        if (axes == RotationAxes.MouseX)
         {
             transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityHor, 0);
         }

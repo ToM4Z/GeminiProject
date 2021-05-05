@@ -32,18 +32,24 @@ public class PlayerInput : MonoBehaviour
     private Vector3 directionSlide;
     private float actualSlideSpeed = 0f;
 
+    private bool attacking = false;
+    private int attackIndex = 0;
+    private string[] comboAttacks = { "Arms.Punch Left", "Arms.Punch Right", "Main.Air Attack"};
+    private bool airAttackJustDone = false;
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
         _vertSpeed = minFall;
         anim = GetComponentInChildren<Animator>();
-
         status = Status.IDLE;
     }
 
     private void Update()
     {
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+        checkAttack();
 
         switch (status)
         {
@@ -69,9 +75,9 @@ public class PlayerInput : MonoBehaviour
                     else
                         _vertSpeed = minFall;
 
-                    if (Input.GetKeyDown(KeyCode.C))
+                    if (Input.GetButtonDown("Crouch"))
                     {
-                        if (Mathf.Approximately(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).magnitude, 0f))
+                        if (Mathf.Approximately(movement.magnitude, 0f))
                         {
                             status = Status.CROUCH;
                             anim.SetBool("Crouch", true);
@@ -88,6 +94,10 @@ public class PlayerInput : MonoBehaviour
                             movement = directionSlide * actualSlideSpeed;
                         }
                     }
+
+                    if (Input.GetButtonDown("Attack"))
+                        attack();
+
                     break; 
                 }
             case Status.CROUCH:
@@ -115,10 +125,18 @@ public class PlayerInput : MonoBehaviour
                     else
                         _vertSpeed = minFall;
 
-                    if (Input.GetKeyDown(KeyCode.C))
+                    if (Input.GetButtonDown("Crouch"))
                     {
                         status = Status.IDLE;
                         anim.SetBool("Crouch", false);
+                        break;
+                    }
+
+                    if (Input.GetButtonDown("Attack"))
+                    {
+                        status = Status.IDLE;
+                        anim.SetBool("Crouch", false);
+                        attack();
                         break;
                     }
 
@@ -138,9 +156,12 @@ public class PlayerInput : MonoBehaviour
                         //anim.ResetTrigger("Jump");
 
                         status = Status.IDLE;
+                        airAttackJustDone = false;
                         break;
                     }
 
+                    if (Input.GetButtonDown("Attack"))
+                        attack();
 
                     break;
                 }
@@ -181,10 +202,6 @@ public class PlayerInput : MonoBehaviour
 
                     break;
                 }
-            case Status.ATTACK:
-                {
-                    break;
-                }
             case Status.DEATH:
                 {
                     break;
@@ -202,4 +219,55 @@ public class PlayerInput : MonoBehaviour
         anim.SetBool("IsOnGround", charController.isGrounded);
     }
 
+
+    private void attack()
+    {
+        if (attacking)
+            return;
+
+        switch (status)
+        {
+            case Status.FALLING:
+                {
+                    if (!airAttackJustDone)
+                    {
+                        anim.Play(comboAttacks[attackIndex = comboAttacks.Length - 1]);
+                        airAttackJustDone = true;
+                        attacking = true;
+                    }
+                    break;
+                }
+            case Status.IDLE:
+                {
+                    attackIndex = (attackIndex + 1) % (comboAttacks.Length - 1); // -1 because the last attack is the air attack
+                    anim.Play(comboAttacks[attackIndex]);
+                    attacking = true;
+                    break;
+                }
+        }
+    }
+
+    private void checkAttack()
+    {
+        if(attacking)
+            switch (status)
+            {
+                case Status.FALLING:
+                    {
+                        if (!anim.GetCurrentAnimatorStateInfo(0).IsName(comboAttacks[attackIndex]))
+                        {
+                            attacking = false;
+                        }
+                        break;
+                    }
+                case Status.IDLE:
+                    {
+                        if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
+                        {
+                            attacking = false;
+                        }
+                        break;
+                    }
+            }
+    }
 }
