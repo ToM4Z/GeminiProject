@@ -132,7 +132,7 @@ public abstract class AIEnemy : MonoBehaviour
             case Status.INACTIVE: { inactiveIdle(); break; }
             case Status.IDLE: { idle(); break; }
             case Status.WARNED: { warned(); break; }
-            case Status.DEAD: { /*die();*/ break; }
+            case Status.DEAD: { die(); break; }
         }
 
         animator.SetFloat(animVarSpeed, agent.velocity.magnitude);      // updates the Speed variable of the animator
@@ -300,6 +300,15 @@ public abstract class AIEnemy : MonoBehaviour
         }
     }
 
+    protected virtual void die()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(deathStateAnim))
+            return;
+
+        animator.Play(deathStateAnim);
+        Destroy(this, 5f);
+    }
+
 
     //  this method reset some variables and turn enemy on IDLE status
     protected virtual void lostWarned()
@@ -313,14 +322,6 @@ public abstract class AIEnemy : MonoBehaviour
 
         ChangeStatus(Status.IDLE);
     }
-
-    //public void SetWarned() { 
-    //    if(status == Status.IDLE)
-    //    {
-    //        agent.stoppingDistance = minDistanceToAttack ;
-    //        ChangeStatus(Status.WARNED);
-    //    }
-    //}
 
     // simple change the status and, if debug is enabled, prints the change
     protected void ChangeStatus(Status s)

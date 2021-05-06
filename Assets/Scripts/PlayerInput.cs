@@ -11,7 +11,6 @@ public class PlayerInput : MonoBehaviour
         CROUCH,
         FALLING,
         SLIDE,
-        ATTACK,
         DEATH
     }
 
@@ -37,6 +36,12 @@ public class PlayerInput : MonoBehaviour
     private string[] comboAttacks = { "Arms.Punch Left", "Arms.Punch Right", "Main.Air Attack"};
     private bool airAttackJustDone = false;
 
+    private ControllerColliderHit _contact;
+
+    protected float attackTimer = 0f;
+    [SerializeField]
+    private AttackTrigger[] hands = new AttackTrigger[2];
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -51,13 +56,21 @@ public class PlayerInput : MonoBehaviour
 
         checkAttack();
 
+        bool hitGround = false;
+        RaycastHit hit;
+        if (_vertSpeed < 0 && Physics.SphereCast(new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), 0.1f, Vector3.down, out hit))
+        {
+            float check = 0.02f;
+            hitGround = hit.distance <= check;
+        }
+
         switch (status)
         {
             case Status.IDLE:
                 {
                     movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
 
-                    if (!charController.isGrounded)
+                    if (!hitGround)
                     {
                         anim.Play("Falling");
                         status = Status.FALLING;
@@ -104,7 +117,7 @@ public class PlayerInput : MonoBehaviour
                 {
                     movement = Vector3.ClampMagnitude(movement * playerCrouchedSpeed, playerCrouchedSpeed);
 
-                    if (!charController.isGrounded)
+                    if (!hitGround)
                     {
                         anim.Play("Falling");
                         status = Status.FALLING;
@@ -150,7 +163,8 @@ public class PlayerInput : MonoBehaviour
                     if (_vertSpeed < terminalVelocity)
                         _vertSpeed = terminalVelocity;
 
-                    if (charController.isGrounded)
+
+                    if (hitGround)
                     {
                         // SE ATTERRO SU UN OGGETTO 'GOMMOSO', RIMBALZO PIU' IN ALTO
                         //anim.ResetTrigger("Jump");
@@ -210,15 +224,27 @@ public class PlayerInput : MonoBehaviour
         }
 
         movement = transform.TransformDirection(movement);
+
+        if (!hitGround && charController.isGrounded)
+        {
+            if (Vector3.Dot(movement, _contact.normal) < 0)
+            {
+                movement = _contact.normal * playerSpeed;
+            }
+            else
+            {
+                movement += _contact.normal * playerSpeed;
+            }
+        }
+
         movement.y = _vertSpeed;
         movement *= Time.deltaTime;
         charController.Move(movement);
 
         anim.SetFloat("MoveV", Input.GetAxis("Vertical"), 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", Input.GetAxis("Horizontal"), 1f, Time.deltaTime * 10f);
-        anim.SetBool("IsOnGround", charController.isGrounded);
+        anim.SetBool("IsOnGround", hitGround);
     }
-
 
     private void attack()
     {
@@ -249,7 +275,9 @@ public class PlayerInput : MonoBehaviour
 
     private void checkAttack()
     {
-        if(attacking)
+        if (attacking)
+        {
+            attackTimer -= Time.deltaTime;
             switch (status)
             {
                 case Status.FALLING:
@@ -262,6 +290,9 @@ public class PlayerInput : MonoBehaviour
                     }
                 case Status.IDLE:
                     {
+
+
+
                         if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
                         {
                             attacking = false;
@@ -269,5 +300,12 @@ public class PlayerInput : MonoBehaviour
                         break;
                     }
             }
+
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        _contact = hit;
     }
 }
