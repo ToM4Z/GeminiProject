@@ -131,14 +131,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 1
-  distanceFromPlayer: 1.5
+  attackTime: 2
+  pauseBetweenAttacksTime: 3
+  lostViewTime: 2
+  minDistanceToAttack: 3
   enableMoveToPlayer: 1
+  moveWhileAttack: 0
   patrolPath: {fileID: 0}
   PathReachingRadius: 0.5
   maxDistancePatrol: 10
-  animator: {fileID: 636352806802659852}
-  attackTime: 2
-  pauseToAttackTime: 1
   hands:
   - {fileID: 636352806398078270}
   - {fileID: 636352808233060814}
@@ -365,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnteredTrigger: 0
+  collisionTag: Player
 --- !u!1 &2071523366577853967
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,6 +701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnteredTrigger: 0
+  collisionTag: Player
 --- !u!1 &6551831078065946832
 GameObject:
   m_ObjectHideFlags: 0

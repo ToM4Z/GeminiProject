@@ -8,7 +8,8 @@ using UnityEngine;
 public class AISkeleton : AIEnemy
 {
     // This triggers are the hands of the skeleton
-    public AttackTrigger[] hands = new AttackTrigger[2];
+    [SerializeField]
+    private AttackTrigger[] hands = new AttackTrigger[2];
 
     protected override void Start()
     {
