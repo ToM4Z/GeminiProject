@@ -132,7 +132,7 @@ public abstract class AIEnemy : MonoBehaviour
             case Status.INACTIVE: { inactiveIdle(); break; }
             case Status.IDLE: { idle(); break; }
             case Status.WARNED: { warned(); break; }
-            case Status.DEAD: { die(); break; }
+            //case Status.DEAD: { die(); break; }       I don't do nothing... 
         }
 
         animator.SetFloat(animVarSpeed, agent.velocity.magnitude);      // updates the Speed variable of the animator
@@ -183,6 +183,8 @@ public abstract class AIEnemy : MonoBehaviour
     {
         if (status == Status.DEAD)
             return;
+
+        agent.ResetPath();
 
         ChangeStatus(Status.DEAD);
         animator.SetTrigger(deathStateAnim);
@@ -298,15 +300,6 @@ public abstract class AIEnemy : MonoBehaviour
             }
 
         }
-    }
-
-    protected virtual void die()
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(deathStateAnim))
-            return;
-
-        animator.Play(deathStateAnim);
-        Destroy(this, 5f);
     }
 
 

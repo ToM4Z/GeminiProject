@@ -56,21 +56,13 @@ public class PlayerInput : MonoBehaviour
 
         checkAttack();
 
-        bool hitGround = false;
-        RaycastHit hit;
-        if (_vertSpeed < 0 && Physics.SphereCast(new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z), 0.1f, Vector3.down, out hit))
-        {
-            float check = 0.02f;
-            hitGround = hit.distance <= check;
-        }
-
         switch (status)
         {
             case Status.IDLE:
                 {
                     movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
 
-                    if (!hitGround)
+                    if (!charController.isGrounded)
                     {
                         anim.Play("Falling");
                         status = Status.FALLING;
@@ -117,7 +109,7 @@ public class PlayerInput : MonoBehaviour
                 {
                     movement = Vector3.ClampMagnitude(movement * playerCrouchedSpeed, playerCrouchedSpeed);
 
-                    if (!hitGround)
+                    if (!charController.isGrounded)
                     {
                         anim.Play("Falling");
                         status = Status.FALLING;
@@ -164,7 +156,7 @@ public class PlayerInput : MonoBehaviour
                         _vertSpeed = terminalVelocity;
 
 
-                    if (hitGround)
+                    if (charController.isGrounded)
                     {
                         // SE ATTERRO SU UN OGGETTO 'GOMMOSO', RIMBALZO PIU' IN ALTO
                         //anim.ResetTrigger("Jump");
@@ -182,9 +174,9 @@ public class PlayerInput : MonoBehaviour
             case Status.SLIDE:
                 {
                     // DA MIGLIORARE
-                    actualSlideSpeed -= Mathf.Lerp(0f, slideSpeed, 0.08f);
+                    actualSlideSpeed = Mathf.Lerp(actualSlideSpeed, 0f, 4f * Time.deltaTime);
 
-                    if (actualSlideSpeed < 0)
+                    if (actualSlideSpeed < 3f)
                     {
                         //anim.ResetTrigger("Slide");
                         status = Status.IDLE;
@@ -225,25 +217,13 @@ public class PlayerInput : MonoBehaviour
 
         movement = transform.TransformDirection(movement);
 
-        if (!hitGround && charController.isGrounded)
-        {
-            if (Vector3.Dot(movement, _contact.normal) < 0)
-            {
-                movement = _contact.normal * playerSpeed;
-            }
-            else
-            {
-                movement += _contact.normal * playerSpeed;
-            }
-        }
-
         movement.y = _vertSpeed;
         movement *= Time.deltaTime;
         charController.Move(movement);
 
         anim.SetFloat("MoveV", Input.GetAxis("Vertical"), 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", Input.GetAxis("Horizontal"), 1f, Time.deltaTime * 10f);
-        anim.SetBool("IsOnGround", hitGround);
+        anim.SetBool("IsOnGround", charController.isGrounded);
     }
 
     private void attack()

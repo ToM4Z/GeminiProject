@@ -132,7 +132,7 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: 5ebb82bba52c5d04ba4db41064d66720, type: 3}
-    m_Threshold: 0.33333334
+    m_Threshold: 0.16666667
     m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -140,8 +140,32 @@ BlendTree:
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: -203655887218126122, guid: a0ca442e72e67214faa7d31456d57560, type: 3}
-    m_Threshold: 0.6666667
+    m_Threshold: 0.33333334
     m_Position: {x: 1, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 800cbd843452f384088d1f8405bab0d0, type: 3}
+    m_Threshold: 0.5
+    m_Position: {x: -0.2, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 1bebca9a7cc450e47a1a69a147dec0d9, type: 3}
+    m_Threshold: 0.6666667
+    m_Position: {x: 0, y: 0.2}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 95305d73ad4976947ac8389ad06478c6, type: 3}
+    m_Threshold: 0.8333333
+    m_Position: {x: 0.2, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveV
@@ -1080,8 +1104,24 @@ BlendTree:
     m_DirectBlendParameter: MoveV
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 800cbd843452f384088d1f8405bab0d0, type: 3}
+    m_Threshold: -0.2
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 9c2cf66e7a7b61940bf30398332c04fd, type: 2}
     m_Threshold: 0
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 95305d73ad4976947ac8389ad06478c6, type: 3}
+    m_Threshold: 0.2
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -1486,6 +1526,14 @@ BlendTree:
     m_DirectBlendParameter: MoveV
     m_Mirror: 0
   - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 800cbd843452f384088d1f8405bab0d0, type: 3}
+    m_Threshold: 0.16666667
+    m_Position: {x: 0.2, y: 0}
+    m_TimeScale: -1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1845829bf53473c4691654c525ecb3c8, type: 2}
     m_Threshold: 0.33333334
     m_Position: {x: 0, y: -1}
@@ -1494,8 +1542,24 @@ BlendTree:
     m_DirectBlendParameter: MoveV
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -203655887218126122, guid: a0ca442e72e67214faa7d31456d57560, type: 3}
+    m_Motion: {fileID: -203655887218126122, guid: 1bebca9a7cc450e47a1a69a147dec0d9, type: 3}
+    m_Threshold: 0.5
+    m_Position: {x: 0, y: -0.2}
+    m_TimeScale: -1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: 95305d73ad4976947ac8389ad06478c6, type: 3}
     m_Threshold: 0.6666667
+    m_Position: {x: -0.2, y: 0}
+    m_TimeScale: -1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: MoveV
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: -203655887218126122, guid: a0ca442e72e67214faa7d31456d57560, type: 3}
+    m_Threshold: 0.8333333
     m_Position: {x: -1, y: 0}
     m_TimeScale: -1
     m_CycleOffset: 0
@@ -1526,7 +1590,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: MoveV
-    m_EventTreshold: 0.1
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6227948693264547058}
   m_Solo: 0
@@ -1798,7 +1862,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 4
     m_ConditionEvent: MoveV
-    m_EventTreshold: -0.1
+    m_EventTreshold: -0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2319278456137775711}
   m_Solo: 0
@@ -1875,7 +1939,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: MoveV
-    m_EventTreshold: -0.1
+    m_EventTreshold: -0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6227948693264547058}
   m_Solo: 0
@@ -1900,7 +1964,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 3
     m_ConditionEvent: MoveV
-    m_EventTreshold: 0.1
+    m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1094419360269345681}
   m_Solo: 0
