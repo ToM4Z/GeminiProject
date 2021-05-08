@@ -22,12 +22,11 @@ public class FOVDetection : MonoBehaviour
     // Indicates that the player is actually visible
     private bool playerVisible = false;
 
-    private GameObject player;
+    private Transform player;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-
+        player = PlayerController.instance.transform;
         targetMask = LayerMask.GetMask("Player");
         obstacleMask = LayerMask.GetMask("Default");
     }
@@ -35,15 +34,17 @@ public class FOVDetection : MonoBehaviour
     // Check if the player is in the field of view and if there aren't obstacles in the middle
     public bool isPlayerVisible()                
     {
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
-        
+        Vector3 myPosition = transform.position;                    // to avoid collisions with terrain, I move up the position check
+        myPosition.y += 0.5f;
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(myPosition, viewRadius, targetMask);
+
         for (int i = 0; i < targetsInViewRadius.Length; i++)
         {
             Transform target = targetsInViewRadius[i].transform;
-            Vector3 dirToTarget = (target.position - transform.position).normalized;
+            Vector3 dirToTarget = (target.position - myPosition).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
-                if (toggleSeeThroughObstacles || !Physics.Raycast(transform.position, dirToTarget, distanceTo(target.position), obstacleMask))
+                if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, distanceTo(target.position), obstacleMask))
                 {
                     return playerVisible = true;
                 }
@@ -76,7 +77,7 @@ public class FOVDetection : MonoBehaviour
         if (player && playerVisible)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(pos, (player.transform.position - transform.position).normalized * viewRadius);
+            Gizmos.DrawRay(pos, (player.position - transform.position).normalized * viewRadius);
         }
     }
 

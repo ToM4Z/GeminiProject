@@ -37,4 +37,10 @@ public class AIDragon : AIEnemy
         posToFire.y += 0.5f;
         particle.gameObject.transform.LookAt(posToFire);
     }
+
+    // when I hurt, I stop to spit
+    protected override void AfterHit()
+    {
+        particle.Stop();
+    }
 }

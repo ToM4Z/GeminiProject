@@ -132,7 +132,7 @@ public abstract class AIEnemy : MonoBehaviour
             case Status.INACTIVE: { inactiveIdle(); break; }
             case Status.IDLE: { idle(); break; }
             case Status.WARNED: { warned(); break; }
-            //case Status.DEAD: { die(); break; }       I don't do nothing... 
+            //case Status.DEAD: { die(); break; }       this event is handled by hit() method 
         }
 
         animator.SetFloat(animVarSpeed, agent.velocity.magnitude);      // updates the Speed variable of the animator
@@ -179,15 +179,20 @@ public abstract class AIEnemy : MonoBehaviour
     }
 
     // With this method, the player can hit and kill the enemy
-    public void hit()
+    public void hurt()
     {
         if (status == Status.DEAD)
             return;
 
-        agent.ResetPath();
-
         ChangeStatus(Status.DEAD);
+
+        agent.ResetPath();
+        foreach(Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = false;
         animator.SetTrigger(deathStateAnim);
+        AfterHit();
+
+
         Destroy(this.gameObject, 5f);       //the enemy will disappear after 5 seconds
     }
 
@@ -324,27 +329,29 @@ public abstract class AIEnemy : MonoBehaviour
         status = s;
     }
 
-    // method that subclasses can override to change the behaviur when enemy START to attack
+    // method that subclasses can override to add behaviour when enemy START to attack
     protected virtual void startAttack()
     {
         animator.SetTrigger(attackStateAnim);
     }
 
-    // method that subclasses can override to change the behaviur when enemy STOP to attack
+    // method that subclasses can override to add behaviour when enemy STOP to attack
     protected virtual void stopAttack() { }
 
-    // method that subclasses MUST override to change the behaviur DURING the enemy attack
+    // method that subclasses MUST override to add behaviour DURING the enemy attack
     // in this method, it must be implemented how to hit the player
     protected virtual void duringAttack() { }
 
 
+    // method that subclasses can override to add behaviour when player hit this enemy
+    protected virtual void AfterHit() { }
 
 
 
 
 
     //--------------PATROL METHODS-------------
-    
+
     // rotate (slerp) the enemy towards a position target
     protected void FaceTarget(Vector3 target)
     {

@@ -6,10 +6,14 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class AttackTrigger : MonoBehaviour
 {
+    [HideInInspector]
     public bool EnteredTrigger;
+    [HideInInspector]
+    public GameObject hitted;
 
     [SerializeField]
     public string collisionTag;
+
 
     private void Start()
     {
@@ -20,12 +24,18 @@ public class AttackTrigger : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(collisionTag))
+        {
+            hitted = other.gameObject;
             EnteredTrigger = true;
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag(collisionTag))
+        {
+            hitted = null;
             EnteredTrigger = false;
+        }
     }
 }
