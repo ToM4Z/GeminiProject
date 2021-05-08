@@ -20,7 +20,7 @@ public class PlayerInput : MonoBehaviour
     public float playerCrouchedSpeed = 3f;
     public float jumpSpeed = 15f;
     public float slideSpeed = 28f;
-    public float multiplierJumpSpeedOnTrampoline = 2f;
+    public float multiplierJumpSpeedOnTrampoline = 1.5f;
     public float terminalVelocity = -10f;
     public float minFall = -1.5f;
     public float gravity = -9.81f;
@@ -37,16 +37,20 @@ public class PlayerInput : MonoBehaviour
     private bool airAttackJustDone = false;
 
     private ControllerColliderHit _contact;
+    private string trampolineMask = "Bouncy";
+    private string enemyMask = "Enemy";
 
-    protected float attackTimer = 0f;
     [SerializeField]
     private AttackTrigger[] hands = new AttackTrigger[2];
+    [SerializeField]
+    private AttackTrigger[] foots = new AttackTrigger[2];
 
     private void Start()
     {
         charController = GetComponent<CharacterController>();
-        _vertSpeed = minFall;
         anim = GetComponentInChildren<Animator>();
+
+        _vertSpeed = minFall;
         status = Status.IDLE;
     }
 
@@ -94,6 +98,7 @@ public class PlayerInput : MonoBehaviour
                             status = Status.SLIDE;
                             //anim.SetTrigger("Slide");
                             anim.Play("Slide");
+                            attacking = true;
 
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
@@ -158,11 +163,28 @@ public class PlayerInput : MonoBehaviour
 
                     if (charController.isGrounded)
                     {
-                        // SE ATTERRO SU UN OGGETTO 'GOMMOSO', RIMBALZO PIU' IN ALTO
                         //anim.ResetTrigger("Jump");
+                        string layer = LayerMask.LayerToName(_contact.gameObject.layer);
+                        if (layer.Equals(trampolineMask))
+                        {
+                            _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;
+                            anim.Play("Jump start");
+                            status = Status.FALLING;
+                        }
+                        else
+                        if (layer.Equals(enemyMask))
+                        {
+                            _vertSpeed = jumpSpeed;
+                            anim.Play("Jump start");
+                            status = Status.FALLING;
+                            _contact.collider.gameObject.GetComponent<AIEnemy>().hurt();
+                        }
+                        else
+                        {
+                            status = Status.IDLE;
+                            airAttackJustDone = false;
+                        }
 
-                        status = Status.IDLE;
-                        airAttackJustDone = false;
                         break;
                     }
 
@@ -233,6 +255,13 @@ public class PlayerInput : MonoBehaviour
 
         switch (status)
         {
+            case Status.IDLE:
+                {
+                    attackIndex = (attackIndex + 1) % (comboAttacks.Length - 1); // -1 because the last attack is the air attack
+                    anim.Play(comboAttacks[attackIndex]);
+                    attacking = true;
+                    break;
+                }
             case Status.FALLING:
                 {
                     if (!airAttackJustDone)
@@ -243,13 +272,6 @@ public class PlayerInput : MonoBehaviour
                     }
                     break;
                 }
-            case Status.IDLE:
-                {
-                    attackIndex = (attackIndex + 1) % (comboAttacks.Length - 1); // -1 because the last attack is the air attack
-                    anim.Play(comboAttacks[attackIndex]);
-                    attacking = true;
-                    break;
-                }
         }
     }
 
@@ -257,25 +279,51 @@ public class PlayerInput : MonoBehaviour
     {
         if (attacking)
         {
-            attackTimer -= Time.deltaTime;
             switch (status)
             {
+                case Status.IDLE:
+                    {
+                        if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
+                        {
+                            attacking = false;
+                        }
+                        else
+                        {
+                            if (hands[attackIndex].EnteredTrigger)
+                            {
+                                hands[attackIndex].hitted.GetComponent<AIEnemy>().hurt();
+                            }
+                        }
+
+                        break;
+                    }
                 case Status.FALLING:
                     {
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(comboAttacks[attackIndex]))
                         {
                             attacking = false;
                         }
+                        else
+                        {
+                            if (foots[0].EnteredTrigger)
+                            {
+                                foots[0].hitted.GetComponent<AIEnemy>().hurt();
+                            }
+                        }
                         break;
                     }
-                case Status.IDLE:
+                case Status.SLIDE:
                     {
-
-
-
-                        if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
+                        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
                         {
                             attacking = false;
+                        }
+                        else
+                        {
+                            if (foots[0].EnteredTrigger)
+                            {
+                                foots[0].hitted.GetComponent<AIEnemy>().hurt();
+                            }
                         }
                         break;
                     }
