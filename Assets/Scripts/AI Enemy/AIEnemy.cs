@@ -107,7 +107,7 @@ public abstract class AIEnemy : MonoBehaviour
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
     {
-        player = PlayerController.instance.transform;
+        player = PlayerStatisticsController.instance.transform;
         rig = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         fov = GetComponent<FOVDetection>();

@@ -31,6 +31,6 @@ public class AISkeleton : AIEnemy
     protected override void duringAttack()
     {
         if (hands[0].EnteredTrigger || hands[1].EnteredTrigger)
-            PlayerController.instance.Damage(1);
+            PlayerStatisticsController.instance.hurt(DeathEvent.HITTED);
     }
 }
