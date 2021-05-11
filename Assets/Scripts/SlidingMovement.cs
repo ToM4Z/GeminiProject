@@ -50,11 +50,11 @@ public class SlidingMovement : MonoBehaviour
         //this.end_rotation = transform.rotation * distance;//new Quaternion(transform.rotation.eulerAngles.x + distance, 0, 0, 0);
         this.TimePassed = 0;
         durationTime = 1.0f * distance;
-        Debug.Log("x %f, %fy, %fz: " + (start_rotation.eulerAngles.x + distance, start_rotation.eulerAngles.y, start_rotation.eulerAngles.z));
+        //Debug.Log("x %f, %fy, %fz: " + (start_rotation.eulerAngles.x + distance, start_rotation.eulerAngles.y, start_rotation.eulerAngles.z));
         //Debug.Log("start r : " + start_rotation);
-        Debug.Log("rot x:" + transform.rotation.eulerAngles.x);
-        Debug.Log("end r : " + end_rotation.eulerAngles);   
-        Debug.Log("fw : " + transform.forward);
+        //Debug.Log("rot x:" + transform.rotation.eulerAngles.x);
+        //Debug.Log("end r : " + end_rotation.eulerAngles);   
+        //Debug.Log("fw : " + transform.forward);
     }
 
     /*IEnumerator SliderMovement()
@@ -101,7 +101,7 @@ public class SlidingMovement : MonoBehaviour
 
         if(platformActivated) {
             if(this.type == Type.Slider) {
-                transform.position += transform.forward * (int)platformDirection * speed * Time.deltaTime;
+                //transform.position += transform.forward * (int)platformDirection * speed * Time.deltaTime;
                 //StartCoroutine(SliderMovement());
                 transform.position = Vector3.Lerp(start_position, end_position_slider, startTime/durationTime);
                 startTime += Time.deltaTime * speed;
@@ -112,7 +112,7 @@ public class SlidingMovement : MonoBehaviour
                 }
                 }*/
             } else if (this.type == Type.Elevator) {
-                transform.position += transform.up * (int)platformDirection * speed * Time.deltaTime;
+                //transform.position += transform.up * (int)platformDirection * speed * Time.deltaTime;
                 transform.position = Vector3.Lerp(start_position, end_position_elevator, startTime/durationTime);
                 startTime += Time.deltaTime * speed;
                 /*transform.position += transform.up * (int)platformDirection * speed * Time.deltaTime;
@@ -125,18 +125,18 @@ public class SlidingMovement : MonoBehaviour
                     //this.transform.rotation = Quaternion.Lerp(start_rotation,end_rotation,(int)platformDirection * this.TimePassed);
                     //this.TimePassed += Time.deltaTime;
                     //this.transform.Rotate((int)platformDirection * speed * 7 * Time.deltaTime,0,0);
-                    if(this.platformDirection == LeftOrRight.Right) {
-                        this.transform.rotation = Quaternion.Slerp(end_rotation, start_rotation, startTime/durationTime);
-                    } else if (this.platformDirection == LeftOrRight.Left) {
-                        this.transform.rotation = Quaternion.Slerp(start_rotation, end_rotation, startTime/durationTime);
-                    }
+                    //if (this.platformDirection == LeftOrRight.Right) {
+                    //    this.transform.rotation = Quaternion.Slerp(end_rotation, start_rotation, startTime/durationTime);
+                    //} else if (this.platformDirection == LeftOrRight.Left) {
+                        this.transform.rotation = Quaternion.Slerp(start_rotation, end_rotation, startTime/durationTime);   // ruoto da start_' a end_' rotation
+                    //}
                     this.startTime += Time.deltaTime * speed * 5;
                     this.TimePassed += Time.deltaTime;
-                    this.transform.Rotate((int)platformDirection * speed * 7 * Time.deltaTime,0,0);
+                    //this.transform.Rotate((int)platformDirection * speed * 7 * Time.deltaTime,0,0);
                     //Debug.Log("time passed: " + TimePassed);
                 }
-                if(playerOnPlatform) {
-                }
+                //if(playerOnPlatform) {
+                //}
                 if(TimePassed >= 2.0f) {
                     this.childWithColl.enabled = false;
                     Vector3 scale = new Vector3(-1,-1,-1);
@@ -178,20 +178,23 @@ public class SlidingMovement : MonoBehaviour
                 end_position_elevator = end_position_elevator + deltaVec * (int)platformDirection;
                 startTime = 0;
             }
-            if( (transform.rotation.eulerAngles.x >= (distance-eps) && platformDirection == LeftOrRight.Right) 
-            || (transform.rotation.eulerAngles.x <= (-distance+eps) && platformDirection == LeftOrRight.Left)) {
-                Debug.Log("euler x: " + transform.rotation.eulerAngles.x);
-                Debug.Log("dir: " + platformDirection);
+            else if(this.type == Type.PopUp && 
+                    (  (platformDirection == LeftOrRight.Right && Mathf.Approximately(transform.rotation.eulerAngles.x, distance))  // Approximately fa la stessa cosa del check '< d+eps'
+                    || (platformDirection == LeftOrRight.Left  && Mathf.Approximately(transform.rotation.eulerAngles.x, 360-distance)) // quando il grado va in negativo in realtà scende da 360 (es. -1 sarebbe 359)
+                    )) {
+                //if( (transform.rotation.eulerAngles.x >= (distance-eps) && platformDirection == LeftOrRight.Right) 
+                //|| (transform.rotation.eulerAngles.x <= (-distance+eps) && platformDirection == LeftOrRight.Left)) {
+                //Debug.Log("euler x: " + transform.rotation.eulerAngles.x);
+                //Debug.Log("dir: " + platformDirection);
                 SwitchDirection();
-                this.startTime = 0;
-                Quaternion temp = transform.rotation;
+                //Quaternion temp = transform.rotation;
                 this.start_rotation = this.transform.rotation = end_rotation;
                 //this.end_rotation = temp;//Quaternion.Euler(Vector3.right * distance * (int)platformDirection);
                 this.end_rotation = Quaternion.Euler((distance * (int)platformDirection), transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-                startTime = 0;
-                Debug.Log("changed dir: " + platformDirection);
-                Debug.Log("end r in switch: " + end_rotation);
-                Debug.Log("====================================");
+                this.startTime = 0;
+                //Debug.Log("changed dir: " + platformDirection);
+                //Debug.Log("end r in switch: " + end_rotation);
+                //Debug.Log("====================================");
             }
         }
     }
