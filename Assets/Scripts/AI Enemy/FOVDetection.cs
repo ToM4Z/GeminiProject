@@ -22,11 +22,13 @@ public class FOVDetection : MonoBehaviour
     // Indicates that the player is actually visible
     private bool playerVisible = false;
 
-    private Transform player;
+    private Transform playerTransform;
+    private PlayerStatisticsController player;
 
     void Start()
     {
-        player = PlayerController.instance.transform;
+        player = PlayerStatisticsController.instance;
+        playerTransform = PlayerStatisticsController.instance.transform;
         targetMask = LayerMask.GetMask("Player");
         obstacleMask = LayerMask.GetMask("Default");
     }
@@ -34,6 +36,9 @@ public class FOVDetection : MonoBehaviour
     // Check if the player is in the field of view and if there aren't obstacles in the middle
     public bool isPlayerVisible()                
     {
+        if (player.isDeath())
+            return playerVisible = false;
+
         Vector3 myPosition = transform.position;                    // to avoid collisions with terrain, I move up the position check
         myPosition.y += 0.5f;
         Collider[] targetsInViewRadius = Physics.OverlapSphere(myPosition, viewRadius, targetMask);
@@ -74,10 +79,10 @@ public class FOVDetection : MonoBehaviour
         Gizmos.DrawRay(pos, fovLine1);
         Gizmos.DrawRay(pos, fovLine2);
 
-        if (player && playerVisible)
+        if (playerTransform && playerVisible)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(pos, (player.position - transform.position).normalized * viewRadius);
+            Gizmos.DrawRay(pos, (playerTransform.position - transform.position).normalized * viewRadius);
         }
     }
 
