@@ -36,7 +36,7 @@ public class FOVDetection : MonoBehaviour
     // Check if the player is in the field of view and if there aren't obstacles in the middle
     public bool isPlayerVisible()                
     {
-        if (player.hp == 0)
+        if (player.isDeath())
             return playerVisible = false;
 
         Vector3 myPosition = transform.position;                    // to avoid collisions with terrain, I move up the position check

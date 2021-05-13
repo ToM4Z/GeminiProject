@@ -86,11 +86,6 @@ public class PlayerMaterialHandler : MonoBehaviour
         resetMaterials();
     }
 
-    //private void OnDestroy()
-    //{
-    //    resetMaterials();
-    //}
-
     private void Awake()
     {
         Messenger.AddListener(GameEvent.RESET, Reset);

@@ -61,15 +61,15 @@ public class MouseLook : MonoBehaviour
 
     private void Awake()
     {
-        Messenger<bool>.AddListener(GameEvent.ENABLE_INPUT_CAMERA, enableCamera);
+        Messenger<bool>.AddListener(GameEvent.ENABLE_INPUT, enableInput);
     }
 
     private void OnDestroy()
     {
-        Messenger<bool>.RemoveListener(GameEvent.ENABLE_INPUT_CAMERA, enableCamera);
+        Messenger<bool>.RemoveListener(GameEvent.ENABLE_INPUT, enableInput);
     }
 
-    private void enableCamera(bool _b)
+    private void enableInput(bool _b)
     {
         enable = _b;
     }

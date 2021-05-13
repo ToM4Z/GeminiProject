@@ -19,16 +19,14 @@ public class PlayerStatisticsController : MonoBehaviour
 
 
     public int playerLives = 3;
-    public int maxHP = 5;
-    public int hp = 5;
+    [SerializeField] private int maxHP;
+    private int hp;
     public int normalGearCount = 0;
     public int bonusGearCount = 0;
 
-    [SerializeField]
-    private GameObject followTarget;
 
     private bool invulnerability;
-    private float invulnerabilityTime = 3f;
+    [SerializeField] private float invulnerabilityTime = 3f;
     private float invulnerabilityTimer = 0f;
 
     private PlayerMaterialHandler materialHandler;
@@ -36,6 +34,7 @@ public class PlayerStatisticsController : MonoBehaviour
     void Start()
     {
         materialHandler = GetComponent<PlayerMaterialHandler>();
+        hp = maxHP;
     }
 
     private void Reset()
@@ -71,39 +70,24 @@ public class PlayerStatisticsController : MonoBehaviour
         bonusGearCount++;
     }
 
+    public bool isDeath() { return hp == 0; }
+
+    public int getHP() { return hp; }
+
     public void increaseHP(){
         hp++;
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
     {
-        if (hp == 0)
-            return;
-
         if (!fatal)
         {
-            if (invulnerability)
+            if (invulnerability || isDeath())
                 return;
 
             hp--;
-            if (hp == 0)
-            {
-                Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
-
-                switch (deathEvent)
-                {
-                    case DeathEvent.BURNED:
-                        {
-                            materialHandler.burnMaterials();
-                            break;
-                        }
-                    case DeathEvent.FROZEN:
-                        {
-                            materialHandler.frozenMaterials();
-                            break;
-                        }
-                }
-            }
+            if (hp == 0) 
+                death(deathEvent);
             else
             {
                 print("HP: " + hp);
@@ -115,12 +99,14 @@ public class PlayerStatisticsController : MonoBehaviour
 
         }
         else
-        {
-            hp = 0;
-            if (deathEvent.Equals(DeathEvent.FALLED_IN_VACUUM))
-                followTarget.transform.SetParent(null);
-            Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
-        }
+            death(deathEvent);
+    }
+
+    private void death(DeathEvent deathEvent)
+    {
+        hp = 0;
+        print("DEATH BY " + deathEvent.ToString());
+        Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
     }
 
     private void OnDestroy()
