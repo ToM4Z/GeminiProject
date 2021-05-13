@@ -11,8 +11,8 @@ public class GameLevelManager : MonoBehaviour
     private void Start()
     {
         player = PlayerStatisticsController.instance.gameObject;
-        respawnPos = player.transform.position;
-        respawnRot = player.transform.rotation; 
+        respawnPos = transform.position;
+        respawnRot = transform.rotation; 
     }
 
     private void OnPlayerDeath(DeathEvent deathEvent) {
@@ -20,13 +20,19 @@ public class GameLevelManager : MonoBehaviour
         StartCoroutine(Respawn());
     }
 
+    public void setRespawn(Vector3 pos, Quaternion rot)
+    {
+        respawnPos = pos;
+        respawnRot = rot;
+    }
+
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(RespawnTime);
         yield return new WaitForEndOfFrame();
 
-        player.transform.position = player.transform.parent.position;
-        player.transform.rotation = player.transform.parent.rotation;
+        player.transform.position = respawnPos;
+        player.transform.rotation = respawnRot;
         print("RESPAWN");
 
         Messenger.Broadcast(GameEvent.RESET);
