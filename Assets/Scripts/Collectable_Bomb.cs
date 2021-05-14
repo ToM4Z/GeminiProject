@@ -21,7 +21,7 @@ public class Collectable_Bomb : MonoBehaviour
         //Check if the other object is a PlayerController
         if (player != null) {
             //If it is the player, increase its Bomb Counter
-            //player.increaseBomb();
+            player.increaseBomb();
         }
 
         Destroy(this.gameObject);
