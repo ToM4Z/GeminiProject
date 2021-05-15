@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedSpin: 1
+  time: 10
 --- !u!1 &7251860253970063686
 GameObject:
   m_ObjectHideFlags: 0

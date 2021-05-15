@@ -27,7 +27,7 @@ public class SlidingMovement : MonoBehaviour
     private bool isScaling;
     private float TimePassed;
     public MeshCollider childWithColl;
-    public bool platformActivated = true;
+    public bool platformActivated = false;
 
     private float durationTime;
     private float startTime = 0;

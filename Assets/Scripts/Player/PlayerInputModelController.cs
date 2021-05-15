@@ -50,14 +50,24 @@ public class PlayerInputModelController : MonoBehaviour
     private AttackTrigger[] hands = new AttackTrigger[2];
     [SerializeField]
     private AttackTrigger[] foots = new AttackTrigger[2];
+    private AttackTrigger armActualAttack = null;
 
     private bool enableInput = true;
+
+    private float heightCollider, crouchedHeightCollider;
+    private Vector3 centerCollider, crouchedCenterCollider;
 
     private void Start()
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         materialHandler = GetComponent<PlayerMaterialHandler>();
+
+        heightCollider = charController.height;
+        centerCollider = charController.center;
+
+        crouchedHeightCollider = heightCollider / 2;
+        crouchedCenterCollider = new Vector3(centerCollider.x, centerCollider.y - .1f, centerCollider.z);
 
         status = Status.IDLE;
         _vertSpeed = minFall;
@@ -72,11 +82,12 @@ public class PlayerInputModelController : MonoBehaviour
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
 
+        SetNormalCollider();
         deathEvent = 0;
-        status = Status.RESPAWN;
         _vertSpeed = minFall;
-        anim.Play("Idle - Run H");
         anim.speed = 1f;
+        anim.Play("Idle - Run H");
+        status = Status.RESPAWN;
         StartCoroutine(Respawn());
     }
 
@@ -95,6 +106,18 @@ public class PlayerInputModelController : MonoBehaviour
     private float GetAxis(string button)
     {
         return enableInput ? Input.GetAxis(button) : 0;
+    }
+
+    private void SetNormalCollider()
+    {
+        charController.height = heightCollider;
+        charController.center = centerCollider;
+    }
+
+    private void SetCrouchedCollider()
+    {
+        charController.height = crouchedHeightCollider;
+        charController.center = crouchedCenterCollider;
     }
 
     private void Update()
@@ -120,6 +143,8 @@ public class PlayerInputModelController : MonoBehaviour
                     if (!charController.isGrounded)
                     {
                         anim.Play("Falling");
+                        stopAttack();
+
                         status = Status.FALLING;
                         break;
                     }
@@ -127,35 +152,39 @@ public class PlayerInputModelController : MonoBehaviour
                     if (GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
-                        //anim.SetTrigger("Jump");
                         anim.Play("Jump start");
+                        stopAttack();
+
                         status = Status.FALLING;
                         break;
                     }
 
                     if (GetButtonDown("Crouch"))
                     {
-                        if (Mathf.Approximately(movement.magnitude, 0f))
+                        SetCrouchedCollider();
+
+                        if (GetAxis("Vertical") <= 0.3f)
                         {
-                            status = Status.CROUCH;
                             anim.SetBool("Crouch", true);
+
+                            status = Status.CROUCH;
                             break;
                         }
                         else
-                        if(GetAxis("Vertical") > 0.5f){
+                        {
                             directionSlide = movement.normalized;
-                            status = Status.SLIDE;
-                            //anim.SetTrigger("Slide");
-                            anim.Play("Slide");
-                            attacking = true;
-
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
+                            anim.Play("Slide");
+                            attack(Status.SLIDE);
+
+                            status = Status.SLIDE;
+                            break;
                         }
                     }
 
                     if (GetButtonDown("Attack"))
-                        attack();
+                        attack(status);
 
                     break; 
                 }
@@ -167,16 +196,18 @@ public class PlayerInputModelController : MonoBehaviour
 
                     if (!charController.isGrounded)
                     {
+                        SetNormalCollider();
                         anim.Play("Falling");
-                        status = Status.FALLING;
                         anim.SetBool("Crouch", false);
+
+                        status = Status.FALLING;
                         break;
                     }
 
                     if (GetButtonDown("Jump"))
                     {
+                        SetNormalCollider();
                         _vertSpeed = jumpSpeed;
-                        //anim.SetTrigger("Jump");
                         anim.Play("Jump start");
                         anim.SetBool("Crouch", false);
 
@@ -186,16 +217,20 @@ public class PlayerInputModelController : MonoBehaviour
 
                     if (GetButtonDown("Crouch"))
                     {
-                        status = Status.IDLE;
+                        SetNormalCollider();
                         anim.SetBool("Crouch", false);
+
+                        status = Status.IDLE;
                         break;
                     }
 
                     if (GetButtonDown("Attack"))
                     {
-                        status = Status.IDLE;
+                        SetNormalCollider();
                         anim.SetBool("Crouch", false);
-                        attack();
+
+                        attack(Status.IDLE);
+                        status = Status.IDLE;
                         break;
                     }
 
@@ -212,12 +247,14 @@ public class PlayerInputModelController : MonoBehaviour
 
                     if (charController.isGrounded)
                     {
-                        //anim.ResetTrigger("Jump");
+                        stopAttack();
+
                         string layer = LayerMask.LayerToName(_contact.gameObject.layer);
                         if (layer.Equals(trampolineMask))
                         {
                             _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;
                             anim.Play("Jump start");
+
                             status = Status.FALLING;
                         }
                         else
@@ -225,20 +262,19 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             _vertSpeed = jumpSpeed;
                             anim.Play("Jump start");
-                            status = Status.FALLING;
                             _contact.collider.gameObject.GetComponent<AIEnemy>().hurt();
+
+                            status = Status.FALLING;
                         }
                         else
                         {
                             status = Status.IDLE;
-                            airAttackJustDone = false;
                         }
-
                         break;
                     }
 
                     if (GetButtonDown("Attack"))
-                        attack();
+                        attack(status);
 
                     break;
                 }
@@ -250,25 +286,29 @@ public class PlayerInputModelController : MonoBehaviour
 
                     if (actualSlideSpeed < 3f)
                     {
-                        //anim.ResetTrigger("Slide");
+                        stopAttack();
+                        SetNormalCollider();
+
                         status = Status.IDLE;
                         break;
                     }
 
                     if (!charController.isGrounded)
                     {
+                        SetNormalCollider();
                         anim.Play("Falling");
-                        //anim.ResetTrigger("Slide");
+                        stopAttack();
+
                         status = Status.FALLING;
                         break;
                     }
 
                     if (GetButtonDown("Jump"))
                     {
+                        SetNormalCollider();
                         _vertSpeed = jumpSpeed;
-                        //anim.SetTrigger("Jump");
                         anim.Play("Jump start");
-                        //anim.SetTrigger("Jump");
+                        stopAttack();
 
                         status = Status.FALLING;
                         break;
@@ -293,18 +333,19 @@ public class PlayerInputModelController : MonoBehaviour
         charController.Move(movement);
     }
 
-    private void attack()
+    private void attack(Status s)
     {
         if (attacking)
             return;
 
-        switch (status)
+        switch (s)
         {
             case Status.IDLE:
                 {
                     attackIndex = (attackIndex + 1) % (comboAttacks.Length - 1); // -1 because the last attack is the air attack
+                    armActualAttack = hands[attackIndex];
                     anim.Play(comboAttacks[attackIndex]);
-                    attacking = true;
+                    armActualAttack.EnableTrigger();
                     break;
                 }
             case Status.FALLING:
@@ -312,12 +353,31 @@ public class PlayerInputModelController : MonoBehaviour
                     if (!airAttackJustDone)
                     {
                         anim.Play(comboAttacks[attackIndex = comboAttacks.Length - 1]);
+                        armActualAttack = foots[0];
+                        armActualAttack.EnableTrigger();
                         airAttackJustDone = true;
-                        attacking = true;
                     }
                     break;
                 }
+            case Status.SLIDE:
+                {
+                    armActualAttack = foots[0];
+                    armActualAttack.EnableTrigger();
+                    break;
+                }
         }
+        attacking = true;
+    }
+
+    private void stopAttack()
+    {
+        if (!attacking)
+            return;
+        armActualAttack.DisableTrigger();
+        armActualAttack = null;
+        attackIndex = -1;
+        airAttackJustDone = false;
+        attacking = false;
     }
 
     private void checkAttack()
@@ -330,7 +390,7 @@ public class PlayerInputModelController : MonoBehaviour
                     {
                         if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
                         {
-                            attacking = false;
+                            stopAttack();
                         }
                         else
                         {
@@ -346,7 +406,7 @@ public class PlayerInputModelController : MonoBehaviour
                     {
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(comboAttacks[attackIndex]))
                         {
-                            attacking = false;
+                            stopAttack();
                         }
                         else
                         {
@@ -361,7 +421,7 @@ public class PlayerInputModelController : MonoBehaviour
                     {
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
                         {
-                            attacking = false;
+                            stopAttack();
                         }
                         else
                         {
@@ -381,7 +441,7 @@ public class PlayerInputModelController : MonoBehaviour
     {
         status = Status.DEATH;
         this.deathEvent = deathEvent;
-        attacking = false;
+        stopAttack();
 
         switch (deathEvent)
         {

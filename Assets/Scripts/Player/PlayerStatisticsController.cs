@@ -23,6 +23,7 @@ public class PlayerStatisticsController : MonoBehaviour
     private int hp;
     public int normalGearCount = 0;
     public int bonusGearCount = 0;
+    public int bombCount = 0;
 
 
     private bool invulnerability;
@@ -31,9 +32,12 @@ public class PlayerStatisticsController : MonoBehaviour
 
     private PlayerMaterialHandler materialHandler;
 
+    private HUDManager hud;
+
     void Start()
     {
         materialHandler = GetComponent<PlayerMaterialHandler>();
+        hud = transform.parent.gameObject.GetComponentInChildren<HUDManager>();
         hp = maxHP;
     }
 
@@ -60,6 +64,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseNormalGear(){
         normalGearCount++;
+        hud.setGearCounter(normalGearCount);
         if (normalGearCount == 100){
             playerLives++;
             normalGearCount = 0;
@@ -68,6 +73,12 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseBonusGear(){
         bonusGearCount++;
+        hud.setGearBonusCounter(bonusGearCount);
+    }
+
+    public void increaseBomb(){
+        bombCount++;
+        hud.setBombCounter(bombCount);
     }
 
     public bool isDeath() { return hp == 0; }
