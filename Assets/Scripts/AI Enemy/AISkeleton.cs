@@ -27,10 +27,26 @@ public class AISkeleton : AIEnemy
         spawn = true;
     }
 
+    // at the beginning of the attack, I activate the attack triggers
+    protected override void startAttack()
+    {
+        base.startAttack();
+        hands[0].EnableTrigger();
+        hands[1].EnableTrigger();
+    }
+
     // during attack, if the hands are triggered by player, I hit him
     protected override void duringAttack()
     {
         if (hands[0].EnteredTrigger || hands[1].EnteredTrigger)
             PlayerStatisticsController.instance.hurt(DeathEvent.HITTED);
+    }
+
+    // at the end of the attack, I deactivate the attack triggers
+    protected override void stopAttack()
+    {
+        base.stopAttack();
+        hands[0].DisableTrigger();
+        hands[1].DisableTrigger();
     }
 }

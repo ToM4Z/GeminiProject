@@ -21,6 +21,19 @@ public class AttackTrigger : MonoBehaviour
             throw new System.Exception("Tag not valid");
     }
 
+    public void EnableTrigger()
+    {
+        GetComponent<Collider>().enabled = true;
+    }
+
+    public void DisableTrigger()
+    {
+        GetComponent<Collider>().enabled = false;
+        hitted = null;
+        EnteredTrigger = false;
+    }
+
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(collisionTag))
