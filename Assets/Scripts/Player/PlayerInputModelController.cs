@@ -63,8 +63,10 @@ public class PlayerInputModelController : MonoBehaviour
 
     private bool enableInput = true;
 
-    private float heightCollider, crouchedHeightCollider;
-    private Vector3 centerCollider, crouchedCenterCollider;
+    private float heightCollider;
+    [SerializeField] private float crouchedHeightCollider;
+    private Vector3 centerCollider;
+    [SerializeField] private Vector3 crouchedCenterCollider;
 
     private void Start()
     {
@@ -74,9 +76,6 @@ public class PlayerInputModelController : MonoBehaviour
 
         heightCollider = charController.height;
         centerCollider = charController.center;
-
-        crouchedHeightCollider = heightCollider / 2;
-        crouchedCenterCollider = new Vector3(centerCollider.x, centerCollider.y - .1f, centerCollider.z);
 
         status = Status.IDLE;
         _vertSpeed = minFall;
