@@ -1,6 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ *  Class: PatrolPath
+ *  
+ *  Description:
+ *  This script describe the patrol path of the enemy.
+ *  The patrol path is composed by various gameobject contained in PathNodes list.
+ *  
+ *  Author: Thomas Voce
+*/
 public class PatrolPath : MonoBehaviour
 {
 

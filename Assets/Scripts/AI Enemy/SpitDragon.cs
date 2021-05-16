@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
- * Spit Dragon Script
- * 
- * This script checks that when the particles are triggered by player, then I hit the player
- */
+ *  Class: SpitDragon
+ *  
+ *  Description:
+ *  This script checks that when the particles are triggered by player, then I hit the player.
+ *  
+ *  Author: Thomas Voce
+*/
 public class SpitDragon : MonoBehaviour
 {
     ParticleSystem particle;

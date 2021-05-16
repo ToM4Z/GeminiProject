@@ -1,5 +1,13 @@
 using UnityEngine;
 
+/*
+ *  Class: FOVDetection
+ *  
+ *  Description:
+ *  This script check if the player (or the gameobject with targetMask) is in the enemy's field of view.
+ *  
+ *  Author: Thomas Voce
+*/
 public class FOVDetection : MonoBehaviour
 {
     [Tooltip("Toggle See Through Obstacles")]

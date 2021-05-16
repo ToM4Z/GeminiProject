@@ -1,8 +1,15 @@
 using UnityEngine;
 using System.Collections;
+
 /*
- * AttackTrigger is a script used to detect if the character's hand/foot hit other one
+ *  Class: AttackTrigger
+ *  
+ *  Description:
+ *  This is a script used to detect if the character's hand/foot hit other one
+ *  
+ *  Author: Thomas Voce
 */
+
 [RequireComponent(typeof(Collider))]
 public class AttackTrigger : MonoBehaviour
 {

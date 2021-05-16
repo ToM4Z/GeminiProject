@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: PlayerStatisticsController
+ *  
+ *  Description:
+ *  This script contains the player'statistics, the number of objects, and manage the invulnerability time.
+ *  
+ *  Author: Thomas Voce, Andrea De Seta
+*/
 public class PlayerStatisticsController : MonoBehaviour
 {
 
     #region Singleton
 
     public static PlayerStatisticsController instance;
-    
+
     void Awake()
     {
         instance = this;
@@ -21,9 +29,9 @@ public class PlayerStatisticsController : MonoBehaviour
     public int playerLives = 3;
     [SerializeField] private int maxHP;
     private int hp;
-    public int normalGearCount = 0;
-    public int bonusGearCount = 0;
-    public int bombCount = 0;
+    public int normalGearCount {get; private set;}
+    public int bonusGearCount { get; private set; }
+    public int bombCount { get; private set; }
 
 
     private bool invulnerability;
@@ -39,6 +47,9 @@ public class PlayerStatisticsController : MonoBehaviour
         materialHandler = GetComponent<PlayerMaterialHandler>();
         hud = transform.parent.gameObject.GetComponentInChildren<HUDManager>();
         hp = maxHP;
+        normalGearCount = 0;
+        bonusGearCount = 0;
+        bombCount = 0;
     }
 
     private void Reset()
@@ -78,6 +89,11 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseBomb(){
         bombCount++;
+        hud.setBombCounter(bombCount);
+    }
+    public void decreaseBomb()
+    {
+        bombCount--;
         hud.setBombCounter(bombCount);
     }
 

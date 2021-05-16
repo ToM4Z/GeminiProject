@@ -1,8 +1,13 @@
 using UnityEngine;
 
 /*
-    This script describe the Dragons behaviur.
-    Inherite by AI Enemy
+ *  Class: AIDragon
+ *  
+ *  Description:
+ *  This script describe the Dragons behaviur.
+ *  Inherite by AI Enemy
+ *  
+ *  Author: Thomas Voce
 */
 public class AIDragon : AIEnemy
 {

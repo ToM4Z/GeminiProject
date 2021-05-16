@@ -1,7 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ *  Class: PlayerMaterialHandler
+ *  
+ *  Description:
+ *  This script handles the player material to apply some cool effects to him.
+ *  
+ *  Author: Thomas Voce
+*/
 public class PlayerMaterialHandler : MonoBehaviour
 {
     [SerializeField] private List<Material> originMaterials;
