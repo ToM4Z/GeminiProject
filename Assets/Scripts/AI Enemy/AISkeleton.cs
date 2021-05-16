@@ -2,8 +2,13 @@ using System.Collections;
 using UnityEngine;
 
 /*
-    This script describe the Skeletons behaviur.
-    Inherite by AI Enemy
+ *  Class: AISkeleton
+ *  
+ *  Description:
+ *  This script describe the Skeleton behaviur.
+ *  Inherite by AI Enemy
+ *  
+ *  Author: Thomas Voce
 */
 public class AISkeleton : AIEnemy
 {

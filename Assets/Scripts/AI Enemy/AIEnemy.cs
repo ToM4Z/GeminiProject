@@ -2,9 +2,13 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /*
- * AI Enemy is a script that describes the general behaviur of enemies
+ *  Class: AIEnemy
+ *  
+ *  Description:
+ *  This script describes the general behaviur of all enemies.
+ *  
+ *  Author: Thomas Voce
 */
-
 [RequireComponent(typeof(FOVDetection))]
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Rigidbody))]

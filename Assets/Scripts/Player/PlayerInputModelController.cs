@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ *  Class: PlayerInputModelController
+ *  
+ *  Description:
+ *  This script allow player to move in the world and to perform different actions.
+ *  
+ *  Author: Thomas Voce
+*/
 [RequireComponent(typeof(CharacterController))]
 public class PlayerInputModelController : MonoBehaviour
 {
@@ -15,7 +24,7 @@ public class PlayerInputModelController : MonoBehaviour
         RESPAWN
     }
 
-    private Status status;
+    public Status status { get; private set; }
 
     public float playerSpeed = 7f;
     public float playerCrouchedSpeed = 2f;
@@ -98,12 +107,12 @@ public class PlayerInputModelController : MonoBehaviour
         status = Status.IDLE;
     }
 
-    private bool GetButtonDown(string button)
+    public bool GetButtonDown(string button)
     {
         return enableInput && Input.GetButtonDown(button);
     }
 
-    private float GetAxis(string button)
+    public float GetAxis(string button)
     {
         return enableInput ? Input.GetAxis(button) : 0;
     }

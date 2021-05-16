@@ -1,7 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ *  Class: MouseLook
+ *  
+ *  Description:
+ *  This script manages the mouse/analog input to handle camera orientation.
+ *  
+ *  Author: Gemini
+*/
 public class MouseLook : MonoBehaviour
 {
     private bool enable = true;
