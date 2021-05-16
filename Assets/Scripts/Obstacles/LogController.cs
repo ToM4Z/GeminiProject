@@ -16,17 +16,29 @@ public class LogController : MonoBehaviour
     {
         _logs = new List<GameObject>();
         startTime = 0f;
-        waitTime = 2.0f;
+        waitTime = 1.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(startTime >= waitTime) {
-            //append di un nuovo log istanziato
+            GameObject log = Instantiate(LogPrefab) as GameObject;
+            log.GetComponent<LogBehaviour>().SetPos(startPos.transform.position,endPos.transform.position);
+            log.transform.position = startPos.transform.position;
+            _logs.Add(log);
+            startTime = 0;
         }
+        List<GameObject> toBeRemoved = new List<GameObject>();
         foreach (GameObject log in _logs) {
-            //eliminare gli oggetti arrivati alla fine
+            if(log.transform.position == endPos.transform.position) {
+                toBeRemoved.Add(log);
+                Destroy(log);
+                //_logs.Remove(log);
+            }            
+        }
+        foreach (GameObject l in toBeRemoved) {
+            _logs.Remove(l);
         }
         startTime += Time.deltaTime;
     }
