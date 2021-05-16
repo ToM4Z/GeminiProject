@@ -1869,6 +1869,8 @@ MonoBehaviour:
   foots:
   - {fileID: 3811851302230492911}
   - {fileID: 3811851303251576392}
+  crouchedHeightCollider: 0.43
+  crouchedCenterCollider: {x: 0, y: 0.37, z: 0}
 --- !u!114 &5432224986264764940
 MonoBehaviour:
   m_ObjectHideFlags: 0
