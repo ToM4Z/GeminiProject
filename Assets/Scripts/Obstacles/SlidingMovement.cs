@@ -32,11 +32,12 @@ public class SlidingMovement : MonoBehaviour
     private float durationTime;
     private float startTime = 0;
 
-    public GameObject player;
+    private GameObject player;
     
     // Start is called before the first frame update
     void Start()
     {
+        this.player = PlayerStatisticsController.instance.transform.parent.gameObject;
         this.platformDirection = LeftOrRight.Right;
         this.start_position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         this.start_position = this.transform.position;
