@@ -9,6 +9,10 @@ public class HUDManager : MonoBehaviour
     Text gearBonusCounter;
     Text bombCounter;
 
+    Image hpBattery;
+
+    Sprite greenHP, orangeHP, redHP;
+
     private T GetChildComponentByName<T>(string name) where T : Component {
         foreach (T component in GetComponentsInChildren<T>(true)) {
             if (component.gameObject.name == name) {
@@ -22,6 +26,11 @@ public class HUDManager : MonoBehaviour
         gearCounter = this.GetChildComponentByName<Text>("GearCounter");
         gearBonusCounter = this.GetChildComponentByName<Text>("GearBonusCounter");
         bombCounter = this.GetChildComponentByName<Text>("BombCounter");
+        hpBattery = this.GetChildComponentByName<Image>("HP");
+        greenHP = Resources.Load<Sprite>("HUD/Green_HP");
+        orangeHP = Resources.Load<Sprite>("HUD/Orange_HP");
+        redHP = Resources.Load<Sprite>("HUD/Red_HP");
+        
     }
 
     // Update is called once per frame
@@ -40,5 +49,19 @@ public class HUDManager : MonoBehaviour
 
     public void setBombCounter(int newCount){
         bombCounter.text = "x" + newCount;
+    }
+
+    public void updateHpBattery(int hp){
+        
+        if(hp == 3){
+            hpBattery.sprite = greenHP;
+        }
+        else if(hp == 2){
+            hpBattery.sprite = orangeHP;
+        }
+        else if(hp == 1){
+            hpBattery.sprite = redHP;
+        }
+        
     }
 }
