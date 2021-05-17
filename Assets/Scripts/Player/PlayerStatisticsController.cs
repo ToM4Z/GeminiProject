@@ -50,11 +50,15 @@ public class PlayerStatisticsController : MonoBehaviour
         normalGearCount = 0;
         bonusGearCount = 0;
         bombCount = 0;
+        hud.setBombCounter(bombCount);
+        hud.setGearBonusCounter(bonusGearCount);
+        hud.setGearCounter(normalGearCount);
     }
 
     private void Reset()
     {
         hp = maxHP;
+        hud.updateHpBattery(hp);
     }
 
     void Update()
@@ -103,6 +107,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseHP(){
         hp++;
+        hud.updateHpBattery(hp);
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
@@ -113,6 +118,7 @@ public class PlayerStatisticsController : MonoBehaviour
                 return;
 
             hp--;
+            hud.updateHpBattery(hp);
             if (hp == 0) 
                 death(deathEvent);
             else
@@ -132,6 +138,7 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
+        //hud.updateHpBattery(hp);
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
     }
