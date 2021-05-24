@@ -54,4 +54,13 @@ public class AISkeleton : AIEnemy
         hands[0].DisableTrigger();
         hands[1].DisableTrigger();
     }
+
+    public override void Reset()
+    {
+        base.Reset();
+
+        status = Status.INACTIVE;
+
+        StartCoroutine(awake());
+    }
 }

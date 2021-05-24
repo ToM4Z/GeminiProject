@@ -48,4 +48,11 @@ public class AIDragon : AIEnemy
     {
         particle.Stop();
     }
+
+    public override void Reset()
+    {
+        base.Reset();
+        particle.Stop();
+
+    }
 }

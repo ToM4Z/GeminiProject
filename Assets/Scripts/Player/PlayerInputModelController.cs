@@ -337,6 +337,7 @@ public class PlayerInputModelController : MonoBehaviour
         movement = transform.TransformDirection(movement);
 
         movement.y = _vertSpeed;
+
         movement *= Time.deltaTime;
         charController.Move(movement);
     }

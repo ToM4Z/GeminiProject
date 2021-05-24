@@ -653,6 +653,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1642299189480851490}
   - component: {fileID: 3299234635934091251}
+  - component: {fileID: 1421231808151141049}
+  - component: {fileID: 213626021527734821}
   m_Layer: 0
   m_Name: Player Manager
   m_TagString: Untagged
@@ -690,7 +692,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7601287af765734e984479ea4173739, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RespawnTime: 3
+--- !u!114 &1421231808151141049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642299189480851485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e45a2a480f8b8042a32ba6431f57e5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &213626021527734821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642299189480851485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f541c0735ea23a54f815422f6767b82c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1642299189713872474
 GameObject:
   m_ObjectHideFlags: 0
