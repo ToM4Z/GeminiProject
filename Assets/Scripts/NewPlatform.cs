@@ -28,17 +28,25 @@ public class NewPlatform : MonoBehaviour
     {
         if (coll.gameObject.tag == "Player")
         {
-            cc = coll.GetComponent<CharacterController>();
+            //cc = coll.GetComponent<CharacterController>();
+            coll.transform.SetParent(this.transform);
         }
     }
-    private void OnTriggerStay(Collider other)
+    void OnTriggerExit(Collider coll)
     {
-
-        if (other.gameObject.tag == "Player")
+        if (coll.gameObject.tag == "Player")
         {
-            cc.Move(m_Rigidbody.velocity * Time.deltaTime);
+            coll.transform.parent = null;
         }
     }
+    //private void OnTriggerStay(Collider other)
+    //{
+
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        //cc.Move(m_Rigidbody.velocity * Time.deltaTime);
+    //    }
+    //}
 
 
     //// Update is called once per frame
