@@ -7,6 +7,8 @@ TagManager:
   - MAST_Holder
   - Enemy
   - TriggerDeath
+  - MovingPlatform
+  - Collectable
   layers:
   - Default
   - TransparentFX

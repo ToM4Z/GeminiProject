@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 /*
  *  Class: AIEnemy
@@ -11,7 +12,6 @@ using UnityEngine.AI;
 */
 [RequireComponent(typeof(FOVDetection))]
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(FOVDetection))]
 public abstract class AIEnemy : MonoBehaviour
 {
@@ -35,7 +35,6 @@ public abstract class AIEnemy : MonoBehaviour
     protected FOVDetection fov;
     protected Transform player;
     protected NavMeshAgent agent;
-    protected Rigidbody rig;
 
     //--------------ATTACK VARIABLES-------------
     
@@ -112,7 +111,6 @@ public abstract class AIEnemy : MonoBehaviour
     protected virtual void Start()
     {
         player = PlayerStatisticsController.instance.transform;
-        rig = GetComponent<Rigidbody>();
         agent = GetComponent<NavMeshAgent>();
         fov = GetComponent<FOVDetection>();
         animator = GetComponentInChildren<Animator>();
@@ -196,8 +194,15 @@ public abstract class AIEnemy : MonoBehaviour
         animator.SetTrigger(deathStateAnim);
         AfterHit();
 
+        Managers.Enemies.EnemyDie(this.gameObject);
+        StartCoroutine(Disappear());
+    }
 
-        Destroy(this.gameObject, 5f);       //the enemy will disappear after 5 seconds
+    private IEnumerator Disappear()     //the enemy will disappear after 5 seconds
+    {
+        yield return new WaitForSeconds(5f);
+        if(status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
+            this.gameObject.SetActive(false);   //i disactive the enemy
     }
 
     // this method handles the behaviur of the enemy when have to attack the player
@@ -433,5 +438,19 @@ public abstract class AIEnemy : MonoBehaviour
             m_PathDestinationNodeIndex++;
             m_PathDestinationNodeIndex %= patrolPath.PathNodes.Count;
         }
+    }
+
+    public virtual void Reset()
+    {
+        transform.position = originPos;
+        transform.rotation = originRot;
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = true;
+        warnedTimer = 0f;
+        attackFase = AttackFase.NO;
+        m_PathDestinationNodeIndex = 1;
+
+        animator.Rebind();
+        status = Status.IDLE;
     }
 }
