@@ -94,8 +94,8 @@ GameObject:
   - component: {fileID: 3212649861905038234}
   - component: {fileID: 3212649861905038237}
   m_Layer: 0
-  m_Name: gear
-  m_TagString: Untagged
+  m_Name: Gear
+  m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

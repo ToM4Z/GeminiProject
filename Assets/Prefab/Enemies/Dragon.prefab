@@ -28,12 +28,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6459335384745907080}
-  - component: {fileID: 6459335384745907087}
   - component: {fileID: 6459335384745907086}
   - component: {fileID: 6459335384745907083}
   - component: {fileID: 6459335384745907081}
   - component: {fileID: 6459335384745907082}
   - component: {fileID: 5417763076481776575}
+  - component: {fileID: 9138126544391051962}
   m_Layer: 7
   m_Name: Dragon
   m_TagString: Enemy
@@ -57,22 +57,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!54 &6459335384745907087
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6459335384745907084}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!136 &6459335384745907086
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -160,6 +144,22 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 1.73, z: 0.7}
+--- !u!54 &9138126544391051962
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6459335384745907084}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &6459335384962426417
 GameObject:
   m_ObjectHideFlags: 0
