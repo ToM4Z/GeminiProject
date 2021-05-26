@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /*
@@ -13,6 +14,9 @@ public class AIDragon : AIEnemy
 {
     // The dragon hit the player spitting fire/ice with ParticleSystem
     private ParticleSystem particle;
+    [SerializeField] private AudioSource beatWingsSFX;
+    [SerializeField] private AudioSource spitSFX;
+    [SerializeField] private AudioSource deathSFX;
 
     protected override void Start()
     {
@@ -26,33 +30,40 @@ public class AIDragon : AIEnemy
     protected override void startAttack()
     {
         particle.Play();
+        spitSFX.Play();
     }
 
     // in stop attack, I stop the fire particles
     protected override void stopAttack()
     {
         particle.Stop();
+        StartCoroutine(AudioManager.FadeOut(spitSFX, 0.5f));
     }
 
-    // during the attack, I adjust the aim of the particles
-    // the hitting player check is made in SpitDragon script
-    protected override void duringAttack()
-    {
-        Vector3 posToFire = player.position;
-        posToFire.y += 0.5f;
-        particle.gameObject.transform.LookAt(posToFire);
-    }
+    //// during the attack, I adjust the aim of the particles
+    //// the hitting player check is made in SpitDragon script
+    //protected override void duringAttack()
+    //{
+    //    //Vector3 posToFire = player.position;
+    //    //posToFire.y += 0.5f;
+    //    //particle.gameObject.transform.LookAt(posToFire);
+    //}
 
     // when I hurt, I stop to spit
-    protected override void AfterHit()
+    protected override void OnDeath()
     {
-        particle.Stop();
+        deathSFX.Play();
+    }
+
+    public void BeatWings()
+    {
+        beatWingsSFX.Play();
     }
 
     public override void Reset()
     {
         base.Reset();
         particle.Stop();
-
     }
+
 }
