@@ -5,6 +5,17 @@ using UnityEngine.UI;
 
 public class HUDManager : MonoBehaviour
 {
+
+    public static HUDManager instance = null;
+
+    void Awake() {
+        if (instance == null)
+            instance = this;
+        else if(instance != this)
+            Destroy(gameObject);
+    }
+
+
     Text gearCounter;
     Text gearBonusCounter;
     Text bombCounter;
