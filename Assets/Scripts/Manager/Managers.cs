@@ -12,11 +12,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemiesManager))]
 [RequireComponent(typeof(RespawnManager))]
+[RequireComponent(typeof(AudioManager))]
 //[RequireComponent(typeof())]
 public class Managers : MonoBehaviour
 {
     public static EnemiesManager Enemies { get; private set; }
     public static RespawnManager Respawn { get; private set; }
+    public static AudioManager Audio { get; private set; }
 
     private List<IGameManager> _startSequence;
 
@@ -25,10 +27,12 @@ public class Managers : MonoBehaviour
     {
         Enemies = GetComponent<EnemiesManager>();
         Respawn = GetComponent<RespawnManager>();
+        Audio = GetComponent<AudioManager>();
 
         _startSequence = new List<IGameManager>();
         _startSequence.Add(Enemies);
         _startSequence.Add(Respawn);
+        _startSequence.Add(Audio);
 
         StartCoroutine(StartupManagers());
     }

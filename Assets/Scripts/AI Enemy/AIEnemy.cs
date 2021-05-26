@@ -50,6 +50,9 @@ public abstract class AIEnemy : MonoBehaviour
     [Tooltip("It's the distance needed to attack and hit the player")]
     public float minDistanceToAttack = 3f;
 
+    [Tooltip("It's the rotation speed when he face to target")]
+    public float rotationSpeed = 3f;
+
     // It's a timer used in some attack fases in 'warned' method
     protected float warnedTimer = 0f;
 
@@ -134,7 +137,7 @@ public abstract class AIEnemy : MonoBehaviour
             case Status.INACTIVE: { inactiveIdle(); break; }
             case Status.IDLE: { idle(); break; }
             case Status.WARNED: { warned(); break; }
-            //case Status.DEAD: { die(); break; }       this event is handled by hit() method 
+            //case Status.DEAD  this event is handled in 'hurt' method 
         }
 
         animator.SetFloat(animVarSpeed, agent.velocity.magnitude);      // updates the Speed variable of the animator
@@ -370,7 +373,7 @@ public abstract class AIEnemy : MonoBehaviour
     {
         Vector3 direction = (target - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 3f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     // rotate (slerp) the enemy towards the player
@@ -448,13 +451,19 @@ public abstract class AIEnemy : MonoBehaviour
     {
         transform.position = originPos;
         transform.rotation = originRot;
+
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = true;
+
+        m_PathDestinationNodeIndex = 1;
+        agent.ResetPath();
+        agent.stoppingDistance = 0f;
+
         warnedTimer = 0f;
         attackFase = AttackFase.NO;
-        m_PathDestinationNodeIndex = 1;
 
         animator.Rebind();
+
         status = Status.IDLE;
     }
 }

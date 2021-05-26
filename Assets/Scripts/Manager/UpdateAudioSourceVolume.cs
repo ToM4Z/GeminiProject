@@ -17,7 +17,10 @@ public class UpdateAudioSourceVolume : MonoBehaviour
 
     private void UpdateVolume()
     {
-        GetComponent<AudioSource>().volume = GlobalVariables.Volume;
+        foreach (AudioSource source in GetComponents<AudioSource>())
+        {
+            source.volume = GameEvent.Volume;
+        }
     }
 
 
