@@ -191,8 +191,12 @@ public abstract class AIEnemy : MonoBehaviour
         agent.ResetPath();
         foreach(Collider c in GetComponentsInChildren<Collider>())
             c.enabled = false;
+        
+        if(attackFase != AttackFase.NO)
+            stopAttack();
+
         animator.SetTrigger(deathStateAnim);
-        AfterHit();
+        OnDeath();
 
         Managers.Enemies.EnemyDie(this.gameObject);
         StartCoroutine(Disappear());
@@ -353,7 +357,7 @@ public abstract class AIEnemy : MonoBehaviour
 
 
     // method that subclasses can override to add behaviour when player hit this enemy
-    protected virtual void AfterHit() { }
+    protected virtual void OnDeath() { }
 
 
 
