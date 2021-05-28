@@ -28,15 +28,16 @@ public class SlidingMovement : MonoBehaviour
     private float TimePassed;
     public MeshCollider childWithColl;
     public bool platformActivated = false;
+
     private float durationTime;
     private float startTime = 0;
-    [SerializeField] private GameObject player;
-    private bool onMovingPlatform;
+
+    private GameObject player;
     
     // Start is called before the first frame update
     void Start()
     {
-        //this.player = PlayerStatisticsController.instance.transform.parent.gameObject;
+        this.player = PlayerStatisticsController.instance.transform.parent.gameObject;
         this.platformDirection = LeftOrRight.Right;
         this.start_position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         this.start_position = this.transform.position;
@@ -48,7 +49,6 @@ public class SlidingMovement : MonoBehaviour
         this.durationTime = 1.0f * distance;
         this.isPop = true;
         this.isScaling = false;
-        this.onMovingPlatform = false;
     }
 
     // Update is called once per frame
@@ -58,21 +58,21 @@ public class SlidingMovement : MonoBehaviour
         if(platformActivated) {
             if(this.type == Type.Slider) {
                 transform.position = Vector3.Lerp(start_position, end_position_slider, startTime/durationTime);
-                startTime += Time.fixedDeltaTime * speed;
+                startTime += Time.deltaTime * speed;
             } else if (this.type == Type.Elevator) {
                 transform.position = Vector3.Lerp(start_position, end_position_elevator, startTime/durationTime);
-                startTime += Time.fixedDeltaTime * speed;
+                startTime += Time.deltaTime * speed;
             } else {
                 if (triggerPopUp) {
                     if (!isScaling) {
                         if (TimePassed < 2.0f) {
                             this.transform.rotation = Quaternion.Slerp(start_rotation, end_rotation, startTime/durationTime);   // ruoto da start_' a end_' rotation
-                            this.startTime += Time.fixedDeltaTime * speed * 5;
-                            this.TimePassed += Time.fixedDeltaTime;
+                            this.startTime += Time.deltaTime * speed * 5;
+                            this.TimePassed += Time.deltaTime;
                         } else if (TimePassed >= 2.0f) {
                             this.childWithColl.enabled = false;
                             this.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, startTime/durationTime);
-                            startTime += Time.fixedDeltaTime * speed * 4;
+                            startTime += Time.deltaTime * speed * 4;
                             StartCoroutine(PopUp());
                         }
                     }
@@ -90,16 +90,11 @@ public class SlidingMovement : MonoBehaviour
                             isPop = true;
                             isScaling = false;
                         }
-                        startTime += Time.fixedDeltaTime * speed * 4;
+                        startTime += Time.deltaTime * speed * 4;
                         this.transform.localScale = Vector3.Lerp(this.transform.localScale, Vector3.one, startTime/durationTime);
                     }
                 } 
             }
-            /*if (onMovingPlatform) {
-                player.transform.SetParent(this.transform);
-            } else {
-                player.transform.parent = null;
-            }*/
             if(end_position_slider == transform.position && this.type == Type.Slider) {
                 SwitchDirection();
                 Vector3 temp = start_position;
@@ -139,8 +134,6 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            this.onMovingPlatform = true;
-            Debug.Log("Player g is: ");
             player.transform.SetParent(this.transform);
         } else if (this.type == Type.PopUp) {
             this.triggerPopUp = true;
@@ -149,7 +142,6 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerExit(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            this.onMovingPlatform = false;
             player.transform.parent = null;
         } else if(this.type == Type.PopUp) {
             this.TimePassed = 0.0f;

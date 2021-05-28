@@ -30,10 +30,4 @@ public class LogBehaviour : MonoBehaviour
         this.transform.position = Vector3.Lerp(startPos,endPos,startTime/durationTime);
         startTime += Time.deltaTime * speed;
     }
-
-    private void OnTriggerEnter(Collider collision) {
-        if(collision.gameObject.tag == "Player") {
-            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.HITTED,false);
-        }
-    }
 }
