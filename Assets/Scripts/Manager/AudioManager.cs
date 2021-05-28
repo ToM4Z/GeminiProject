@@ -29,4 +29,23 @@ public class AudioManager : MonoBehaviour, IGameManager
         audioSource.Stop();
         audioSource.volume = startVolume;
     }
+
+    // da testare
+    public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
+    {
+        float originVolume = audioSource.volume;
+        float startVolume = 0.1f;
+
+        audioSource.volume = 0;
+        audioSource.Play();
+
+        while (audioSource.volume < originVolume)
+        {
+            audioSource.volume += startVolume * Time.deltaTime / FadeTime;
+
+            yield return null;
+        }
+
+        audioSource.volume = originVolume;
+    }
 }

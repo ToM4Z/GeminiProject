@@ -21,7 +21,8 @@ public class PlayerInputModelController : MonoBehaviour
         FALLING,
         SLIDE,
         DEATH,
-        RESPAWN
+        RESPAWN,
+        VICTORY
     }
 
     public Status status { get; private set; }
@@ -478,6 +479,16 @@ public class PlayerInputModelController : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    public void OnVictory()
+    {
+        if (status == Status.VICTORY)
+            return;
+
+        anim.Play("Victory 1");
+        enableInput = false;
+        status = Status.VICTORY;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
