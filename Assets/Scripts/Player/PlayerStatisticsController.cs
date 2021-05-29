@@ -40,25 +40,23 @@ public class PlayerStatisticsController : MonoBehaviour
 
     private PlayerMaterialHandler materialHandler;
 
-    private HUDManager hud;
 
     void Start()
     {
         materialHandler = GetComponent<PlayerMaterialHandler>();
-        hud = transform.parent.gameObject.GetComponentInChildren<HUDManager>();
         hp = maxHP;
         normalGearCount = 0;
         bonusGearCount = 0;
         bombCount = 0;
-        hud.setBombCounter(bombCount);
-        hud.setGearBonusCounter(bonusGearCount);
-        hud.setGearCounter(normalGearCount);
+        HUDManager.instance.setBombCounter(bombCount);
+        HUDManager.instance.setGearBonusCounter(bonusGearCount);
+        HUDManager.instance.setGearCounter(normalGearCount);
     }
 
     private void Reset()
     {
         hp = maxHP;
-        hud.updateHpBattery(hp);
+        HUDManager.instance.updateHpBattery(hp);
     }
 
     void Update()
@@ -79,7 +77,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseNormalGear(){
         normalGearCount++;
-        hud.setGearCounter(normalGearCount);
+        HUDManager.instance.setGearCounter(normalGearCount);
         if (normalGearCount == 100){
             playerLives++;
             normalGearCount = 0;
@@ -88,17 +86,17 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseBonusGear(){
         bonusGearCount++;
-        hud.setGearBonusCounter(bonusGearCount);
+        HUDManager.instance.setGearBonusCounter(bonusGearCount);
     }
 
     public void increaseBomb(){
         bombCount++;
-        hud.setBombCounter(bombCount);
+        HUDManager.instance.setBombCounter(bombCount);
     }
     public void decreaseBomb()
     {
         bombCount--;
-        hud.setBombCounter(bombCount);
+        HUDManager.instance.setBombCounter(bombCount);
     }
 
     public bool isDeath() { return hp == 0; }
@@ -107,7 +105,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseHP(){
         hp++;
-        hud.updateHpBattery(hp);
+        HUDManager.instance.updateHpBattery(hp);
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
@@ -118,7 +116,7 @@ public class PlayerStatisticsController : MonoBehaviour
                 return;
 
             hp--;
-            hud.updateHpBattery(hp);
+            HUDManager.instance.updateHpBattery(hp);
             if (hp == 0) 
                 death(deathEvent);
             else
@@ -138,7 +136,7 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        //hud.updateHpBattery(hp);
+        //HUDManager.instance.updateHpBattery(hp);
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
     }
