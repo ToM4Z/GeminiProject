@@ -578,9 +578,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   attackTime: 2
-  pauseBetweenAttacksTime: 3
+  pauseBetweenAttacksTime: 1
   lostViewTime: 2
   minDistanceToAttack: 1.5
+  rotationSpeed: 3
   enableMoveToPlayer: 1
   moveWhileAttack: 0
   patrolPath: {fileID: 0}

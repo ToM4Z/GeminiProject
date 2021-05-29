@@ -22,6 +22,9 @@ public abstract class AIEnemy : MonoBehaviour
     // if enemy start from INACTIVE status, this variable, if enabled, allows to pass at IDLE status
     protected bool spawn = false;
 
+    [Tooltip("Acceptable initial status are INACTIVE or IDLE")]
+    [SerializeField] private Status initialStatus;
+
     // Denote the status of the enemy
     protected Status status;
     protected enum Status
@@ -121,7 +124,7 @@ public abstract class AIEnemy : MonoBehaviour
         originPos = transform.position;
         originRot = transform.rotation;
 
-        ChangeStatus(Status.IDLE);
+        ChangeStatus(initialStatus);
     }
 
     // Update method equal to all subclasses
@@ -451,6 +454,7 @@ public abstract class AIEnemy : MonoBehaviour
     {
         transform.position = originPos;
         transform.rotation = originRot;
+        spawn = false;
 
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = true;
@@ -464,6 +468,11 @@ public abstract class AIEnemy : MonoBehaviour
 
         animator.Rebind();
 
-        status = Status.IDLE;
+        status = initialStatus;
+    }
+
+    public void AwakeEnemy()
+    {
+        spawn = true;
     }
 }

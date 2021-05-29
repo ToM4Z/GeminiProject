@@ -22,15 +22,15 @@ public class AISkeleton : AIEnemy
 
         status = Status.INACTIVE;
 
-        StartCoroutine(awake());
+        //StartCoroutine(awake());
     }
 
-    IEnumerator awake()
-    {
-        yield return new WaitForSeconds(1f);
+    //IEnumerator awake()
+    //{
+    //    yield return new WaitForSeconds(1f);
 
-        spawn = true;
-    }
+    //    spawn = true;
+    //}
 
     // at the beginning of the attack, I activate the attack triggers
     protected override void startAttack()
@@ -53,14 +53,5 @@ public class AISkeleton : AIEnemy
         base.stopAttack();
         hands[0].DisableTrigger();
         hands[1].DisableTrigger();
-    }
-
-    public override void Reset()
-    {
-        base.Reset();
-
-        status = Status.INACTIVE;
-
-        StartCoroutine(awake());
     }
 }

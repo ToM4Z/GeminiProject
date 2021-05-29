@@ -5145,6 +5145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
+  initialStatus: 1
   attackTime: 4.5
   pauseBetweenAttacksTime: 2
   lostViewTime: 2
