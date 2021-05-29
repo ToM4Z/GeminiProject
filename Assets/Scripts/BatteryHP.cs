@@ -14,7 +14,7 @@ public class BatteryHP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0,0,speedSpin);
+        transform.Rotate(0,speedSpin,0);
     }
 
     void OnTriggerEnter(Collider other) {
