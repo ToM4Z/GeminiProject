@@ -12,7 +12,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(EnemiesManager))]
 [RequireComponent(typeof(RespawnManager))]
-[RequireComponent(typeof(AudioManager))]
+//[RequireComponent(typeof(AudioManager))]
 //[RequireComponent(typeof())]
 public class Managers : MonoBehaviour
 {

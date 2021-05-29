@@ -5070,7 +5070,6 @@ GameObject:
   - component: {fileID: 539407064211278969}
   - component: {fileID: 1582929792824386636}
   - component: {fileID: 4017111593275412919}
-  - component: {fileID: 3930811475139333740}
   - component: {fileID: 5462229084782992073}
   - component: {fileID: 2072041772109109034}
   - component: {fileID: 944927714816459212}
@@ -5204,18 +5203,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3930811475139333740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 539407064211278975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9792e024d3ffc194493286678096072c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &5462229084782992073
 AudioSource:
   m_ObjectHideFlags: 0

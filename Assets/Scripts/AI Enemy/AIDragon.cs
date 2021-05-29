@@ -57,6 +57,7 @@ public class AIDragon : AIEnemy
 
     public void BeatWings()
     {
+        beatWingsSFX.pitch = 2;
         beatWingsSFX.Play();
     }
 
