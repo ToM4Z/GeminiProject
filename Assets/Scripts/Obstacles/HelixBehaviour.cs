@@ -26,15 +26,7 @@ public class HelixBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //y_angle += Time.deltaTime;
-        //transform.Rotate(0,Time.deltaTime*50,0);
-        //transform.rotation = Quaternion.Euler(0,Mathf.Lerp(0.0f,360.0f,startTime/durationTime),0);
         this.transform.rotation = Quaternion.Lerp(startRot,endRot,startTime/durationTime);
-        /*Debug.Log("start r:" + startRot.eulerAngles);
-        Debug.Log("end r:" + endRot.eulerAngles);
-        Debug.Log("trans r:" + transform.rotation.eulerAngles.y%45);
-        Debug.Log("start time:" + startTime);
-        Debug.Log("approx: " + Mathf.Approximately(transform.rotation.eulerAngles.y%45, 0.0f));*/
         if(Approx((transform.rotation.eulerAngles.y + 0.01f)%45, 0.0f) && startTime > 0) {
             Quaternion temp = startRot;
             startRot = endRot;
@@ -45,7 +37,12 @@ public class HelixBehaviour : MonoBehaviour
     }
 
     private bool Approx(float a, float b) {
-        Debug.Log("abs diff: " + Mathf.Abs(a-b));
         return Mathf.Abs(a-b) <= 0.1f;
+    }
+
+    private void OnTriggerEnter(Collider collision) {
+        if(collision.gameObject.tag == "Player") {
+            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.HITTED,false);
+        }
     }
 }
