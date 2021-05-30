@@ -14,9 +14,7 @@ public class AIDragon : AIEnemy
 {
     // The dragon hit the player spitting fire/ice with ParticleSystem
     private ParticleSystem particle;
-    [SerializeField] private AudioSource beatWingsSFX;
-    [SerializeField] private AudioSource spitSFX;
-    [SerializeField] private AudioSource deathSFX;
+    [SerializeField] private AudioSource attackSFXSource;
 
     protected override void Start()
     {
@@ -29,15 +27,16 @@ public class AIDragon : AIEnemy
     // in start attack, I active the particles
     protected override void startAttack()
     {
+        attackSFXSource.clip = attackClip;
+        attackSFXSource.Play();
         particle.Play();
-        spitSFX.Play();
     }
 
     // in stop attack, I stop the fire particles
     protected override void stopAttack()
     {
+        StartCoroutine(AudioManager.FadeOut(attackSFXSource, 0.5f));
         particle.Stop();
-        StartCoroutine(AudioManager.FadeOut(spitSFX, 0.5f));
     }
 
     //// during the attack, I adjust the aim of the particles
@@ -48,18 +47,6 @@ public class AIDragon : AIEnemy
     //    //posToFire.y += 0.5f;
     //    //particle.gameObject.transform.LookAt(posToFire);
     //}
-
-    // when I hurt, I stop to spit
-    protected override void OnDeath()
-    {
-        deathSFX.Play();
-    }
-
-    public void BeatWings()
-    {
-        beatWingsSFX.pitch = 1.5f;
-        beatWingsSFX.PlayOneShot(beatWingsSFX.clip);
-    }
 
     public override void Reset()
     {
