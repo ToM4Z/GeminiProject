@@ -16,21 +16,10 @@ public class AISkeleton : AIEnemy
     [SerializeField]
     private AttackTrigger[] hands = new AttackTrigger[2];
 
-    protected override void Start()
+    protected override bool isInitialStatusAcceptable(Status s)
     {
-        base.Start();
-
-        status = Status.INACTIVE;
-
-        //StartCoroutine(awake());
+        return s == Status.INACTIVE || base.isInitialStatusAcceptable(s);
     }
-
-    //IEnumerator awake()
-    //{
-    //    yield return new WaitForSeconds(1f);
-
-    //    spawn = true;
-    //}
 
     // at the beginning of the attack, I activate the attack triggers
     protected override void startAttack()

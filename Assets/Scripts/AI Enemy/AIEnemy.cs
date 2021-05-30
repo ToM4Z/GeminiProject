@@ -124,6 +124,15 @@ public abstract class AIEnemy : MonoBehaviour
         originPos = transform.position;
         originRot = transform.rotation;
 
+        if (!isInitialStatusAcceptable(initialStatus))
+            throw new System.Exception("Initial status not acceptable for gameobject " + gameObject.name);
+
+        if (initialStatus != Status.INACTIVE)
+        {
+            spawn = true;
+            animator.SetTrigger(animVarSpawn);
+        }
+
         ChangeStatus(initialStatus);
     }
 
@@ -454,7 +463,6 @@ public abstract class AIEnemy : MonoBehaviour
     {
         transform.position = originPos;
         transform.rotation = originRot;
-        spawn = false;
 
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = true;
@@ -468,11 +476,24 @@ public abstract class AIEnemy : MonoBehaviour
 
         animator.Rebind();
 
+        if (initialStatus != Status.INACTIVE)
+        {
+            spawn = true;
+            animator.SetTrigger(animVarSpawn);
+        }
+        else
+            spawn = false;
+
         status = initialStatus;
     }
 
     public void AwakeEnemy()
     {
         spawn = true;
+    }
+
+    protected virtual bool isInitialStatusAcceptable(Status s)
+    {
+        return s == Status.IDLE;
     }
 }

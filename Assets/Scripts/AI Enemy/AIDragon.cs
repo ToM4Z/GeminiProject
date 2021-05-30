@@ -57,8 +57,8 @@ public class AIDragon : AIEnemy
 
     public void BeatWings()
     {
-        beatWingsSFX.pitch = 2;
-        beatWingsSFX.Play();
+        beatWingsSFX.pitch = 1.5f;
+        beatWingsSFX.PlayOneShot(beatWingsSFX.clip);
     }
 
     public override void Reset()
@@ -66,5 +66,4 @@ public class AIDragon : AIEnemy
         base.Reset();
         particle.Stop();
     }
-
 }
