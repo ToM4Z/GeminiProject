@@ -45,12 +45,12 @@ public class EnemiesManager : MonoBehaviour, IGameManager
     public void RespawnEnemies()
     {
         foreach (GameObject enemy in enemies)
-            enemy.GetComponent<AIEnemy>().Reset();
+            enemy.GetComponent<AIEnemy>().ResetEnemy();
 
         foreach (GameObject enemy in enemiesDead)
         {
             enemy.SetActive(true);
-            enemy.GetComponent<AIEnemy>().Reset();
+            enemy.GetComponent<AIEnemy>().ResetEnemy();
             enemies.Add(enemy);
         }
         enemiesDead.Clear();

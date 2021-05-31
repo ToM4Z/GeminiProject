@@ -6,7 +6,7 @@ using System.Collections;
  *  Class: AIEnemy
  *  
  *  Description:
- *  This script describes the general behaviur of all enemies.
+ *  This script describes the general behaviour of all enemies.
  *  
  *  Author: Thomas Voce
 */
@@ -14,7 +14,7 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody))]
-public abstract class AIEnemy : MonoBehaviour
+public class AIEnemy : MonoBehaviour
 {
     //--------------GENERAL-------------
     [Tooltip("If enabled, prints will be enabled")]
@@ -43,16 +43,16 @@ public abstract class AIEnemy : MonoBehaviour
     //--------------ATTACK VARIABLES-------------
     
     [Tooltip("The time it takes to perform an attack")]
-    public float attackTime = 4.5f;
+    public float attackTime = 2f;
 
     [Tooltip("The time passes between one attack and another")]
-    public float pauseBetweenAttacksTime = 3f;
+    public float pauseBetweenAttacksTime = 1f;
 
     [Tooltip("Indicates the waiting time before returning to IDLE status from last time it saw the player")] 
     public float lostViewTime = 2f;
 
     [Tooltip("It's the distance needed to attack and hit the player")]
-    public float minDistanceToAttack = 3f;
+    public float minDistanceToAttack = 1.3f;
 
     [Tooltip("It's the rotation speed when he face to target")]
     public float rotationSpeed = 3f;
@@ -105,7 +105,7 @@ public abstract class AIEnemy : MonoBehaviour
 
     // Animation state names
     protected string idleStateAnim = "Idle",
-        runStateAnim = "Run",
+        walkStateAnim = "Walk",
         attackStateAnim = "Attack",
         deathStateAnim = "Death",
 
@@ -117,6 +117,10 @@ public abstract class AIEnemy : MonoBehaviour
     //AUDIO VARIABLES
     protected AudioSource soundSource;
     [SerializeField] protected AudioClip spawnClip, walkClip, attackClip, dieClip;
+
+
+    [SerializeField]
+    private AttackTrigger[] attackTriggers;
 
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
@@ -372,14 +376,29 @@ public abstract class AIEnemy : MonoBehaviour
     protected virtual void startAttack()
     {
         animator.SetTrigger(attackStateAnim);
+
+        foreach (AttackTrigger t in attackTriggers)
+            t.EnableTrigger();
     }
 
     // method that subclasses can override to add behaviour when enemy STOP to attack
-    protected virtual void stopAttack() { }
+    protected virtual void stopAttack()
+    {
+        foreach (AttackTrigger t in attackTriggers)
+            t.DisableTrigger();
+    }
 
     // method that subclasses MUST override to add behaviour DURING the enemy attack
     // in this method, it must be implemented how to hit the player
-    protected virtual void duringAttack() { }
+    protected virtual void duringAttack()
+    {
+        foreach (AttackTrigger t in attackTriggers)
+            if (t.EnteredTrigger)
+            {
+                PlayerStatisticsController.instance.hurt(DeathEvent.HITTED);
+                break;
+            }
+    }
 
 
     // method that subclasses can override to add behaviour when player hit this enemy
@@ -473,7 +492,7 @@ public abstract class AIEnemy : MonoBehaviour
         }
     }
 
-    public virtual void Reset()
+    public virtual void ResetEnemy()
     {
         transform.position = originPos;
         transform.rotation = originRot;
@@ -508,7 +527,7 @@ public abstract class AIEnemy : MonoBehaviour
 
     protected virtual bool isInitialStatusAcceptable(Status s)
     {
-        return s == Status.IDLE;
+        return s == Status.IDLE || s == Status.INACTIVE;
     }
 
     public virtual void PlayWalkSound()
