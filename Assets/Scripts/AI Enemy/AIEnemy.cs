@@ -6,21 +6,25 @@ using System.Collections;
  *  Class: AIEnemy
  *  
  *  Description:
- *  This script describes the general behaviur of all enemies.
+ *  This script describes the general behaviour of all enemies.
  *  
  *  Author: Thomas Voce
 */
 [RequireComponent(typeof(FOVDetection))]
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(FOVDetection))]
-public abstract class AIEnemy : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(Rigidbody))]
+public class AIEnemy : MonoBehaviour
 {
     //--------------GENERAL-------------
     [Tooltip("If enabled, prints will be enabled")]
     public bool debug = false;
 
     // if enemy start from INACTIVE status, this variable, if enabled, allows to pass at IDLE status
-    protected bool spawn = false;
+    private bool spawn = false, spawning = false;
+
+    [Tooltip("Acceptable initial status are INACTIVE or IDLE")]
+    [SerializeField] private Status initialStatus;
 
     // Denote the status of the enemy
     protected Status status;
@@ -39,16 +43,16 @@ public abstract class AIEnemy : MonoBehaviour
     //--------------ATTACK VARIABLES-------------
     
     [Tooltip("The time it takes to perform an attack")]
-    public float attackTime = 4.5f;
+    public float attackTime = 2f;
 
     [Tooltip("The time passes between one attack and another")]
-    public float pauseBetweenAttacksTime = 3f;
+    public float pauseBetweenAttacksTime = 1f;
 
     [Tooltip("Indicates the waiting time before returning to IDLE status from last time it saw the player")] 
     public float lostViewTime = 2f;
 
     [Tooltip("It's the distance needed to attack and hit the player")]
-    public float minDistanceToAttack = 3f;
+    public float minDistanceToAttack = 1.3f;
 
     [Tooltip("It's the rotation speed when he face to target")]
     public float rotationSpeed = 3f;
@@ -101,7 +105,7 @@ public abstract class AIEnemy : MonoBehaviour
 
     // Animation state names
     protected string idleStateAnim = "Idle",
-        runStateAnim = "Run",
+        walkStateAnim = "Walk",
         attackStateAnim = "Attack",
         deathStateAnim = "Death",
 
@@ -109,6 +113,17 @@ public abstract class AIEnemy : MonoBehaviour
         animVarSpawn = "Spawn",
         animVarSpeed = "Speed";
 
+
+    //AUDIO VARIABLES
+    protected AudioSource soundSource;
+    [SerializeField] protected AudioClip spawnClip, walkClip, attackClip, dieClip;
+    [SerializeField] private AudioSource idleSoundSource;
+
+
+    [SerializeField]
+    private AttackTrigger[] attackTriggers;
+
+    [SerializeField] private DeathEvent typeAttack = DeathEvent.HITTED;
 
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
@@ -118,10 +133,23 @@ public abstract class AIEnemy : MonoBehaviour
         fov = GetComponent<FOVDetection>();
         animator = GetComponentInChildren<Animator>();
 
+        soundSource = GetComponent<AudioSource>();
+
         originPos = transform.position;
         originRot = transform.rotation;
 
-        ChangeStatus(Status.IDLE);
+        if (!isInitialStatusAcceptable(initialStatus))
+            throw new System.Exception("Error: initial status not acceptable for gameobject " + gameObject.name);
+
+        if (initialStatus != Status.INACTIVE)
+        {
+            spawn = true;
+            animator.SetTrigger(animVarSpawn);
+        }
+
+        //agent.autoBraking = false;
+
+        ChangeStatus(initialStatus);
     }
 
     // Update method equal to all subclasses
@@ -147,12 +175,16 @@ public abstract class AIEnemy : MonoBehaviour
     // if spawn is true, activated from external event, it passes to IDLE state
     protected virtual void inactiveIdle()
     {
-        if (spawn)
+        if (spawn && !spawning)
         {
+            spawning = true;
             animator.SetTrigger(animVarSpawn);
-
-            if (animStateInfo.IsName(idleStateAnim))
-                ChangeStatus(Status.IDLE);
+            soundSource.PlayOneShot(spawnClip);
+        }
+        else if (animStateInfo.IsName(idleStateAnim))
+        {
+            spawning = false;
+            ChangeStatus(Status.IDLE);
         }
     }
 
@@ -186,7 +218,7 @@ public abstract class AIEnemy : MonoBehaviour
     // With this method, the player can hit and kill the enemy
     public void hurt()
     {
-        if (status == Status.DEAD)
+        if (status == Status.DEAD || status == Status.INACTIVE)
             return;
 
         ChangeStatus(Status.DEAD);
@@ -199,6 +231,13 @@ public abstract class AIEnemy : MonoBehaviour
             stopAttack();
 
         animator.SetTrigger(deathStateAnim);
+
+        if(idleSoundSource != null)
+        {
+            idleSoundSource.loop = false;
+            StartCoroutine(AudioManager.FadeOut(idleSoundSource, 0.5f));
+        }
+
         OnDeath();
 
         Managers.Enemies.EnemyDie(this.gameObject);
@@ -349,18 +388,36 @@ public abstract class AIEnemy : MonoBehaviour
     protected virtual void startAttack()
     {
         animator.SetTrigger(attackStateAnim);
+
+        foreach (AttackTrigger t in attackTriggers)
+            t.EnableTrigger();
     }
 
     // method that subclasses can override to add behaviour when enemy STOP to attack
-    protected virtual void stopAttack() { }
+    protected virtual void stopAttack()
+    {
+        foreach (AttackTrigger t in attackTriggers)
+            t.DisableTrigger();
+    }
 
     // method that subclasses MUST override to add behaviour DURING the enemy attack
     // in this method, it must be implemented how to hit the player
-    protected virtual void duringAttack() { }
+    protected virtual void duringAttack()
+    {
+        foreach (AttackTrigger t in attackTriggers)
+            if (t.EnteredTrigger)
+            {
+                PlayerStatisticsController.instance.hurt(typeAttack);
+                break;
+            }
+    }
 
 
     // method that subclasses can override to add behaviour when player hit this enemy
-    protected virtual void OnDeath() { }
+    protected virtual void OnDeath() 
+    {
+        soundSource.PlayOneShot(dieClip);
+    }
 
 
 
@@ -439,15 +496,15 @@ public abstract class AIEnemy : MonoBehaviour
 
     // Check if reached the path destination so that it set the next path destination
     protected void UpdatePathDestination()
-    {        
-        if (fov.distanceTo(GetDestinationOnPath()) <= PathReachingRadius)
+    {        //fov.distanceTo(GetDestinationOnPath()) <=
+        if (agent.remainingDistance < PathReachingRadius)
         {
             m_PathDestinationNodeIndex++;
             m_PathDestinationNodeIndex %= patrolPath.PathNodes.Count;
         }
     }
 
-    public virtual void Reset()
+    public virtual void ResetEnemy()
     {
         transform.position = originPos;
         transform.rotation = originRot;
@@ -464,6 +521,39 @@ public abstract class AIEnemy : MonoBehaviour
 
         animator.Rebind();
 
-        status = Status.IDLE;
+        if (idleSoundSource != null)
+        {
+            idleSoundSource.loop = true;
+        }
+
+        if (initialStatus != Status.INACTIVE)
+        {
+            spawn = true;
+            animator.SetTrigger(animVarSpawn);
+        }
+        else
+            spawn = false;
+
+        status = initialStatus;
+    }
+
+    public void AwakeEnemy()
+    {
+        spawn = true;
+    }
+
+    protected virtual bool isInitialStatusAcceptable(Status s)
+    {
+        return s == Status.IDLE || s == Status.INACTIVE;
+    }
+
+    public virtual void PlayWalkSound()
+    {
+        soundSource.PlayOneShot(walkClip);
+    }
+
+    public virtual void PlayAttackSound()
+    {
+        soundSource.PlayOneShot(attackClip);
     }
 }

@@ -4,10 +4,25 @@ using UnityEngine;
 
 public class ReceiveEventAnimation : MonoBehaviour
 {
-    [SerializeField] private AIDragon dragon;
+    private AIEnemy enemy;
 
-    public void Dragon_BeatWings()
+    private void Start()
     {
-        dragon.BeatWings();
+        enemy = GetComponentInParent<AIEnemy>();
+    }
+
+    public void PlayWalkSound()
+    {
+        enemy.PlayWalkSound();
+    }
+
+    public void PlayAttackSound()
+    {
+        enemy.PlayAttackSound();
+    }
+
+    public void PlayIdleSound()
+    {
+        enemy.PlayWalkSound();
     }
 }

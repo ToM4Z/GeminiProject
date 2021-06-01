@@ -19,7 +19,7 @@ public class AttackTrigger : MonoBehaviour
     public GameObject hitted;
 
     [SerializeField]
-    public string collisionTag;
+    public string collisionTag = "Player";
 
 
     private void Start()
