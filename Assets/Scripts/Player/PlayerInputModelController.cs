@@ -69,6 +69,8 @@ public class PlayerInputModelController : MonoBehaviour
     private Vector3 centerCollider;
     [SerializeField] private Vector3 crouchedCenterCollider;
 
+    [SerializeField] private List<TrailRenderer> trails;
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -129,6 +131,12 @@ public class PlayerInputModelController : MonoBehaviour
         charController.center = crouchedCenterCollider;
     }
 
+    private void SetTrailOnOff(bool b)
+    {
+        foreach (TrailRenderer t in trails)
+            t.enabled = b;
+    }
+
     private void Update()
     {
         if (status == Status.RESPAWN) return;
@@ -154,6 +162,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Falling");
                         stopAttack();
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -164,6 +173,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Jump start");
                         stopAttack();
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -187,6 +197,7 @@ public class PlayerInputModelController : MonoBehaviour
                             anim.Play("Slide");
                             attack(Status.SLIDE);
 
+                            SetTrailOnOff(true);
                             status = Status.SLIDE;
                             break;
                         }
@@ -209,6 +220,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Falling");
                         anim.SetBool("Crouch", false);
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -220,6 +232,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Jump start");
                         anim.SetBool("Crouch", false);
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -277,6 +290,7 @@ public class PlayerInputModelController : MonoBehaviour
                         }
                         else
                         {
+                            SetTrailOnOff(false);
                             status = Status.IDLE;
                         }
                         break;
@@ -298,6 +312,7 @@ public class PlayerInputModelController : MonoBehaviour
                         stopAttack();
                         SetNormalCollider();
 
+                        SetTrailOnOff(false);
                         status = Status.IDLE;
                         break;
                     }
@@ -385,7 +400,6 @@ public class PlayerInputModelController : MonoBehaviour
             return;
         armActualAttack.DisableTrigger();
         armActualAttack = null;
-        attackIndex = -1;
         airAttackJustDone = false;
         attacking = false;
     }
