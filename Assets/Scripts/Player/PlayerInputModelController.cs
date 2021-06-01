@@ -197,7 +197,6 @@ public class PlayerInputModelController : MonoBehaviour
                             anim.Play("Slide");
                             attack(Status.SLIDE);
 
-                            SetTrailOnOff(true);
                             status = Status.SLIDE;
                             break;
                         }
@@ -260,7 +259,7 @@ public class PlayerInputModelController : MonoBehaviour
                 }
             case Status.FALLING:
                 {
-                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
+                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed) / 1.5f;
 
                     _vertSpeed += gravity * 5 * Time.deltaTime;
                     if (_vertSpeed < terminalVelocity)
@@ -323,6 +322,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Falling");
                         stopAttack();
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -334,6 +334,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.Play("Jump start");
                         stopAttack();
 
+                        SetTrailOnOff(true);
                         status = Status.FALLING;
                         break;
                     }
@@ -362,6 +363,8 @@ public class PlayerInputModelController : MonoBehaviour
     {
         if (attacking)
             return;
+
+        SetTrailOnOff(true);
 
         switch (s)
         {
@@ -398,6 +401,8 @@ public class PlayerInputModelController : MonoBehaviour
     {
         if (!attacking)
             return;
+
+        SetTrailOnOff(false);
         armActualAttack.DisableTrigger();
         armActualAttack = null;
         airAttackJustDone = false;
