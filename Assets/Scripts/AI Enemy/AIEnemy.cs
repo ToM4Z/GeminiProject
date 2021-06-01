@@ -117,6 +117,7 @@ public class AIEnemy : MonoBehaviour
     //AUDIO VARIABLES
     protected AudioSource soundSource;
     [SerializeField] protected AudioClip spawnClip, walkClip, attackClip, dieClip;
+    [SerializeField] private AudioSource idleSoundSource;
 
 
     [SerializeField]
@@ -143,6 +144,8 @@ public class AIEnemy : MonoBehaviour
             spawn = true;
             animator.SetTrigger(animVarSpawn);
         }
+
+        //agent.autoBraking = false;
 
         ChangeStatus(initialStatus);
     }
@@ -226,6 +229,13 @@ public class AIEnemy : MonoBehaviour
             stopAttack();
 
         animator.SetTrigger(deathStateAnim);
+
+        if(idleSoundSource != null)
+        {
+            idleSoundSource.loop = false;
+            StartCoroutine(AudioManager.FadeOut(idleSoundSource, 0.5f));
+        }
+
         OnDeath();
 
         Managers.Enemies.EnemyDie(this.gameObject);
@@ -484,8 +494,8 @@ public class AIEnemy : MonoBehaviour
 
     // Check if reached the path destination so that it set the next path destination
     protected void UpdatePathDestination()
-    {        
-        if (fov.distanceTo(GetDestinationOnPath()) <= PathReachingRadius)
+    {        //fov.distanceTo(GetDestinationOnPath()) <=
+        if (agent.remainingDistance < PathReachingRadius)
         {
             m_PathDestinationNodeIndex++;
             m_PathDestinationNodeIndex %= patrolPath.PathNodes.Count;
@@ -508,6 +518,11 @@ public class AIEnemy : MonoBehaviour
         attackFase = AttackFase.NO;
 
         animator.Rebind();
+
+        if (idleSoundSource != null)
+        {
+            idleSoundSource.loop = true;
+        }
 
         if (initialStatus != Status.INACTIVE)
         {

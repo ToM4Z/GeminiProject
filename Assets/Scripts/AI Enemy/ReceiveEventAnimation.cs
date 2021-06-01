@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class ReceiveEventAnimation : MonoBehaviour
 {
-    [SerializeField] private AIEnemy enemy;
+    private AIEnemy enemy;
+
+    private void Start()
+    {
+        enemy = GetComponentInParent<AIEnemy>();
+    }
 
     public void PlayWalkSound()
     {
@@ -14,5 +19,10 @@ public class ReceiveEventAnimation : MonoBehaviour
     public void PlayAttackSound()
     {
         enemy.PlayAttackSound();
+    }
+
+    public void PlayIdleSound()
+    {
+        enemy.PlayWalkSound();
     }
 }

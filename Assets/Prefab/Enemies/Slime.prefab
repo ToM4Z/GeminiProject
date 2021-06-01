@@ -47,6 +47,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4729639812187814517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7034236601235810914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3df438b1691b5d478e8bf991c404d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7881239128118909792
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,7 +89,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7881239128118909792}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.4010677, y: -0.499, z: 15.545687}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7698182592063238360}
@@ -108,10 +120,11 @@ MonoBehaviour:
   patrolPath: {fileID: 0}
   PathReachingRadius: 0.5
   maxDistancePatrol: 6
-  spawnClip: {fileID: 0}
-  walkClip: {fileID: 8300000, guid: a503aed199f2a4a47945aaf7274d0e21, type: 3}
-  attackClip: {fileID: 0}
-  dieClip: {fileID: 8300000, guid: e91889b5a26064745851e954a03891d8, type: 3}
+  spawnClip: {fileID: 8300000, guid: dfde3900d4ce29540a56d8e4d6829ab0, type: 3}
+  walkClip: {fileID: 8300000, guid: dfde3900d4ce29540a56d8e4d6829ab0, type: 3}
+  attackClip: {fileID: 8300000, guid: dfde3900d4ce29540a56d8e4d6829ab0, type: 3}
+  dieClip: {fileID: 8300000, guid: f60f678784e0edc47ba516d678ea3d70, type: 3}
+  idleSoundSource: {fileID: 0}
   attackTriggers:
   - {fileID: 7881239126160189146}
 --- !u!114 &7881239128118909803
@@ -148,7 +161,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 0.6
-  m_BaseOffset: 0
+  m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!82 &7881239128118909805

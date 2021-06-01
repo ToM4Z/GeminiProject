@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8449751834353489432}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.67, y: -0.039, z: 16.17}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8271201544350176500}
@@ -90,9 +90,10 @@ MonoBehaviour:
   PathReachingRadius: 0.5
   maxDistancePatrol: 6
   spawnClip: {fileID: 0}
-  walkClip: {fileID: 0}
-  attackClip: {fileID: 0}
-  dieClip: {fileID: 0}
+  walkClip: {fileID: 8300000, guid: 878bb93ee35b1be42ba306330631e7d8, type: 3}
+  attackClip: {fileID: 8300000, guid: 0458560040b0f8b41b6c0b1f3ddce5e6, type: 3}
+  dieClip: {fileID: 8300000, guid: 625f97e05a5f42f42bb11152a9f7e0da, type: 3}
+  idleSoundSource: {fileID: 0}
   attackTriggers:
   - {fileID: 8449751833051954537}
 --- !u!114 &8449751834353489893
@@ -129,7 +130,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 0.5
-  m_BaseOffset: 0
+  m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!82 &8449751834353489895
@@ -276,6 +277,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8057247733218485761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8755812790710029902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3df438b1691b5d478e8bf991c404d3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8449751833602880287
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5086,15 +5086,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539407064211278975}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.2039382, y: -0.75000024, z: 15.317177}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7853929602106809719}
   - {fileID: 539407063041730326}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &539407064211278973
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5159,6 +5159,8 @@ MonoBehaviour:
   walkClip: {fileID: 8300000, guid: ac67925d855f0b34d8e433fe23641d1b, type: 3}
   attackClip: {fileID: 8300000, guid: af86f44345e9f73478ab4dde12d62e2c, type: 3}
   dieClip: {fileID: 8300000, guid: 32e048d27fee9d64cb3f07fc75c51a46, type: 3}
+  idleSoundSource: {fileID: 0}
+  attackTriggers: []
   attackSFXSource: {fileID: 631926094888878663}
 --- !u!114 &539407064211278969
 MonoBehaviour:
@@ -6445,7 +6447,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3df438b1691b5d478e8bf991c404d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 539407064211278970}
 --- !u!1 &7530288463193815331
 GameObject:
   m_ObjectHideFlags: 0
