@@ -123,6 +123,8 @@ public class AIEnemy : MonoBehaviour
     [SerializeField]
     private AttackTrigger[] attackTriggers;
 
+    [SerializeField] private DeathEvent typeAttack = DeathEvent.HITTED;
+
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
     {
@@ -405,7 +407,7 @@ public class AIEnemy : MonoBehaviour
         foreach (AttackTrigger t in attackTriggers)
             if (t.EnteredTrigger)
             {
-                PlayerStatisticsController.instance.hurt(DeathEvent.HITTED);
+                PlayerStatisticsController.instance.hurt(typeAttack);
                 break;
             }
     }
