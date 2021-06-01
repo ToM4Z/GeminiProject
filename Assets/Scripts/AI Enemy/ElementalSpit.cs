@@ -35,8 +35,6 @@ public class ElementalSpit : MonoBehaviour
     {
         int insideCount = particle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, new List<ParticleSystem.Particle>());
 
-        print(insideCount);
-
         if (insideCount >= numberParticleTrigger)
             PlayerStatisticsController.instance.hurt( 
                 element == Element.FIRE ? 
