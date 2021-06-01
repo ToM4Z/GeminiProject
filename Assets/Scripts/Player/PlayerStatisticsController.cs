@@ -48,9 +48,6 @@ public class PlayerStatisticsController : MonoBehaviour
         normalGearCount = 0;
         bonusGearCount = 0;
         bombCount = 0;
-        HUDManager.instance.setBombCounter(bombCount);
-        HUDManager.instance.setGearBonusCounter(bonusGearCount);
-        HUDManager.instance.setGearCounter(normalGearCount);
     }
 
     private void Reset()
@@ -99,6 +96,18 @@ public class PlayerStatisticsController : MonoBehaviour
         HUDManager.instance.setBombCounter(bombCount);
     }
 
+    public void increaseLives(){
+        playerLives++;
+        HUDManager.instance.setLifeCounter(playerLives);
+    }
+    public void decreaseLives(){
+        playerLives--;
+        if(playerLives < 0){
+            //TODO GAME OVER
+        }
+        HUDManager.instance.setLifeCounter(playerLives);
+    }
+
     public bool isDeath() { return hp == 0; }
 
     public int getHP() { return hp; }
@@ -136,9 +145,11 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        //HUDManager.instance.updateHpBattery(hp);
+        this.decreaseLives();
+        BlackFadeScreen.instance.startFade();
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
+        
     }
 
     private void OnDestroy()

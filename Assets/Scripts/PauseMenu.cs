@@ -8,19 +8,19 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     void Start()
     {
+        //Cursor.visible = false;
         pausePanel.SetActive(false);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetButtonDown("Cancel")){
-            if (isPaused){
+            if (isPaused)
                 Unpause();
-            }
-            else{
+            else
                 Pause();
-            }
         }
     }
 
@@ -29,6 +29,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         Messenger<bool>.Broadcast(GameEvent.ENABLE_INPUT, false);
         isPaused = true;
+        //Cursor.visible = true;
     }
 
     public void Unpause(){
@@ -36,6 +37,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         Messenger<bool>.Broadcast(GameEvent.ENABLE_INPUT, true);
         isPaused = false;
+        //Cursor.visible = false;
     }
 
     public void QuitGame(){
