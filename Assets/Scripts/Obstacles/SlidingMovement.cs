@@ -31,7 +31,6 @@ public class SlidingMovement : MonoBehaviour
     private float durationTime;
     private float startTime = 0;
     [SerializeField] private GameObject player;
-    private bool onMovingPlatform;
     
     // Start is called before the first frame update
     void Start()
@@ -48,7 +47,6 @@ public class SlidingMovement : MonoBehaviour
         this.durationTime = 1.0f * distance;
         this.isPop = true;
         this.isScaling = false;
-        this.onMovingPlatform = false;
     }
 
     // Update is called once per frame
@@ -95,11 +93,6 @@ public class SlidingMovement : MonoBehaviour
                     }
                 } 
             }
-            /*if (onMovingPlatform) {
-                player.transform.SetParent(this.transform);
-            } else {
-                player.transform.parent = null;
-            }*/
             if(end_position_slider == transform.position && this.type == Type.Slider) {
                 SwitchDirection();
                 Vector3 temp = start_position;
@@ -139,7 +132,6 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            this.onMovingPlatform = true;
             Debug.Log("Player g is: ");
             player.transform.SetParent(this.transform);
         } else if (this.type == Type.PopUp) {
@@ -149,7 +141,6 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerExit(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            this.onMovingPlatform = false;
             player.transform.parent = null;
         } else if(this.type == Type.PopUp) {
             this.TimePassed = 0.0f;
