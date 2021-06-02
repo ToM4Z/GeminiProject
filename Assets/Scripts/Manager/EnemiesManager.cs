@@ -58,11 +58,11 @@ public class EnemiesManager : MonoBehaviour, IGameManager
 
     private void Awake()
     {
-        Messenger.AddListener(GameEvent.RESET, RespawnEnemies);
+        Messenger.AddListener(GlobalVariables.RESET, RespawnEnemies);
     }
 
     private void OnDestroy()
     {
-        Messenger.RemoveListener(GameEvent.RESET, RespawnEnemies);
+        Messenger.RemoveListener(GlobalVariables.RESET, RespawnEnemies);
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDManager : MonoBehaviour
+public class HUDScript : MonoBehaviour
 {
 
-    public static HUDManager instance = null;
+    public static HUDScript instance = null;
 
     void Awake() {
         if (instance == null)
@@ -19,6 +19,7 @@ public class HUDManager : MonoBehaviour
     Text gearCounter;
     Text gearBonusCounter;
     Text bombCounter;
+    Text lifeCounter;
 
     Image hpBattery;
 
@@ -35,12 +36,19 @@ public class HUDManager : MonoBehaviour
     void Start()
     {
         gearCounter = this.GetChildComponentByName<Text>("GearCounter");
+        lifeCounter = this.GetChildComponentByName<Text>("LifeCounter");
         gearBonusCounter = this.GetChildComponentByName<Text>("GearBonusCounter");
         bombCounter = this.GetChildComponentByName<Text>("BombCounter");
         hpBattery = this.GetChildComponentByName<Image>("HP");
+
         greenHP = Resources.Load<Sprite>("HUD/Green_HP");
         orangeHP = Resources.Load<Sprite>("HUD/Orange_HP");
         redHP = Resources.Load<Sprite>("HUD/Red_HP");
+
+        this.setBombCounter(PlayerStatisticsController.instance.bombCount);
+        this.setLifeCounter(PlayerStatisticsController.instance.playerLives);
+        this.setGearBonusCounter(PlayerStatisticsController.instance.bonusGearCount);
+        this.setGearCounter(PlayerStatisticsController.instance.normalGearCount);
         
     }
 
@@ -60,6 +68,10 @@ public class HUDManager : MonoBehaviour
 
     public void setBombCounter(int newCount){
         bombCounter.text = "x" + newCount;
+    }
+
+    public void setLifeCounter(int newCount){
+        lifeCounter.text = "x" + newCount;
     }
 
     public void updateHpBattery(int hp){
