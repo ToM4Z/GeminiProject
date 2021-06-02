@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUDManager : MonoBehaviour
+public class HUDScript : MonoBehaviour
 {
 
-    public static HUDManager instance = null;
+    public static HUDScript instance = null;
 
     void Awake() {
         if (instance == null)

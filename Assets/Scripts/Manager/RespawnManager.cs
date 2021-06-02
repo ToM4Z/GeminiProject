@@ -33,7 +33,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
     }
 
     private void OnPlayerDeath(DeathEvent deathEvent) {
-        Messenger<bool>.Broadcast(GameEvent.ENABLE_INPUT, false);
+        Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
         StartCoroutine(Respawn());
     }
 
@@ -53,18 +53,18 @@ public class RespawnManager : MonoBehaviour, IGameManager
         player.transform.rotation = respawnRot;
         print("RESPAWN");
 
-        Messenger.Broadcast(GameEvent.RESET);
-        Messenger<bool>.Broadcast(GameEvent.ENABLE_INPUT, true);
+        Messenger.Broadcast(GlobalVariables.RESET);
+        Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
     }
 
     private void Awake()
     {
-        Messenger<DeathEvent>.AddListener(GameEvent.DEATH, OnPlayerDeath);
+        Messenger<DeathEvent>.AddListener(GlobalVariables.DEATH, OnPlayerDeath);
     }
 
     private void OnDestroy()
     {
-        Messenger<DeathEvent>.RemoveListener(GameEvent.DEATH, OnPlayerDeath);
+        Messenger<DeathEvent>.RemoveListener(GlobalVariables.DEATH, OnPlayerDeath);
     }
 
 }

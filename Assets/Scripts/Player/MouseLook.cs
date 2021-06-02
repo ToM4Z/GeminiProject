@@ -68,12 +68,12 @@ public class MouseLook : MonoBehaviour
 
     private void Awake()
     {
-        Messenger<bool>.AddListener(GameEvent.ENABLE_INPUT, enableInput);
+        Messenger<bool>.AddListener(GlobalVariables.ENABLE_INPUT, enableInput);
     }
 
     private void OnDestroy()
     {
-        Messenger<bool>.RemoveListener(GameEvent.ENABLE_INPUT, enableInput);
+        Messenger<bool>.RemoveListener(GlobalVariables.ENABLE_INPUT, enableInput);
     }
 
     private void enableInput(bool _b)
