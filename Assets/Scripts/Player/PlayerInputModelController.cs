@@ -517,16 +517,16 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void Awake()
     {
-        Messenger<bool>.AddListener(GameEvent.ENABLE_INPUT, EnableInput);
-        Messenger<DeathEvent>.AddListener(GameEvent.DEATH, OnDeath);
-        Messenger.AddListener(GameEvent.RESET, Reset);
+        Messenger<bool>.AddListener(GlobalVariables.ENABLE_INPUT, EnableInput);
+        Messenger<DeathEvent>.AddListener(GlobalVariables.DEATH, OnDeath);
+        Messenger.AddListener(GlobalVariables.RESET, Reset);
     }
 
     private void OnDestroy()
     {
-        Messenger<bool>.RemoveListener(GameEvent.ENABLE_INPUT, EnableInput);
-        Messenger<DeathEvent>.RemoveListener(GameEvent.DEATH, OnDeath);
-        Messenger.RemoveListener(GameEvent.RESET, Reset);
+        Messenger<bool>.RemoveListener(GlobalVariables.ENABLE_INPUT, EnableInput);
+        Messenger<DeathEvent>.RemoveListener(GlobalVariables.DEATH, OnDeath);
+        Messenger.RemoveListener(GlobalVariables.RESET, Reset);
     }
 
     private void EnableInput(bool b)

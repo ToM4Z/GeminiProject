@@ -20,7 +20,7 @@ public class PlayerStatisticsController : MonoBehaviour
     void Awake()
     {
         instance = this;
-        Messenger.AddListener(GameEvent.RESET, Reset);
+        Messenger.AddListener(GlobalVariables.RESET, Reset);
     }
 
     #endregion
@@ -48,15 +48,12 @@ public class PlayerStatisticsController : MonoBehaviour
         normalGearCount = 0;
         bonusGearCount = 0;
         bombCount = 0;
-        HUDManager.instance.setBombCounter(bombCount);
-        HUDManager.instance.setGearBonusCounter(bonusGearCount);
-        HUDManager.instance.setGearCounter(normalGearCount);
     }
 
     private void Reset()
     {
         hp = maxHP;
-        HUDManager.instance.updateHpBattery(hp);
+        HUDScript.instance.updateHpBattery(hp);
     }
 
     void Update()
@@ -77,7 +74,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseNormalGear(){
         normalGearCount++;
-        HUDManager.instance.setGearCounter(normalGearCount);
+        HUDScript.instance.setGearCounter(normalGearCount);
         if (normalGearCount == 100){
             playerLives++;
             normalGearCount = 0;
@@ -86,17 +83,29 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseBonusGear(){
         bonusGearCount++;
-        HUDManager.instance.setGearBonusCounter(bonusGearCount);
+        HUDScript.instance.setGearBonusCounter(bonusGearCount);
     }
 
     public void increaseBomb(){
         bombCount++;
-        HUDManager.instance.setBombCounter(bombCount);
+        HUDScript.instance.setBombCounter(bombCount);
     }
     public void decreaseBomb()
     {
         bombCount--;
-        HUDManager.instance.setBombCounter(bombCount);
+        HUDScript.instance.setBombCounter(bombCount);
+    }
+
+    public void increaseLives(){
+        playerLives++;
+        HUDScript.instance.setLifeCounter(playerLives);
+    }
+    public void decreaseLives(){
+        playerLives--;
+        if(playerLives < 0){
+            //TODO GAME OVER
+        }
+        HUDScript.instance.setLifeCounter(playerLives);
     }
 
     public bool isDeath() { return hp == 0; }
@@ -105,7 +114,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseHP(){
         hp++;
-        HUDManager.instance.updateHpBattery(hp);
+        HUDScript.instance.updateHpBattery(hp);
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
@@ -116,7 +125,7 @@ public class PlayerStatisticsController : MonoBehaviour
                 return;
 
             hp--;
-            HUDManager.instance.updateHpBattery(hp);
+            HUDScript.instance.updateHpBattery(hp);
             if (hp == 0) 
                 death(deathEvent);
             else
@@ -136,13 +145,15 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        //HUDManager.instance.updateHpBattery(hp);
+        this.decreaseLives();
+        BlackFadeScreen.instance.startFade();
         print("DEATH BY " + deathEvent.ToString());
-        Messenger<DeathEvent>.Broadcast(GameEvent.DEATH, deathEvent);
+        Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
+        
     }
 
     private void OnDestroy()
     {
-        Messenger.RemoveListener(GameEvent.RESET, Reset);
+        Messenger.RemoveListener(GlobalVariables.RESET, Reset);
     }
 }

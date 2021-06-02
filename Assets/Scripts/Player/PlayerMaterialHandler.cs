@@ -95,11 +95,11 @@ public class PlayerMaterialHandler : MonoBehaviour
 
     private void Awake()
     {
-        Messenger.AddListener(GameEvent.RESET, Reset);
+        Messenger.AddListener(GlobalVariables.RESET, Reset);
     }
 
     private void OnDestroy()
     {
-        Messenger.RemoveListener(GameEvent.RESET, Reset);
+        Messenger.RemoveListener(GlobalVariables.RESET, Reset);
     }
 }

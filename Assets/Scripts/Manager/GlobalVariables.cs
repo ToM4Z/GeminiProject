@@ -6,7 +6,7 @@
  *  
  *  Author: Thomas Voce
 */
-public static class GameEvent
+public static class GlobalVariables
 {
     public static bool isPaused = false;
 
