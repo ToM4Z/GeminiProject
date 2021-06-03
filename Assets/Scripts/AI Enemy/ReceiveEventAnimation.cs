@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ReceiveEventAnimation : MonoBehaviour
@@ -9,6 +7,16 @@ public class ReceiveEventAnimation : MonoBehaviour
     private void Start()
     {
         enemy = GetComponentInParent<AIEnemy>();
+    }
+
+    public void PlaySpawnSound()
+    {
+        enemy.PlaySpawnSound();
+    }
+
+    public void PlayIdleSound()
+    {
+        enemy.PlayIdleSound();
     }
 
     public void PlayWalkSound()
@@ -21,8 +29,4 @@ public class ReceiveEventAnimation : MonoBehaviour
         enemy.PlayAttackSound();
     }
 
-    public void PlayIdleSound()
-    {
-        enemy.PlayWalkSound();
-    }
 }

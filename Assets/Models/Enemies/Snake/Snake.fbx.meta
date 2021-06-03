@@ -104,8 +104,8 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.080318436
-        functionName: PlayWalkSound
+      - time: 0.98851514
+        functionName: PlayIdleSound
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

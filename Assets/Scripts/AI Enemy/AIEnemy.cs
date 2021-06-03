@@ -116,8 +116,8 @@ public class AIEnemy : MonoBehaviour
 
     //AUDIO VARIABLES
     protected AudioSource soundSource;
-    [SerializeField] protected AudioClip spawnClip, walkClip, attackClip, dieClip;
-    [SerializeField] private AudioSource idleSoundSource;
+    [SerializeField] protected AudioClip spawnClip, idleClip, walkClip, attackClip, dieClip;
+    [SerializeField] private AudioSource idleLoopSoundSource;
 
 
     [SerializeField]
@@ -179,7 +179,6 @@ public class AIEnemy : MonoBehaviour
         {
             spawning = true;
             animator.SetTrigger(animVarSpawn);
-            soundSource.PlayOneShot(spawnClip);
         }
         else if (animStateInfo.IsName(idleStateAnim))
         {
@@ -232,10 +231,10 @@ public class AIEnemy : MonoBehaviour
 
         animator.SetTrigger(deathStateAnim);
 
-        if(idleSoundSource != null)
+        if(idleLoopSoundSource != null)
         {
-            idleSoundSource.loop = false;
-            StartCoroutine(AudioManager.FadeOut(idleSoundSource, 0.5f));
+            idleLoopSoundSource.loop = false;
+            StartCoroutine(AudioManager.FadeOut(idleLoopSoundSource, 0.5f));
         }
 
         OnDeath();
@@ -521,9 +520,9 @@ public class AIEnemy : MonoBehaviour
 
         animator.Rebind();
 
-        if (idleSoundSource != null)
+        if (idleLoopSoundSource != null)
         {
-            idleSoundSource.loop = true;
+            idleLoopSoundSource.loop = true;
         }
 
         if (initialStatus != Status.INACTIVE)
@@ -545,6 +544,16 @@ public class AIEnemy : MonoBehaviour
     protected virtual bool isInitialStatusAcceptable(Status s)
     {
         return s == Status.IDLE || s == Status.INACTIVE;
+    }
+
+    public virtual void PlaySpawnSound()
+    {
+        soundSource.PlayOneShot(spawnClip);
+    }
+
+    public virtual void PlayIdleSound()
+    {
+        soundSource.PlayOneShot(idleClip);
     }
 
     public virtual void PlayWalkSound()
