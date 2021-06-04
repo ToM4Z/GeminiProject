@@ -33,12 +33,16 @@ public class FOVDetection : MonoBehaviour
     private Transform playerTransform;
     private PlayerStatisticsController player;
 
+    private float originVA, originVR;  
+
     void Start()
     {
         player = PlayerStatisticsController.instance;
         playerTransform = PlayerStatisticsController.instance.transform;
         targetMask = LayerMask.GetMask("Player");
-        obstacleMask = LayerMask.GetMask("Default");
+        obstacleMask = LayerMask.GetMask("Static"); //Default
+        originVA = viewAngle;
+        originVR = viewRadius;
     }
 
     // Check if the player is in the field of view and if there aren't obstacles in the middle
@@ -57,10 +61,12 @@ public class FOVDetection : MonoBehaviour
             Vector3 dirToTarget = (target.position - myPosition).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
-                if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, distanceTo(target.position), obstacleMask))
+                RaycastHit hit;
+                if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, out hit, distanceTo(target.position), obstacleMask))
                 {
                     return playerVisible = true;
                 }
+                print(hit.collider.gameObject.name);
             }
         }
         return playerVisible = false;
@@ -90,8 +96,14 @@ public class FOVDetection : MonoBehaviour
         if (playerTransform && playerVisible)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(pos, (playerTransform.position - transform.position).normalized * viewRadius);
+            Gizmos.DrawLine(pos, playerTransform.position);
         }
+    }
+
+    public void Reset()
+    {
+        viewAngle = originVA;
+        viewRadius = originVR;
     }
 
 

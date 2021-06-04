@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.AI;
 using System.Collections;
 
@@ -83,16 +84,27 @@ public class AIEnemy : MonoBehaviour
     private Vector3 originPos;
     private Quaternion originRot;
 
+    public enum IdleType { NONE, PATROL, RANDOM }
+    [Tooltip("Set the idle type")]
+    [SerializeField]
+    public IdleType idleType;
+
     // It's the patrolpath that enemy will follow
     [Tooltip("Drag here a gameobject with a PatrolPath component")]
     [SerializeField]
     public PatrolPath patrolPath;
 
     [Tooltip("The distance at which the enemy considers that it has reached its current path destination point")]
-    public float PathReachingRadius = 0.5f;
+    private float PathReachingRadius = 0.25f;
 
     [Tooltip("It's the maximum distance that the enemy can reach from the nearest patrolpath node or from its original position")]
     public float maxDistancePatrol = 6f;
+
+    private Vector3 randomDestination;  // it's the destination path created randomly
+
+    [SerializeField] private float idleTime;    // it's used in IdleType.RANDOM mode to wait some seconds before find a new randomDestination
+    private float idleTimer;
+    private bool idleWaiting = false;
 
     // Indicate the node at which the enemy is pointing
     int m_PathDestinationNodeIndex = 1;
@@ -141,6 +153,11 @@ public class AIEnemy : MonoBehaviour
         if (!isInitialStatusAcceptable(initialStatus))
             throw new System.Exception("Error: initial status not acceptable for gameobject " + gameObject.name);
 
+        if(patrolPath != null && idleType != IdleType.PATROL)
+            throw new System.Exception("Error: cannot assign a PatrolPath with a IdleType different from PATROL for object: " + gameObject.name);
+        else if (patrolPath == null && idleType == IdleType.PATROL)
+            throw new System.Exception("Error: PatrolPath not assigned for object: " + gameObject.name);
+
         if (initialStatus != Status.INACTIVE)
         {
             spawn = true;
@@ -148,6 +165,9 @@ public class AIEnemy : MonoBehaviour
         }
 
         //agent.autoBraking = false;
+        print(originRot);
+
+        idleTimer = -1; // this will cause a call to newRandomDestination
 
         ChangeStatus(initialStatus);
     }
@@ -157,14 +177,20 @@ public class AIEnemy : MonoBehaviour
     {
         animStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        if(attackFase != AttackFase.NO)                 // if I'm executing some attack fase, I decrease the timer
-            warnedTimer -= Time.deltaTime;
-
         switch (status)                                 // in base of the status, I execute the relative method
         {
-            case Status.INACTIVE: { inactiveIdle(); break; }
-            case Status.IDLE: { idle(); break; }
-            case Status.WARNED: { warned(); break; }
+            case Status.INACTIVE: 
+                inactiveIdle(); 
+                break; 
+
+            case Status.IDLE:     
+                idle(); 
+                break; 
+                
+            case Status.WARNED: 
+                warned(); 
+                break;
+
             //case Status.DEAD  this event is handled in 'hurt' method 
         }
 
@@ -190,69 +216,77 @@ public class AIEnemy : MonoBehaviour
     // method called when status is IDLE
     protected virtual void idle()
     {
-        // if patrolPath is enabled, it follows the path.
-        if (patrolPath)
+        if (idleWaiting)
+            idleTimer -= Time.deltaTime;
+
+        switch (idleType)
         {
-            UpdatePathDestination();
-            SetNavDestination(GetDestinationOnPath());
-        }
-        else
-        {
-            // Otherwise, if I'm far from my origin point, I go there
-            if (fov.distanceTo(originPos) > PathReachingRadius)
-                SetNavDestination(originPos);
-            else
-                // if I'm are already there, I look in the initial direction
-                transform.rotation = Quaternion.Slerp(transform.rotation, originRot, Time.deltaTime * 3f);
+            case IdleType.NONE: 
+                // In this mode, I have to stay in my originPos, so if I followed the player, I have to return home.
+
+                // If I'm so close to my originPos
+                if (fov.distanceTo(originPos) < PathReachingRadius)
+                    // I rotate to the originRot
+                    transform.rotation = Quaternion.Slerp(transform.rotation, originRot, Time.deltaTime * rotationSpeed);
+                else
+                    // else, I go in my originPos
+                    SetNavDestination(originPos);
+                break;
+
+
+            case IdleType.PATROL:
+                // In this mode, if I have a patrol path component attached to me, I follow its node.
+
+                if (patrolPath)
+                {
+                    // if I reached the path destination I go to the next patrol path node
+                    if (agent.remainingDistance < PathReachingRadius)//fov.distanceTo(GetDestinationOnPath()) <=
+                    {
+                        m_PathDestinationNodeIndex = (m_PathDestinationNodeIndex + 1) % patrolPath.PathNodes.Count;
+                        SetNavDestination(GetDestinationOnPath());
+                    }
+                }
+                break;
+
+
+            case IdleType.RANDOM:
+                // In this mode, I can move randomly
+                // I set a random destination and I go there,
+                // When I arrive there, I wait 'IdleTime' seconds
+                // and then I will set a new random destination 
+
+                if(idleTimer < 0)
+                {
+                    idleWaiting = false;
+                    idleTimer = 0;
+                    setRandomDestination();
+                }
+                else
+                if (!idleWaiting && fov.distanceTo(randomDestination) < PathReachingRadius)
+                {
+                    idleWaiting = true;
+                    idleTimer = idleTime;
+                }
+                break;
         }
 
         // if I see the player, I pass in WARNED state
         if (fov.isPlayerVisible())
         {
+            idleTimer = -1;
+            idleWaiting = false;
             agent.stoppingDistance = minDistanceToAttack;
+            fov.viewRadius *= 2;
             ChangeStatus(Status.WARNED);
         }
-    }
-
-    // With this method, the player can hit and kill the enemy
-    public void hurt()
-    {
-        if (status == Status.DEAD || status == Status.INACTIVE)
-            return;
-
-        ChangeStatus(Status.DEAD);
-
-        agent.ResetPath();
-        foreach(Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = false;
-        
-        if(attackFase != AttackFase.NO)
-            stopAttack();
-
-        animator.SetTrigger(deathStateAnim);
-
-        if(idleLoopSoundSource != null)
-        {
-            idleLoopSoundSource.loop = false;
-            StartCoroutine(AudioManager.FadeOut(idleLoopSoundSource, 0.5f));
-        }
-
-        OnDeath();
-
-        Managers.Enemies.EnemyDie(this.gameObject);
-        StartCoroutine(Disappear());
-    }
-
-    private IEnumerator Disappear()     //the enemy will disappear after 5 seconds
-    {
-        yield return new WaitForSeconds(5f);
-        if(status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
-            this.gameObject.SetActive(false);   //i disactive the enemy
     }
 
     // this method handles the behaviur of the enemy when have to attack the player
     protected void warned()
     {
+        if (attackFase != AttackFase.NO)                 // if I'm executing some attack fase, I decrease the timer
+            warnedTimer -= Time.deltaTime;
+
         FacePlayer();   // first of all, it rotates towards the player
 
         if (enableMoveToPlayer)  
@@ -265,6 +299,8 @@ public class AIEnemy : MonoBehaviour
 
             GetClosestPatrolNode(out float distanceFromClosestNode);
             float distancePlayerFromMyOrigin = Vector3.Distance(GetPositionClosestPatrolNode(), player.position);
+
+            print("1: " + (distancePlayerFromMyOrigin <= maxDistancePatrol) + "  2: " + (distanceFromClosestNode <= maxDistancePatrol));
 
             if ((distancePlayerFromMyOrigin <= maxDistancePatrol || distanceFromClosestNode <= maxDistancePatrol) && (moveWhileAttack || attackFase != AttackFase.ATTACK))
             {
@@ -361,18 +397,54 @@ public class AIEnemy : MonoBehaviour
         }
     }
 
-
     //  this method reset some variables and turn enemy on IDLE status
     protected virtual void lostWarned()
     {
         warnedTimer = 0f;
         attackFase = AttackFase.NO;
 
+        fov.viewRadius /= 2;
         agent.stoppingDistance = 0f;
         if (patrolPath)
             SetPathDestinationToClosestNode();
 
         ChangeStatus(Status.IDLE);
+    }
+
+    // With this method, the player can hit and kill the enemy
+    public void hurt()
+    {
+        if (status == Status.DEAD || status == Status.INACTIVE)
+            return;
+
+        ChangeStatus(Status.DEAD);
+
+        agent.ResetPath();
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = false;
+
+        if (attackFase != AttackFase.NO)
+            stopAttack();
+
+        animator.SetTrigger(deathStateAnim);
+
+        if (idleLoopSoundSource != null)
+        {
+            idleLoopSoundSource.loop = false;
+            StartCoroutine(AudioManager.FadeOut(idleLoopSoundSource, 0.5f));
+        }
+
+        OnDeath();
+
+        Managers.Enemies.EnemyDie(this.gameObject);
+        StartCoroutine(Disappear());
+    }
+
+    private IEnumerator Disappear()     //the enemy will disappear after 5 seconds
+    {
+        yield return new WaitForSeconds(5f);
+        if (status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
+            this.gameObject.SetActive(false);   //i disactive the enemy
     }
 
     // simple change the status and, if debug is enabled, prints the change
@@ -491,16 +563,29 @@ public class AIEnemy : MonoBehaviour
     protected void SetNavDestination(Vector3 destination)
     {
         agent.SetDestination(destination);
+        //print(destination);
     }
 
-    // Check if reached the path destination so that it set the next path destination
-    protected void UpdatePathDestination()
-    {        //fov.distanceTo(GetDestinationOnPath()) <=
-        if (agent.remainingDistance < PathReachingRadius)
+    private void setRandomDestination()
+    {
+        randomDestination = RandomNavSphere(originPos, maxDistancePatrol, NavMesh.AllAreas);
+        SetNavDestination(randomDestination);
+    }
+
+    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
+    {
+        bool find;
+        Vector3 position;
+        NavMeshPath path = new NavMeshPath();
+        do
         {
-            m_PathDestinationNodeIndex++;
-            m_PathDestinationNodeIndex %= patrolPath.PathNodes.Count;
-        }
+            Vector3 randDirection = Random.insideUnitSphere * dist;
+            randDirection += origin;
+            find = NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, dist, layermask);
+            position = navHit.position;
+        } while (find && !NavMesh.CalculatePath(origin, position, layermask, path));
+
+        return position;
     }
 
     public virtual void ResetEnemy()
@@ -514,6 +599,10 @@ public class AIEnemy : MonoBehaviour
         m_PathDestinationNodeIndex = 1;
         agent.ResetPath();
         agent.stoppingDistance = 0f;
+        fov.Reset();
+
+        idleTimer = -1;
+        idleWaiting = false;
 
         warnedTimer = 0f;
         attackFase = AttackFase.NO;
@@ -564,5 +653,26 @@ public class AIEnemy : MonoBehaviour
     public virtual void PlayAttackSound()
     {
         soundSource.PlayOneShot(attackClip);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if(originPos != null && originPos != Vector3.zero)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(originPos, 0.1f);
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(originPos, originPos + Vector3.up);
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(originPos, originPos + originRot * Vector3.right);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(originPos, originPos + originRot * Vector3.forward);
+
+            Gizmos.color = Color.grey;
+            Gizmos.DrawWireSphere(originPos, maxDistancePatrol);
+
+            GUI.color = Color.black;
+            Handles.Label(originPos, Vector3.Distance(originPos, transform.position).ToString());
+        }
     }
 }
