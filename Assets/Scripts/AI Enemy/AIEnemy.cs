@@ -65,7 +65,7 @@ public class AIEnemy : MonoBehaviour
     protected AttackFase attackFase = AttackFase.NO;
     protected enum AttackFase 
     { 
-        NO,         // The enemy is not attacking the player
+        NO,         // The enemy can see the player but he is not attacking him yet
         ATTACK,     // The enemy is attacking the player  
         PAUSE,      // The enemy just ends to attack player and will wait a bit before to attack again
         LOSTVIEW    // The enemy doesn't see more the player. He will wait a bit and then, if the player is not visible yet, he will turn on IDLE status
@@ -165,8 +165,6 @@ public class AIEnemy : MonoBehaviour
         }
 
         //agent.autoBraking = false;
-        print(originRot);
-
         idleTimer = -1; // this will cause a call to newRandomDestination
 
         ChangeStatus(initialStatus);
@@ -183,11 +181,13 @@ public class AIEnemy : MonoBehaviour
                 inactiveIdle(); 
                 break; 
 
-            case Status.IDLE:     
+            case Status.IDLE:
+                fov.checkIsPlayerVisible();
                 idle(); 
                 break; 
                 
-            case Status.WARNED: 
+            case Status.WARNED:
+                fov.checkIsPlayerVisible();
                 warned(); 
                 break;
 
@@ -271,17 +271,16 @@ public class AIEnemy : MonoBehaviour
         }
 
         // if I see the player, I pass in WARNED state
-        if (fov.isPlayerVisible())
+        if (fov.isPlayerVisible)
         {
             idleTimer = -1;
             idleWaiting = false;
             agent.stoppingDistance = minDistanceToAttack;
-            fov.viewRadius *= 2;
+            fov.viewRadius *= 1.5f;
             ChangeStatus(Status.WARNED);
         }
     }
 
-    // this method handles the behaviur of the enemy when have to attack the player
     protected void warned()
     {
         if (attackFase != AttackFase.NO)                 // if I'm executing some attack fase, I decrease the timer
@@ -289,55 +288,52 @@ public class AIEnemy : MonoBehaviour
 
         FacePlayer();   // first of all, it rotates towards the player
 
-        if (enableMoveToPlayer)  
+        if (enableMoveToPlayer)
         {
             // IF I can move towards the player &&
-            // the player / enemy is not so far from the origin point / patrol path &&
+            // the player or enemy is not so far from the origin point / patrol path &&
             // the enemy is not attacking or he can move while is attacking
             // so he can move towards the player
             // Otherwise, the agent is resetted
 
             GetClosestPatrolNode(out float distanceFromClosestNode);
-            float distancePlayerFromMyOrigin = Vector3.Distance(GetPositionClosestPatrolNode(), player.position);
-
-            print("1: " + (distancePlayerFromMyOrigin <= maxDistancePatrol) + "  2: " + (distanceFromClosestNode <= maxDistancePatrol));
+            float distancePlayerFromMyOrigin = Vector3.Distance(GetPositionClosestPatrolNode(), fov.lastPlayerPositionKnowed);
 
             if ((distancePlayerFromMyOrigin <= maxDistancePatrol || distanceFromClosestNode <= maxDistancePatrol) && (moveWhileAttack || attackFase != AttackFase.ATTACK))
             {
-                SetNavDestination(player.transform.position);
+                SetNavDestination(fov.lastPlayerPositionKnowed);
             }
             else
                 agent.ResetPath();
         }
 
         // IF I'm not attacking 
-        float actualDistanceFromPlayer = fov.distanceTo(player.position);
+        float actualDistanceFromPlayer = fov.distanceTo(fov.lastPlayerPositionKnowed);
         if (attackFase == AttackFase.NO)
         {
             // and I'm close enough to the player
             if (actualDistanceFromPlayer <= minDistanceToAttack)
             {
-                attackFase = AttackFase.ATTACK;     // I attack him
+                ChandeAttackState(AttackFase.ATTACK);   // I attack him
                 warnedTimer = attackTime;
                 startAttack();
             }
             // otherwise, if I don't see the player, began the lost view timer 
-            else if(!fov.isPlayerVisible())
+            else if (!fov.isPlayerVisible)
             {
-                attackFase = AttackFase.LOSTVIEW;
+                ChandeAttackState(AttackFase.LOSTVIEW);
                 warnedTimer = lostViewTime;
             }
         }
-        else if (attackFase != AttackFase.NO)
+
+        else
         {
             switch (attackFase)
             {
-                case AttackFase.NO:
-                    {
-                        break;
-                    }
+                case AttackFase.NO:     break;
+
                 case AttackFase.ATTACK: // IF I'm attacking
-                    {
+                    
                         // I execute some control during attack (implemented by subclasses)
                         duringAttack();
 
@@ -346,43 +342,44 @@ public class AIEnemy : MonoBehaviour
                         {
                             stopAttack();
                             warnedTimer = pauseBetweenAttacksTime;
-                            attackFase = AttackFase.PAUSE;
+                            ChandeAttackState(AttackFase.PAUSE);
                         }
                         break;
-                    }
+                    
                 case AttackFase.PAUSE:
-                    {
+                    
                         // When i finish the pause time
                         if (warnedTimer <= 0f)
                         {
                             // if the player is not visible yet, I turn in IDLE state
-                            if (!fov.isPlayerVisible())
+                            if (!fov.isPlayerVisible)
                             {
-                                lostWarned();
+                                ChandeAttackState(AttackFase.LOSTVIEW);
+                                warnedTimer = lostViewTime;
                             }
                             else
                             // if I'm close enough to the player, I start another attack 
                             if (actualDistanceFromPlayer <= minDistanceToAttack)
                             {
-                                attackFase = AttackFase.ATTACK;
+                                ChandeAttackState(AttackFase.ATTACK);
                                 warnedTimer = attackTime;
                                 startAttack();
                             }
                             // Otherwise, I don't do anything (while in I should walk against the player to start another actions)
                             else
                             {
-                                attackFase = AttackFase.NO;
+                                ChandeAttackState(AttackFase.NO);
                                 warnedTimer = 0f;
                             }
                         }
                         break;
-                    }
+                    
                 case AttackFase.LOSTVIEW:   // IF I'm in LOSTVIEW fase
-                    {
+                    
                         // if I see the player, I turn in No attack fase
-                        if (fov.isPlayerVisible())
+                        if (fov.isPlayerVisible)
                         {
-                            attackFase = AttackFase.NO;
+                            ChandeAttackState(AttackFase.NO);
                             warnedTimer = 0f;
                         }
                         // if the timer is finished and the player is not visible until now, I turn in IDLE state
@@ -391,7 +388,6 @@ public class AIEnemy : MonoBehaviour
                             lostWarned();
                         }
                         break;
-                    }
             }
 
         }
@@ -401,9 +397,9 @@ public class AIEnemy : MonoBehaviour
     protected virtual void lostWarned()
     {
         warnedTimer = 0f;
-        attackFase = AttackFase.NO;
+        ChandeAttackState(AttackFase.NO);
 
-        fov.viewRadius /= 2;
+        fov.viewRadius /= 1.5f;
         agent.stoppingDistance = 0f;
         if (patrolPath)
             SetPathDestinationToClosestNode();
@@ -450,9 +446,18 @@ public class AIEnemy : MonoBehaviour
     // simple change the status and, if debug is enabled, prints the change
     protected void ChangeStatus(Status s)
     {
-        if (debug)
-            print(s);
         status = s;
+        if (debug)
+            print(gameObject.name + ": " + status);
+    }
+
+
+    // simple change the attack fase and, if debug is enabled, prints the change
+    protected void ChandeAttackState(AttackFase fase)
+    {
+        attackFase = fase;
+        if (debug)
+            print(gameObject.name + ": " + attackFase);
     }
 
     // method that subclasses can override to add behaviour when enemy START to attack
@@ -568,7 +573,7 @@ public class AIEnemy : MonoBehaviour
 
     private void setRandomDestination()
     {
-        randomDestination = RandomNavSphere(originPos, maxDistancePatrol, NavMesh.AllAreas);
+        randomDestination = RandomNavSphere(originPos, maxDistancePatrol*.8f, NavMesh.AllAreas);
         SetNavDestination(randomDestination);
     }
 
@@ -668,11 +673,10 @@ public class AIEnemy : MonoBehaviour
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(originPos, originPos + originRot * Vector3.forward);
 
-            Gizmos.color = Color.grey;
-            Gizmos.DrawWireSphere(originPos, maxDistancePatrol);
-
             GUI.color = Color.black;
             Handles.Label(originPos, Vector3.Distance(originPos, transform.position).ToString());
+            Handles.color = Color.black;
+            Handles.DrawWireDisc(originPos, Vector3.up, maxDistancePatrol * .8f);
         }
     }
 }
