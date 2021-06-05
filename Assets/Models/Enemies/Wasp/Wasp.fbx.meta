@@ -108,7 +108,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.98893183
+      - time: 1
         functionName: StartDespawn
         data: 
         objectReferenceParameter: {instanceID: 0}
