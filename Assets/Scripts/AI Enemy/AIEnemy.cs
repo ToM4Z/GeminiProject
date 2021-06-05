@@ -588,7 +588,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             randDirection += origin;
             find = NavMesh.SamplePosition(randDirection, out NavMeshHit navHit, dist, layermask);
             position = navHit.position;
-        } while (find && !NavMesh.CalculatePath(origin, position, layermask, path));
+        } while (!find || !NavMesh.CalculatePath(origin, position, layermask, path));
 
         return position;
     }
