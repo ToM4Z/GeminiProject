@@ -125,6 +125,10 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         animVarSpawn = "Spawn",
         animVarSpeed = "Speed";
 
+    private Transform model;
+    private Vector3 originModelPos;
+    private Quaternion originModelRot;
+
 
     //AUDIO VARIABLES
     protected AudioSource soundSource;
@@ -166,6 +170,10 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         //agent.autoBraking = false;
         idleTimer = -1; // this will cause a call to newRandomDestination
+
+        model = transform.GetChild(0);
+        originModelPos = model.localPosition;
+        originModelRot = model.localRotation;
 
         ChangeStatus(initialStatus);
     }
@@ -667,7 +675,10 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     public void Disable()
     {
-        gameObject.transform.GetChild(0).localScale = Vector3.one;  // reset model scale 
+        // reset model transform, despawn and other animations could edit them
+        model.localPosition = originModelPos;
+        model.localRotation = originModelRot;
+        model.localScale    = Vector3.one;
         this.gameObject.SetActive(false);
     }
 
