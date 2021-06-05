@@ -59,9 +59,9 @@ public class AIElementalEnemy : AIEnemy
     //    //particle.gameObject.transform.LookAt(posToFire);
     //}
 
-    public override void ResetEnemy()
+    public override void Reset()
     {
-        base.ResetEnemy();
+        base.Reset();
         particle.Stop();
         lightParticle.enabled = false;
     }

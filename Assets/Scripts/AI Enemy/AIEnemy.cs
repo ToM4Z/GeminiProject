@@ -15,7 +15,7 @@ using System.Collections;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody))]
-public class AIEnemy : MonoBehaviour
+public class AIEnemy : MonoBehaviour, IHittable, IResettable
 {
     //--------------GENERAL-------------
     [Tooltip("If enabled, prints will be enabled")]
@@ -408,7 +408,7 @@ public class AIEnemy : MonoBehaviour
     }
 
     // With this method, the player can hit and kill the enemy
-    public void hurt()
+    public void hit()
     {
         if (status == Status.DEAD || status == Status.INACTIVE)
             return;
@@ -573,11 +573,11 @@ public class AIEnemy : MonoBehaviour
 
     private void setRandomDestination()
     {
-        randomDestination = RandomNavSphere(originPos, maxDistancePatrol*.8f, NavMesh.AllAreas);
+        randomDestination = GenerateRandomPosition(originPos, maxDistancePatrol*.8f, NavMesh.AllAreas);
         SetNavDestination(randomDestination);
     }
 
-    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
+    public static Vector3 GenerateRandomPosition(Vector3 origin, float dist, int layermask)
     {
         bool find;
         Vector3 position;
@@ -593,7 +593,7 @@ public class AIEnemy : MonoBehaviour
         return position;
     }
 
-    public virtual void ResetEnemy()
+    public virtual void Reset()
     {
         transform.position = originPos;
         transform.rotation = originRot;
