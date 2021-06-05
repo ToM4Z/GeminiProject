@@ -128,7 +128,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     //AUDIO VARIABLES
     protected AudioSource soundSource;
-    [SerializeField] protected AudioClip spawnClip, idleClip, walkClip, attackClip, dieClip;
+    [SerializeField] protected AudioClip spawnClip, idleClip, walkClip, attackClip, deathClip;
     [SerializeField] private AudioSource idleLoopSoundSource;
 
 
@@ -433,14 +433,6 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         OnDeath();
 
         Managers.Enemies.EnemyDie(this.gameObject);
-        StartCoroutine(Disappear());
-    }
-
-    private IEnumerator Disappear()     //the enemy will disappear after 5 seconds
-    {
-        yield return new WaitForSeconds(5f);
-        if (status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
-            this.gameObject.SetActive(false);   //i disactive the enemy
     }
 
     // simple change the status and, if debug is enabled, prints the change
@@ -490,10 +482,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
 
     // method that subclasses can override to add behaviour when player hit this enemy
-    protected virtual void OnDeath() 
-    {
-        soundSource.PlayOneShot(dieClip);
-    }
+    protected virtual void OnDeath() {}
 
 
 
@@ -568,7 +557,6 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     protected void SetNavDestination(Vector3 destination)
     {
         agent.SetDestination(destination);
-        //print(destination);
     }
 
     private void setRandomDestination()
@@ -612,7 +600,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         warnedTimer = 0f;
         attackFase = AttackFase.NO;
 
-        animator.Rebind();
+        //animator.Rebind();
 
         if (idleLoopSoundSource != null)
         {
@@ -658,6 +646,29 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     public virtual void PlayAttackSound()
     {
         soundSource.PlayOneShot(attackClip);
+    }
+
+    public virtual void PlayDeathSound()
+    {
+        soundSource.PlayOneShot(deathClip);
+    }
+
+    public void StartDespawn()
+    {
+        StartCoroutine(StartDespawnDelayed());
+    }
+
+    private IEnumerator StartDespawnDelayed()
+    {
+        yield return new WaitForSeconds(4f);
+        if (status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
+            animator.SetTrigger("Despawn"); // I start Despawn
+    }
+
+    public void Disable()
+    {
+        gameObject.transform.GetChild(0).localScale = Vector3.one;  // reset model scale 
+        this.gameObject.SetActive(false);
     }
 
     void OnDrawGizmosSelected()

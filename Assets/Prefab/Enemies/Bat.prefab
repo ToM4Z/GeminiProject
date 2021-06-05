@@ -597,14 +597,16 @@ MonoBehaviour:
   rotationSpeed: 5
   enableMoveToPlayer: 1
   moveWhileAttack: 1
+  idleType: 0
   patrolPath: {fileID: 0}
-  PathReachingRadius: 0.5
   maxDistancePatrol: 6
+  idleTime: 0
   spawnClip: {fileID: 0}
+  idleClip: {fileID: 0}
   walkClip: {fileID: 8300000, guid: 5f24b0e3da2bfc246bddbe88e52c3d9d, type: 3}
   attackClip: {fileID: 8300000, guid: 3603ed8d19e2b634ca4188c5c8a28572, type: 3}
-  dieClip: {fileID: 8300000, guid: fbd5e3905496a2e4baada65150a6e85c, type: 3}
-  idleSoundSource: {fileID: 0}
+  deathClip: {fileID: 8300000, guid: fbd5e3905496a2e4baada65150a6e85c, type: 3}
+  idleLoopSoundSource: {fileID: 0}
   attackTriggers:
   - {fileID: 3347305797912963627}
   typeAttack: 0

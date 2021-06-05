@@ -126,8 +126,8 @@ MonoBehaviour:
   idleClip: {fileID: 0}
   walkClip: {fileID: 0}
   attackClip: {fileID: 8300000, guid: 0735d071500544246a09a6b9c4f14f5a, type: 3}
-  dieClip: {fileID: 8300000, guid: 839ace58f2fb23d47a431174d7804036, type: 3}
-  idleLoopSoundSource: {fileID: 0}
+  deathClip: {fileID: 8300000, guid: 839ace58f2fb23d47a431174d7804036, type: 3}
+  idleLoopSoundSource: {fileID: 1509024449150545052}
   attackTriggers:
   - {fileID: 4589809601223402980}
   typeAttack: 3

@@ -84,13 +84,13 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
 
     public void Disable()
     {
+        gameObject.transform.GetChild(0).localScale = Vector3.one;
         this.gameObject.SetActive(false);
     }
 
     public void Reset()
     {
         this.gameObject.SetActive(true);
-        animator.gameObject.transform.localScale = Vector3.one;
         material.DisableKeyword("_EMISSION");
         particle.Stop();
         activate = false;

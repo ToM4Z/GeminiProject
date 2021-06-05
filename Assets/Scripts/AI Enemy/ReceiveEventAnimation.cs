@@ -29,6 +29,16 @@ public class ReceiveEventAnimation : MonoBehaviour
         go.SendMessage("PlayAttackSound");
     }
 
+    public void PlayDeathSound()
+    {
+        go.SendMessage("PlayDeathSound");
+    }
+
+    public void StartDespawn()
+    {
+        go.SendMessage("StartDespawn");
+    }
+
     public void Disable()
     {
         go.SendMessage("Disable");
