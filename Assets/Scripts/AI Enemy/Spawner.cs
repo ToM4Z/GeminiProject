@@ -21,12 +21,14 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
     [SerializeField] public AudioClip spawnClip, destroyClip;
     [SerializeField] public GameObject particleSpawnPrefab;
     private AudioSource audioSource;
+    private Animator animator;
 
     private bool activate = false;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        animator = GetComponentInChildren<Animator>();
         material = GetComponentInChildren<Renderer>().material;
         material.DisableKeyword("_EMISSION");
         particle.Stop();
@@ -54,14 +56,13 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
             CheckToDestroy();
     }
 
-    private void CheckToDestroy()
+    private void CheckToDestroy()   // I remove an enemy for frame if it's disactivated
     {
         GameObject toRemove = null;
         foreach (GameObject e in enemiesSpawned)
             if (!e.activeSelf)
             {
                 toRemove = e;
-                print("Find toRemove");
                 break;
             }
 
@@ -71,27 +72,32 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
 
     public void hit()
     {
+        activate = false;
+
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = false;
 
-        //parte animazione
+        particle.Stop();
+        animator.Play("Despawn");
         audioSource.PlayOneShot(destroyClip);
-
-        StartCoroutine(Disable());
     }
 
-    private IEnumerator Disable()
+    public void Disable()
     {
-        yield return new WaitForSeconds(1);
         this.gameObject.SetActive(false);
     }
 
     public void Reset()
     {
         this.gameObject.SetActive(true);
+        animator.gameObject.transform.localScale = Vector3.one;
         material.DisableKeyword("_EMISSION");
         particle.Stop();
         activate = false;
+
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = true;
+
         foreach (GameObject e in enemiesSpawned)
             Destroy(e);
         enemiesSpawned.Clear();

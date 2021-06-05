@@ -2,31 +2,36 @@ using UnityEngine;
 
 public class ReceiveEventAnimation : MonoBehaviour
 {
-    private AIEnemy enemy;
+    private GameObject go;
 
     private void Start()
     {
-        enemy = GetComponentInParent<AIEnemy>();
+        go = this.transform.parent.gameObject;
     }
 
     public void PlaySpawnSound()
     {
-        enemy.PlaySpawnSound();
+        go.SendMessage("PlaySpawnSound");
     }
 
     public void PlayIdleSound()
     {
-        enemy.PlayIdleSound();
+        go.SendMessage("PlayIdleSound");
     }
 
     public void PlayWalkSound()
     {
-        enemy.PlayWalkSound();
+        go.SendMessage("PlayWalkSound");
     }
 
     public void PlayAttackSound()
     {
-        enemy.PlayAttackSound();
+        go.SendMessage("PlayAttackSound");
+    }
+
+    public void Disable()
+    {
+        go.SendMessage("Disable");
     }
 
 }
