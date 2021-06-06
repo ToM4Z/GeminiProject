@@ -31,7 +31,7 @@ public class FOVDetection : MonoBehaviour
     public bool isPlayerVisible { get; private set; } = false;
 
     private PlayerStatisticsController player;
-    public Vector3 lastPlayerPositionKnowed { get;  private set; }
+    public Vector3 lastPlayerPositionKnown { get;  private set; }
 
     private float originVA, originVR;
 
@@ -65,7 +65,7 @@ public class FOVDetection : MonoBehaviour
                 RaycastHit hit;
                 if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, out hit, distanceTo(target.position), obstacleMask))
                 {
-                    lastPlayerPositionKnowed = player.transform.position;
+                    lastPlayerPositionKnown = player.transform.position;
                     return isPlayerVisible = true;
                 }
                 print(hit.collider.gameObject.name);
@@ -98,7 +98,7 @@ public class FOVDetection : MonoBehaviour
         if (isPlayerVisible)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(pos, lastPlayerPositionKnowed);
+            Gizmos.DrawLine(pos, lastPlayerPositionKnown);
         }
     }
 

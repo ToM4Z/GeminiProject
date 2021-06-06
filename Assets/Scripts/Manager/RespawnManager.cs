@@ -47,11 +47,11 @@ public class RespawnManager : MonoBehaviour, IGameManager
     private IEnumerator Respawn()
     {
         yield return new WaitForSeconds(RespawnTime);
-        //yield return new WaitForEndOfFrame();
 
         player.transform.position = respawnPos;
         player.transform.rotation = respawnRot;
         print("RESPAWN");
+        yield return new WaitForEndOfFrame();
 
         Messenger.Broadcast(GlobalVariables.RESET);
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);

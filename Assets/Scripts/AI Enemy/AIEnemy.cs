@@ -297,6 +297,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         FacePlayer();   // first of all, it rotates towards the player
 
+        float actualDistanceFromPlayer = fov.distanceTo(fov.lastPlayerPositionKnown);
+
         if (enableMoveToPlayer)
         {
             // IF I can move towards the player &&
@@ -306,18 +308,23 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             // Otherwise, the agent is resetted
 
             GetClosestPatrolNode(out float distanceFromClosestNode);
-            float distancePlayerFromMyOrigin = Vector3.Distance(GetPositionClosestPatrolNode(), fov.lastPlayerPositionKnowed);
-
-            if ((distancePlayerFromMyOrigin <= maxDistancePatrol || distanceFromClosestNode <= maxDistancePatrol) && (moveWhileAttack || attackFase != AttackFase.ATTACK))
+            float distancePlayerFromMyOrigin = Vector3.Distance(GetPositionClosestPatrolNode(), fov.lastPlayerPositionKnown);
+            
+            if (
+                    (distancePlayerFromMyOrigin <= maxDistancePatrol || distanceFromClosestNode <= maxDistancePatrol) && 
+                    actualDistanceFromPlayer > minDistanceToAttack && 
+                    (moveWhileAttack || attackFase != AttackFase.ATTACK)
+                )
             {
-                SetNavDestination(fov.lastPlayerPositionKnowed);
+                SetNavDestination(fov.lastPlayerPositionKnown);
             }
             else
+            {
                 agent.ResetPath();
+            }
         }
 
         // IF I'm not attacking 
-        float actualDistanceFromPlayer = fov.distanceTo(fov.lastPlayerPositionKnowed);
         if (attackFase == AttackFase.NO)
         {
             // and I'm close enough to the player
@@ -609,7 +616,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         warnedTimer = 0f;
         attackFase = AttackFase.NO;
 
-        //animator.Rebind();
+        animator.Rebind();
 
         if (soundSource[2].clip != null)
         {
@@ -698,8 +705,9 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
             GUI.color = Color.black;
             Handles.Label(originPos, Vector3.Distance(originPos, transform.position).ToString());
+            Handles.Label( new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), fov.distanceTo(fov.lastPlayerPositionKnown).ToString());
             Handles.color = Color.black;
-            Handles.DrawWireDisc(originPos, Vector3.up, maxDistancePatrol * .8f);
+            Handles.DrawWireDisc(originPos, Vector3.up, maxDistancePatrol * .8f);            
         }
     }
 }
