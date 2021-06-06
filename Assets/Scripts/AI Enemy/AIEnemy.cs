@@ -13,7 +13,6 @@ using System.Collections;
 */
 [RequireComponent(typeof(FOVDetection))]
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody))]
 public class AIEnemy : MonoBehaviour, IHittable, IResettable
 {
@@ -131,10 +130,12 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
 
     //AUDIO VARIABLES
-    protected AudioSource soundSource;
+    protected AudioSource[] soundSource;
+    // this array will contains two soundSources,
+    // the first will used to play all little clips
+    // the second will be used to play long clips which have to fade out (dragon attack)
+    // the third will be used to idle clips which have to loop
     [SerializeField] protected AudioClip spawnClip, idleClip, walkClip, attackClip, deathClip;
-    [SerializeField] private AudioSource idleLoopSoundSource;
-
 
     [SerializeField]
     private AttackTrigger[] attackTriggers;
@@ -149,7 +150,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         fov = GetComponent<FOVDetection>();
         animator = GetComponentInChildren<Animator>();
 
-        soundSource = GetComponent<AudioSource>();
+        soundSource = GetComponentsInChildren<AudioSource>();
 
         originPos = transform.position;
         originRot = transform.rotation;
@@ -432,10 +433,10 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         animator.SetTrigger(deathStateAnim);
 
-        if (idleLoopSoundSource != null)
+        if (soundSource[2].clip != null)
         {
-            idleLoopSoundSource.loop = false;
-            StartCoroutine(AudioManager.FadeOut(idleLoopSoundSource, 0.5f));
+            soundSource[2].loop = false;
+            StartCoroutine(AudioManager.FadeOut(soundSource[2], 0.5f));
         }
 
         OnDeath();
@@ -610,9 +611,9 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         //animator.Rebind();
 
-        if (idleLoopSoundSource != null)
+        if (soundSource[2].clip != null)
         {
-            idleLoopSoundSource.loop = true;
+            soundSource[2].loop = true;
         }
 
         if (initialStatus != Status.INACTIVE)
@@ -638,27 +639,27 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     public virtual void PlaySpawnSound()
     {
-        soundSource.PlayOneShot(spawnClip);
+        soundSource[0].PlayOneShot(spawnClip);
     }
 
     public virtual void PlayIdleSound()
     {
-        soundSource.PlayOneShot(idleClip);
+        soundSource[0].PlayOneShot(idleClip);
     }
 
     public virtual void PlayWalkSound()
     {
-        soundSource.PlayOneShot(walkClip);
+        soundSource[0].PlayOneShot(walkClip);
     }
 
     public virtual void PlayAttackSound()
     {
-        soundSource.PlayOneShot(attackClip);
+        soundSource[0].PlayOneShot(attackClip);
     }
 
     public virtual void PlayDeathSound()
     {
-        soundSource.PlayOneShot(deathClip);
+        soundSource[0].PlayOneShot(deathClip);
     }
 
     public void StartDespawn()

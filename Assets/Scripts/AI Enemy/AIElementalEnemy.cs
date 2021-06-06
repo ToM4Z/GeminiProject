@@ -15,7 +15,6 @@ public class AIElementalEnemy : AIEnemy
     // The dragon hit the player spitting fire/ice with ParticleSystem
     [SerializeField] private ParticleSystem particle;
     [SerializeField] private Light lightParticle;
-    [SerializeField] private AudioSource attackSFXSource;
 
     protected override void Start()
     {
@@ -29,8 +28,8 @@ public class AIElementalEnemy : AIEnemy
     protected override void startAttack()
     {
         base.startAttack();
-        attackSFXSource.clip = attackClip;
-        attackSFXSource.Play();
+        soundSource[1].clip = attackClip;
+        soundSource[1].Play();
         particle.Play();
         StartCoroutine(AbleLight(true));
     }
@@ -39,7 +38,7 @@ public class AIElementalEnemy : AIEnemy
     protected override void stopAttack()
     {
         base.stopAttack();
-        StartCoroutine(AudioManager.FadeOut(attackSFXSource, 0.5f));
+        StartCoroutine(AudioManager.FadeOut(soundSource[1], 0.5f));
         particle.Stop();
         StartCoroutine(AbleLight(false));
     }
