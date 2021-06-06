@@ -259,7 +259,7 @@ public class PlayerInputModelController : MonoBehaviour
                 }
             case Status.FALLING:
                 {
-                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed) / 1.5f;
+                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed); /// 1.5f;
 
                     _vertSpeed += gravity * 5 * Time.deltaTime;
                     if (_vertSpeed < terminalVelocity)
