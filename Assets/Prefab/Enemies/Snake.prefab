@@ -63,7 +63,7 @@ MonoBehaviour:
   maxDistancePatrol: 6
   idleTime: 0
   spawnClip: {fileID: 0}
-  idleClip: {fileID: 0}
+  idleClip: {fileID: 8300000, guid: e22012685a15b7c479e49b0acb3d6fd1, type: 3}
   walkClip: {fileID: 8300000, guid: e22012685a15b7c479e49b0acb3d6fd1, type: 3}
   attackClip: {fileID: 8300000, guid: 09efa08f9de163a4aac07c95e978d2f3, type: 3}
   deathClip: {fileID: 8300000, guid: 0a1f177c1c53e384e92c8a5a7b78ff52, type: 3}
