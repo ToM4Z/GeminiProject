@@ -454,13 +454,17 @@ MonoBehaviour:
   spawnClip: {fileID: 0}
   idleClip: {fileID: 0}
   walkClip: {fileID: 8300000, guid: 5f24b0e3da2bfc246bddbe88e52c3d9d, type: 3}
-  attackClip: {fileID: 8300000, guid: 3603ed8d19e2b634ca4188c5c8a28572, type: 3}
+  attackClip: {fileID: 0}
   deathClip: {fileID: 8300000, guid: fbd5e3905496a2e4baada65150a6e85c, type: 3}
   attackTriggers:
   - {fileID: 3347305797912963627}
   typeAttack: 0
   particle: {fileID: 8058885718481889679}
   lightParticle: {fileID: 6438412116065532184}
+  elementalAttackClip: {fileID: 8300000, guid: 3603ed8d19e2b634ca4188c5c8a28572, type: 3}
+  MeleeAttack: 0
+  distanceMeleeAttack: 0
+  MeleeAttackTime: 0
 --- !u!114 &3644212532243442263
 MonoBehaviour:
   m_ObjectHideFlags: 0

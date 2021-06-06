@@ -101,7 +101,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     private Vector3 randomDestination;  // it's the destination path created randomly
 
-    [SerializeField] private float idleTime;    // it's used in IdleType.RANDOM mode to wait some seconds before find a new randomDestination
+    [SerializeField] private float idleTime = 4;    // it's used in IdleType.RANDOM mode to wait some seconds before find a new randomDestination
     private float idleTimer;
     private bool idleWaiting = false;
 
@@ -140,7 +140,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     [SerializeField]
     private AttackTrigger[] attackTriggers;
 
-    [SerializeField] private DeathEvent typeAttack = DeathEvent.HITTED;
+    [SerializeField] protected DeathEvent typeAttack = DeathEvent.HITTED;
 
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()

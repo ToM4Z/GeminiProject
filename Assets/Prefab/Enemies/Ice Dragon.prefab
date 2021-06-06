@@ -572,6 +572,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4400080816401426277}
+  - component: {fileID: 8802818850326377990}
+  - component: {fileID: 3135969023042570310}
   m_Layer: 0
   m_Name: Tail4
   m_TagString: Untagged
@@ -594,6 +596,34 @@ Transform:
   m_Father: {fileID: 5767664401766343181}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8802818850326377990
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3398005924524121118}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.001, y: 0.011407632, z: 0.010835319}
+  m_Center: {x: -1.070724e-15, y: -0.0012896141, z: -0.0023797918}
+--- !u!114 &3135969023042570310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3398005924524121118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c24edcf6bb61ef4bb28d7685610896e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnteredTrigger: 0
+  hitted: {fileID: 0}
+  collisionTag: Player
 --- !u!1 &3505721530343252962
 GameObject:
   m_ObjectHideFlags: 0
@@ -5817,17 +5847,22 @@ MonoBehaviour:
   idleType: 0
   patrolPath: {fileID: 0}
   maxDistancePatrol: 6
-  idleTime: 0
+  idleTime: 4
   spawnClip: {fileID: 0}
   idleClip: {fileID: 0}
   walkClip: {fileID: 8300000, guid: ac67925d855f0b34d8e433fe23641d1b, type: 3}
-  attackClip: {fileID: 8300000, guid: af86f44345e9f73478ab4dde12d62e2c, type: 3}
-  deathClip: {fileID: 8300000, guid: 32e048d27fee9d64cb3f07fc75c51a46, type: 3}
-  idleLoopSoundSource: {fileID: 0}
+  attackClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
+  deathClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
   attackTriggers: []
-  typeAttack: 1
+  typeAttack: 3
   particle: {fileID: 5301166710069466122}
   lightParticle: {fileID: 5301166709446068958}
+  elementalAttackClip: {fileID: 8300000, guid: af86f44345e9f73478ab4dde12d62e2c, type: 3}
+  MeleeAttack: 1
+  distanceMeleeAttack: 2
+  MeleeAttackTime: 1
+  attackTriggersForMeleeAttackElementalEnemy:
+  - {fileID: 3135969023042570310}
 --- !u!114 &5301166710836379495
 MonoBehaviour:
   m_ObjectHideFlags: 0
