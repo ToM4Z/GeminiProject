@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
+  drop: {fileID: 2329708832348443860, guid: b4e33b06c42b4f343b97a32ad2676ae5, type: 3}
   initialStatus: 1
   attackTime: 1
   pauseBetweenAttacksTime: 1

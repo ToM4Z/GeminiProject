@@ -18,6 +18,8 @@ public class EnemiesManager : MonoBehaviour, IGameManager
 
     private List<GameObject> enemiesDead = new List<GameObject>();
 
+    [SerializeField] public GameObject DropItem;
+
     public void Startup()
     {
         enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
