@@ -27,6 +27,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.gameObject.SetActive(true);
         Time.timeScale = 0f;
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
+        Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, false);
         GlobalVariables.isPaused = true;
         //Cursor.visible = true;
     }
@@ -35,6 +36,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.gameObject.SetActive(false);
         Time.timeScale = 1f;
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
+        Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, true);
         GlobalVariables.isPaused = false;
         //Cursor.visible = false;
     }

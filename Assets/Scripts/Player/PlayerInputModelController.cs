@@ -283,7 +283,7 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             _vertSpeed = jumpSpeed;
                             anim.Play("Jump start");
-                            _contact.collider.gameObject.GetComponent<AIEnemy>().hurt();
+                            _contact.collider.gameObject.GetComponent<IHittable>().hit();
 
                             status = Status.FALLING;
                         }
@@ -425,7 +425,7 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (hands[attackIndex].EnteredTrigger)
                             {
-                                hands[attackIndex].hitted.GetComponent<AIEnemy>().hurt();
+                                hands[attackIndex].hitted.GetComponent<IHittable>().hit();
                             }
                         }
 
@@ -441,7 +441,7 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<AIEnemy>().hurt();
+                                foots[0].hitted.GetComponent<IHittable>().hit();
                             }
                         }
                         break;
@@ -456,7 +456,7 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<AIEnemy>().hurt();
+                                foots[0].hitted.GetComponent<IHittable>().hit();
                             }
                         }
                         break;

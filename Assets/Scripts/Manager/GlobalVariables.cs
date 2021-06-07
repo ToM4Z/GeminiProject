@@ -15,4 +15,6 @@ public static class GlobalVariables
     public const string DEATH = "DEATH";
     public const string RESET = "RESET";
     public const string ENABLE_INPUT = "ENABLE_INPUT";
+    public const string TOGGLE_AUDIO_ON_OFF = "TOGGLE_AUDIO_ON_OFF";
+
 }

@@ -15,7 +15,12 @@ public class AIElementalEnemy : AIEnemy
     // The dragon hit the player spitting fire/ice with ParticleSystem
     [SerializeField] private ParticleSystem particle;
     [SerializeField] private Light lightParticle;
-    [SerializeField] private AudioSource attackSFXSource;
+    [SerializeField] private AudioClip elementalAttackClip;
+    [SerializeField] private bool MeleeAttack;
+    [SerializeField] private float distanceMeleeAttack;
+    [SerializeField] private float MeleeAttackTime;
+    [SerializeField] private AttackTrigger[] attackTriggersForMeleeAttackElementalEnemy;   // used by dragons, this edit is needed because bat uses an attackTrigger instead of ElementalSpit script
+    private bool usedMeleeAttack;
 
     protected override void Start()
     {
@@ -28,20 +33,57 @@ public class AIElementalEnemy : AIEnemy
     // in start attack, I active the particles
     protected override void startAttack()
     {
-        base.startAttack();
-        attackSFXSource.clip = attackClip;
-        attackSFXSource.Play();
-        particle.Play();
-        StartCoroutine(AbleLight(true));
+        float distanceFromPlayer = fov.distanceTo(player.position);
+        if (MeleeAttack && !usedMeleeAttack && distanceFromPlayer <= distanceMeleeAttack)
+        {
+            animator.Play(attackStateAnim);
+
+            foreach (AttackTrigger t in attackTriggersForMeleeAttackElementalEnemy)
+                t.EnableTrigger();
+
+            usedMeleeAttack = true;
+            warnedTimer = MeleeAttackTime;
+        }
+        else
+        {
+            base.startAttack();
+            soundSource[1].clip = elementalAttackClip;
+            soundSource[1].Play();
+            particle.Play();
+            StartCoroutine(AbleLight(true));
+        }
+    }
+
+    protected override void duringAttack()
+    {
+        base.duringAttack();
+
+        foreach (AttackTrigger t in attackTriggersForMeleeAttackElementalEnemy)
+            if (t.EnteredTrigger)
+            {
+                PlayerStatisticsController.instance.hurt(typeAttack);
+                break;
+            }
+
+        float distanceFromPlayer = fov.distanceTo(player.position);
+        if(MeleeAttack && !usedMeleeAttack && distanceFromPlayer <= distanceMeleeAttack)
+        {
+            stopAttack();
+            startAttack();
+        }
+
     }
 
     // in stop attack, I stop the fire particles
     protected override void stopAttack()
     {
         base.stopAttack();
-        StartCoroutine(AudioManager.FadeOut(attackSFXSource, 0.5f));
+        foreach (AttackTrigger t in attackTriggersForMeleeAttackElementalEnemy)
+            t.DisableTrigger();
+        StartCoroutine(AudioManager.FadeOut(soundSource[1], 0.5f));
         particle.Stop();
         StartCoroutine(AbleLight(false));
+        usedMeleeAttack = false;
     }
 
     private IEnumerator AbleLight(bool x)
@@ -59,9 +101,9 @@ public class AIElementalEnemy : AIEnemy
     //    //particle.gameObject.transform.LookAt(posToFire);
     //}
 
-    public override void ResetEnemy()
+    public override void Reset()
     {
-        base.ResetEnemy();
+        base.Reset();
         particle.Stop();
         lightParticle.enabled = false;
     }

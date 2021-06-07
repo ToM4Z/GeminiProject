@@ -27,10 +27,10 @@ public class EnemiesManager : MonoBehaviour, IGameManager
 
     public void EnemyDie(GameObject enemy)
     {
-        if (!enemies.Remove(enemy))
-            throw new System.Exception("Removing enemy that not existing");
-
-        enemiesDead.Add(enemy);
+        if (enemies.Remove(enemy))  // if I'm not able to remove an enemy means that enemy was spawned at runtime and cannot be respawned
+        {
+            enemiesDead.Add(enemy);
+        }
     }
 
     public void ClearEnemyDeadList()
@@ -45,12 +45,12 @@ public class EnemiesManager : MonoBehaviour, IGameManager
     public void RespawnEnemies()
     {
         foreach (GameObject enemy in enemies)
-            enemy.GetComponent<AIEnemy>().ResetEnemy();
+            enemy.GetComponent<IResettable>().Reset();
 
         foreach (GameObject enemy in enemiesDead)
         {
             enemy.SetActive(true);
-            enemy.GetComponent<AIEnemy>().ResetEnemy();
+            enemy.GetComponent<IResettable>().Reset();
             enemies.Add(enemy);
         }
         enemiesDead.Clear();

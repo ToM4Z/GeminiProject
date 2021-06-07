@@ -1,28 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ReceiveEventAnimation : MonoBehaviour
 {
-    private AIEnemy enemy;
+    private GameObject go;
 
     private void Start()
     {
-        enemy = GetComponentInParent<AIEnemy>();
+        go = this.transform.parent.gameObject;
     }
 
-    public void PlayWalkSound()
+    public void PlaySpawnSound()
     {
-        enemy.PlayWalkSound();
-    }
-
-    public void PlayAttackSound()
-    {
-        enemy.PlayAttackSound();
+        go.SendMessage("PlaySpawnSound");
     }
 
     public void PlayIdleSound()
     {
-        enemy.PlayWalkSound();
+        go.SendMessage("PlayIdleSound");
     }
+
+    public void PlayWalkSound()
+    {
+        go.SendMessage("PlayWalkSound");
+    }
+
+    public void PlayAttackSound()
+    {
+        go.SendMessage("PlayAttackSound");
+    }
+
+    public void PlayDeathSound()
+    {
+        go.SendMessage("PlayDeathSound");
+    }
+
+    public void StartDespawn()
+    {
+        go.SendMessage("StartDespawn");
+    }
+
+    public void Disable()
+    {
+        go.SendMessage("Disable");
+    }
+
 }

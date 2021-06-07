@@ -28,24 +28,29 @@ public class FOVDetection : MonoBehaviour
     private LayerMask obstacleMask;
 
     // Indicates that the player is actually visible
-    private bool playerVisible = false;
+    public bool isPlayerVisible { get; private set; } = false;
 
-    private Transform playerTransform;
     private PlayerStatisticsController player;
+    public Vector3 lastPlayerPositionKnown { get;  private set; }
+
+    private float originVA, originVR;
 
     void Start()
     {
         player = PlayerStatisticsController.instance;
-        playerTransform = PlayerStatisticsController.instance.transform;
         targetMask = LayerMask.GetMask("Player");
-        obstacleMask = LayerMask.GetMask("Default");
+        obstacleMask = LayerMask.GetMask("Static"); //Default
+        originVA = viewAngle;
+        originVR = viewRadius;
     }
-
+    
     // Check if the player is in the field of view and if there aren't obstacles in the middle
-    public bool isPlayerVisible()                
+    public bool checkIsPlayerVisible()                
     {
         if (player.isDeath())
-            return playerVisible = false;
+        {
+            return isPlayerVisible = false;
+        }
 
         Vector3 myPosition = transform.position;                    // to avoid collisions with terrain, I move up the position check
         myPosition.y += 0.5f;
@@ -57,13 +62,16 @@ public class FOVDetection : MonoBehaviour
             Vector3 dirToTarget = (target.position - myPosition).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
-                if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, distanceTo(target.position), obstacleMask))
+                RaycastHit hit;
+                if (toggleSeeThroughObstacles || !Physics.Raycast(myPosition, dirToTarget, out hit, distanceTo(target.position), obstacleMask))
                 {
-                    return playerVisible = true;
+                    lastPlayerPositionKnown = player.transform.position;
+                    return isPlayerVisible = true;
                 }
+                print(hit.collider.gameObject.name);
             }
         }
-        return playerVisible = false;
+        return isPlayerVisible = false;
     }
 
     // calculate distance from this gameobject to target position
@@ -87,11 +95,17 @@ public class FOVDetection : MonoBehaviour
         Gizmos.DrawRay(pos, fovLine1);
         Gizmos.DrawRay(pos, fovLine2);
 
-        if (playerTransform && playerVisible)
+        if (isPlayerVisible)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(pos, (playerTransform.position - transform.position).normalized * viewRadius);
+            Gizmos.DrawLine(pos, lastPlayerPositionKnown);
         }
+    }
+
+    public void Reset()
+    {
+        viewAngle = originVA;
+        viewRadius = originVR;
     }
 
 
