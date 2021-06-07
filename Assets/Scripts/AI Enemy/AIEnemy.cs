@@ -679,8 +679,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         yield return new WaitForSeconds(2.5f);
         if (status == Status.DEAD)  // if the enemy is still dead (during this 2.5 seconds the player should be die) 
         {
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefab/Gear.prefab", typeof(GameObject));
-            GameObject gear = Instantiate(prefab, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity) as GameObject;
+            GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity);
             gear.GetComponent<Rigidbody>().useGravity = true;
             gear.GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
 
