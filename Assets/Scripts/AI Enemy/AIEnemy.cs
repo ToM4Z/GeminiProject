@@ -676,9 +676,16 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     private IEnumerator StartDespawnDelayed()
     {
-        yield return new WaitForSeconds(4f);
-        if (status == Status.DEAD)       // if the enemy is still dead (during this 5 seconds the player should be die) 
+        yield return new WaitForSeconds(2.5f);
+        if (status == Status.DEAD)  // if the enemy is still dead (during this 2.5 seconds the player should be die) 
+        {
+            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefab/Gear.prefab", typeof(GameObject));
+            GameObject gear = Instantiate(prefab, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity) as GameObject;
+            gear.GetComponent<Rigidbody>().useGravity = true;
+            gear.GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
+
             animator.SetTrigger("Despawn"); // I start Despawn
+        }
     }
 
     public void Disable()
