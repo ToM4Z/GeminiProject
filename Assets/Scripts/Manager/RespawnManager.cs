@@ -53,7 +53,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
         print("RESPAWN");
         yield return new WaitForEndOfFrame();
 
-        Messenger.Broadcast(GlobalVariables.RESET);
+        Messenger.Broadcast(GlobalVariables.RESET, MessengerMode.DONT_REQUIRE_LISTENER);
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
     }
 

@@ -71,6 +71,8 @@ public class PlayerInputModelController : MonoBehaviour
 
     [SerializeField] private List<TrailRenderer> trails;
 
+    public bool InvertDirectionRespectToCamera = false;
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -139,10 +141,11 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void Update()
     {
-        if (status == Status.RESPAWN) return;
+        if (status == Status.RESPAWN || GlobalVariables.isPaused) return;
 
-        Vector3 movement = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
-
+        Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
+        Vector3 movement = input;
+        
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", movement.x, 1f, Time.deltaTime * 10f);
         anim.SetBool("IsOnGround", charController.isGrounded);
@@ -351,13 +354,20 @@ public class PlayerInputModelController : MonoBehaviour
                 }
         }
 
-        movement = transform.TransformDirection(movement);
-
         movement.y = _vertSpeed;
+        
+        if(input.magnitude > 0)
+        {
+            Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward * (InvertDirectionRespectToCamera ? -1 : 1), Vector3.up);
+            Quaternion rotationToCamera = Quaternion.LookRotation(projectCameraForward, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToCamera, 310f * Time.deltaTime);
 
+            movement = rotationToCamera * movement;
+        }
         movement *= Time.deltaTime;
         charController.Move(movement);
     }
+
 
     private void attack(Status s)
     {
