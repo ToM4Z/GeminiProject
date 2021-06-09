@@ -30,12 +30,13 @@ public class SlidingMovement : MonoBehaviour
     public bool platformActivated = false;
     private float durationTime;
     private float startTime = 0;
-    [SerializeField] private GameObject player;
+    private GameObject player, playerParent;
     
     // Start is called before the first frame update
     void Start()
     {
-        //this.player = PlayerStatisticsController.instance.transform.parent.gameObject;
+        this.player = PlayerStatisticsController.instance.gameObject;
+        playerParent = player.transform.parent.gameObject;
         this.platformDirection = LeftOrRight.Right;
         this.start_position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         this.start_position = this.transform.position;
@@ -142,7 +143,7 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerExit(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            player.transform.parent = null;
+            player.transform.parent = playerParent.transform;
         } else if(this.type == Type.PopUp) {
             this.TimePassed = 0.0f;
         }
