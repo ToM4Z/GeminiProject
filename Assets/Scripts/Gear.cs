@@ -24,8 +24,12 @@ public class Gear : MonoBehaviour
             player.increaseNormalGear();
             Destroy(this.gameObject);
         }
+    }
 
-        
-        
+    public void ActivateFallDown()
+    {
+        GetComponent<BoxCollider>().enabled = true;
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
     }
 }
