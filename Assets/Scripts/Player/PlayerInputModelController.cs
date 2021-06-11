@@ -141,13 +141,13 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void Update()
     {
-        if (status == Status.RESPAWN || GlobalVariables.isPaused) return;
+        if (status == Status.RESPAWN || status == Status.VICTORY || GlobalVariables.isPaused) return;
 
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
         if (InvertDirectionRespectToCamera)
             input.x = input.x * -1;
         Vector3 movement = input;
-        
+
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", movement.x, 1f, Time.deltaTime * 10f);
         anim.SetBool("IsOnGround", charController.isGrounded);

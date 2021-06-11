@@ -37,6 +37,18 @@ public class PatrolPath : MonoBehaviour
         return PathNodes[nodeIndex].position;
     }
 
+    public Quaternion GetRotationOfPathNode(int nodeIndex)
+    {
+        if (nodeIndex < 0 || nodeIndex >= PathNodes.Count || PathNodes[nodeIndex] == null)
+        {
+            return Quaternion.identity;
+        }
+
+        return PathNodes[nodeIndex].rotation;
+    }
+
+    public int GetPathLength() { return PathNodes.Count; }
+
     // draw patrol path 
     void OnDrawGizmos()
     {

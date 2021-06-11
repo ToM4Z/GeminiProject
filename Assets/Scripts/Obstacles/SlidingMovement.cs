@@ -55,7 +55,6 @@ public class SlidingMovement : MonoBehaviour
     {
 
         if(platformActivated) {
-            Debug.Log("activated");
             if(this.type == Type.Slider) {
                 transform.position = Vector3.Lerp(start_position, end_position_slider, startTime/durationTime);
                 startTime += Time.fixedDeltaTime * speed;
