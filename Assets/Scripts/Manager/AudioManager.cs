@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour, IGameManager
     [SerializeField] private AudioSource soundSource;
     [SerializeField] private AudioSource musicSource;
 
+    [SerializeField] private AudioClip tinSFX;
 
     public void Startup()
     {
@@ -107,5 +108,10 @@ public class AudioManager : MonoBehaviour, IGameManager
         }
 
         audioSource.volume = originVolume;
+    }
+
+    public void PlayTin()
+    {
+        PlaySound(tinSFX);
     }
 }

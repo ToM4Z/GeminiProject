@@ -21,6 +21,7 @@ public class Gear : MonoBehaviour
         //Check if the other object is a PlayerController
         if (player != null) {
             //If it is the player, increase Gear Counter
+            Managers.Audio.PlayTin();
             player.increaseNormalGear();
             Destroy(this.gameObject);
         }

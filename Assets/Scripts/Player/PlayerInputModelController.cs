@@ -36,6 +36,8 @@ public class PlayerInputModelController : MonoBehaviour
     public float minFall = -1.5f;
     public float gravity = -9.81f;
 
+    private bool enableInput = true;
+
     private CharacterController charController;
     private Animator anim;
     private float _vertSpeed;
@@ -48,39 +50,43 @@ public class PlayerInputModelController : MonoBehaviour
     private bool airAttackJustDone = false;
 
     private ControllerColliderHit _contact;
-    private string trampolineMask = "Bouncy";
-    private string enemyMask = "Enemy";
+    private readonly string trampolineMask = "Bouncy";
+    private readonly string enemyMask = "Enemy";
 
     private PlayerMaterialHandler materialHandler;
     private DeathEvent deathEvent;
 
-    [SerializeField]
-    private GameObject followTarget;
-    [SerializeField]
-    private AttackTrigger[] hands = new AttackTrigger[2];
-    [SerializeField]
-    private AttackTrigger[] foots = new AttackTrigger[2];
+    [SerializeField] private GameObject followTarget;
+
     private AttackTrigger armActualAttack = null;
-
-    private bool enableInput = true;
-
-    private float heightCollider;
-    [SerializeField] private float crouchedHeightCollider;
-    private Vector3 centerCollider;
-    [SerializeField] private Vector3 crouchedCenterCollider;
+    [SerializeField] private AttackTrigger[] hands, foots;
 
     [SerializeField] private List<TrailRenderer> trails;
 
+    private float heightCollider;
+    private Vector3 centerCollider;
+    [SerializeField] private float crouchedHeightCollider;
+    [SerializeField] private Vector3 crouchedCenterCollider;
+
     public bool InvertDirectionRespectToCamera = false;
+
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX;
+    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX;
+    private bool[] footStepSoundJustPlayed = new bool[2];
 
     private void Start()
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         materialHandler = GetComponent<PlayerMaterialHandler>();
+        audioSource = GetComponentInChildren<AudioSource>();
 
         heightCollider = charController.height;
         centerCollider = charController.center;
+
+        footStepSoundJustPlayed[0] = false;
+        footStepSoundJustPlayed[1] = false;
 
         status = Status.IDLE;
         _vertSpeed = minFall;
@@ -151,6 +157,7 @@ public class PlayerInputModelController : MonoBehaviour
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", movement.x, 1f, Time.deltaTime * 10f);
         anim.SetBool("IsOnGround", charController.isGrounded);
+        PlayFootStepSound();
 
         checkAttack();
 
@@ -179,6 +186,7 @@ public class PlayerInputModelController : MonoBehaviour
                         stopAttack();
 
                         SetTrailOnOff(true);
+                        audioSource.PlayOneShot(jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -199,7 +207,6 @@ public class PlayerInputModelController : MonoBehaviour
                             directionSlide = movement.normalized;
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
-                            anim.Play("Slide");
                             attack(Status.SLIDE);
 
                             status = Status.SLIDE;
@@ -237,6 +244,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.SetBool("Crouch", false);
 
                         SetTrailOnOff(true);
+                        audioSource.PlayOneShot(jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -281,6 +289,7 @@ public class PlayerInputModelController : MonoBehaviour
                             _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;
                             anim.Play("Jump start");
 
+                            audioSource.PlayOneShot(boingSFX[Random.Range(0, boingSFX.Length)]);
                             status = Status.FALLING;
                         }
                         else
@@ -295,6 +304,7 @@ public class PlayerInputModelController : MonoBehaviour
                         else
                         {
                             SetTrailOnOff(false);
+                            audioSource.PlayOneShot(landedSFX);
                             status = Status.IDLE;
                         }
                         break;
@@ -311,35 +321,26 @@ public class PlayerInputModelController : MonoBehaviour
 
                     _vertSpeed = minFall;
 
-                    if (actualSlideSpeed < 3f)
-                    {
-                        stopAttack();
-                        SetNormalCollider();
-
-                        SetTrailOnOff(false);
-                        status = Status.IDLE;
-                        break;
-                    }
+                    // I will change status from StopSlide method
 
                     if (!charController.isGrounded)
                     {
-                        SetNormalCollider();
-                        anim.Play("Falling");
-                        stopAttack();
+                        StopSlide();
 
                         SetTrailOnOff(true);
+                        anim.Play("Falling");
                         status = Status.FALLING;
                         break;
                     }
 
                     if (GetButtonDown("Jump"))
                     {
-                        SetNormalCollider();
-                        _vertSpeed = jumpSpeed;
-                        anim.Play("Jump start");
-                        stopAttack();
+                        StopSlide();
 
                         SetTrailOnOff(true);
+                        _vertSpeed = jumpSpeed;
+                        anim.Play("Jump start");
+                        audioSource.PlayOneShot(jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -386,6 +387,7 @@ public class PlayerInputModelController : MonoBehaviour
                     armActualAttack = hands[attackIndex];
                     anim.Play(comboAttacks[attackIndex]);
                     armActualAttack.EnableTrigger();
+                    audioSource.PlayOneShot(missingHitSFX[Random.Range(0, missingHitSFX.Length)]);
                     break;
                 }
             case Status.FALLING:
@@ -401,8 +403,12 @@ public class PlayerInputModelController : MonoBehaviour
                 }
             case Status.SLIDE:
                 {
+                    print("Start slide");
+                    anim.Play("Slide");
+
                     armActualAttack = foots[0];
                     armActualAttack.EnableTrigger();
+                    audioSource.PlayOneShot(slideSFX);
                     break;
                 }
         }
@@ -460,9 +466,10 @@ public class PlayerInputModelController : MonoBehaviour
                     }
                 case Status.SLIDE:
                     {
+                        // the slide will be stopped or here or by animation event
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
                         {
-                            stopAttack();
+                            StopSlide();
                         }
                         else
                         {
@@ -497,6 +504,12 @@ public class PlayerInputModelController : MonoBehaviour
                     anim.Play("Death 1");
                     break;
                 }
+            case DeathEvent.MASHED:
+                {
+                    anim.Play("Mashed Death");
+                    audioSource.PlayOneShot(mashedSFX);
+                    break;
+                }
             case DeathEvent.BURNED:
                 {
                     anim.speed = 0f;
@@ -522,6 +535,21 @@ public class PlayerInputModelController : MonoBehaviour
         status = Status.VICTORY;
     }
 
+    private void PlayFootStepSound()
+    {
+        if(status == Status.IDLE || status == Status.CROUCH)
+            for( int i =0; i < 2; ++i) 
+                if(foots[i].transform.position.y <= transform.position.y+.01f && !footStepSoundJustPlayed[i])
+                {
+                    audioSource.PlayOneShot(footStepSFX[Random.Range(0, footStepSFX.Length)]);
+                    footStepSoundJustPlayed[i] = true;
+                    break;
+                }
+                else
+                    if (foots[i].transform.position.y > transform.position.y + .01f)
+                        footStepSoundJustPlayed[i] = false;
+    }
+
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
@@ -544,5 +572,13 @@ public class PlayerInputModelController : MonoBehaviour
     private void EnableInput(bool b)
     {
         enableInput = b;
+    }
+
+    public void StopSlide()
+    {
+        stopAttack();
+
+        SetNormalCollider();
+        status = Status.IDLE;
     }
 }
