@@ -126,7 +126,8 @@ MonoBehaviour:
   attackTriggers:
   - {fileID: 5801950742024426197}
   - {fileID: 5801950741145458162}
-  typeAttack: 3
+  typeAttack: 4
+  canDropItem: 1
 --- !u!114 &5801950743102398768
 MonoBehaviour:
   m_ObjectHideFlags: 0

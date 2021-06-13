@@ -74,7 +74,7 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
         Destroy(toRemove);
     }
 
-    public void hit()
+    public bool hit()
     {
         activate = false;
 
@@ -87,6 +87,8 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
         particle.Stop();
         animator.Play("Despawn");
         audioSource.PlayOneShot(destroyClip);
+
+        return true;
     }
 
     public void Disable()

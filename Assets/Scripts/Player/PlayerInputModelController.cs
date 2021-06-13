@@ -71,8 +71,8 @@ public class PlayerInputModelController : MonoBehaviour
     public bool InvertDirectionRespectToCamera = false;
 
     private AudioSource audioSource;
-    [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX;
-    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX;
+    [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX, hitSFX;
+    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX;
     private bool[] footStepSoundJustPlayed = new bool[2];
 
     private void Start()
@@ -149,6 +149,10 @@ public class PlayerInputModelController : MonoBehaviour
     {
         if (status == Status.RESPAWN || status == Status.VICTORY || GlobalVariables.isPaused) return;
 
+        if (status == Status.DEATH &&
+            (deathEvent == DeathEvent.FROZEN || deathEvent == DeathEvent.BURNED))
+            return;
+
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
         if (InvertDirectionRespectToCamera)
             input.x = input.x * -1;
@@ -186,7 +190,7 @@ public class PlayerInputModelController : MonoBehaviour
                         stopAttack();
 
                         SetTrailOnOff(true);
-                        audioSource.PlayOneShot(jumpSFX);
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -244,7 +248,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.SetBool("Crouch", false);
 
                         SetTrailOnOff(true);
-                        audioSource.PlayOneShot(jumpSFX);
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -289,7 +293,7 @@ public class PlayerInputModelController : MonoBehaviour
                             _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;
                             anim.Play("Jump start");
 
-                            audioSource.PlayOneShot(boingSFX[Random.Range(0, boingSFX.Length)]);
+                            PlayClip(ref boingSFX);
                             status = Status.FALLING;
                         }
                         else
@@ -297,14 +301,16 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             _vertSpeed = jumpSpeed;
                             anim.Play("Jump start");
-                            _contact.collider.gameObject.GetComponent<IHittable>().hit();
+
+                            if(_contact.collider.gameObject.GetComponent<IHittable>().hit())
+                                PlayClip(ref hitSFX);
 
                             status = Status.FALLING;
                         }
                         else
                         {
                             SetTrailOnOff(false);
-                            audioSource.PlayOneShot(landedSFX);
+                            PlayClip(ref landedSFX);
                             status = Status.IDLE;
                         }
                         break;
@@ -340,7 +346,7 @@ public class PlayerInputModelController : MonoBehaviour
                         SetTrailOnOff(true);
                         _vertSpeed = jumpSpeed;
                         anim.Play("Jump start");
-                        audioSource.PlayOneShot(jumpSFX);
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -355,6 +361,7 @@ public class PlayerInputModelController : MonoBehaviour
                         _vertSpeed = 0;
                     break;
                 }
+
         }
 
         movement.y = _vertSpeed;
@@ -371,7 +378,6 @@ public class PlayerInputModelController : MonoBehaviour
         charController.Move(movement);
     }
 
-
     private void attack(Status s)
     {
         if (attacking)
@@ -387,7 +393,7 @@ public class PlayerInputModelController : MonoBehaviour
                     armActualAttack = hands[attackIndex];
                     anim.Play(comboAttacks[attackIndex]);
                     armActualAttack.EnableTrigger();
-                    audioSource.PlayOneShot(missingHitSFX[Random.Range(0, missingHitSFX.Length)]);
+                    PlayClip(ref missingHitSFX);
                     break;
                 }
             case Status.FALLING:
@@ -408,7 +414,7 @@ public class PlayerInputModelController : MonoBehaviour
 
                     armActualAttack = foots[0];
                     armActualAttack.EnableTrigger();
-                    audioSource.PlayOneShot(slideSFX);
+                    PlayClip(ref slideSFX);
                     break;
                 }
         }
@@ -443,7 +449,8 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (hands[attackIndex].EnteredTrigger)
                             {
-                                hands[attackIndex].hitted.GetComponent<IHittable>().hit();
+                                if(hands[attackIndex].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
 
@@ -459,7 +466,8 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<IHittable>().hit();
+                                if (foots[0].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
                         break;
@@ -475,7 +483,8 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<IHittable>().hit();
+                                if (foots[0].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
                         break;
@@ -497,17 +506,19 @@ public class PlayerInputModelController : MonoBehaviour
                 {
                     anim.speed = 0f;
                     followTarget.transform.SetParent(null);
+                    PlayClip(ref fall_vacuumSFX);
                     break;
                 }
             case DeathEvent.HITTED:
                 {
                     anim.Play("Death 1");
+                    PlayClip(ref hitSFX);
                     break;
                 }
             case DeathEvent.MASHED:
                 {
                     anim.Play("Mashed Death");
-                    audioSource.PlayOneShot(mashedSFX);
+                    PlayClip(ref mashedSFX);
                     break;
                 }
             case DeathEvent.BURNED:
@@ -541,7 +552,7 @@ public class PlayerInputModelController : MonoBehaviour
             for( int i =0; i < 2; ++i) 
                 if(foots[i].transform.position.y <= transform.position.y+.01f && !footStepSoundJustPlayed[i])
                 {
-                    audioSource.PlayOneShot(footStepSFX[Random.Range(0, footStepSFX.Length)]);
+                    PlayClip(ref footStepSFX);
                     footStepSoundJustPlayed[i] = true;
                     break;
                 }
@@ -553,6 +564,12 @@ public class PlayerInputModelController : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
+    }
+
+    public void PlayHurtAnimation()
+    {
+        anim.Play("Get hit");
+        PlayClip(ref hitSFX);
     }
 
     private void Awake()
@@ -580,5 +597,15 @@ public class PlayerInputModelController : MonoBehaviour
 
         SetNormalCollider();
         status = Status.IDLE;
+    }
+
+    private void PlayClip(ref AudioClip a)
+    {
+        audioSource.PlayOneShot(a);
+    }
+
+    private void PlayClip(ref AudioClip[] a)
+    {
+        PlayClip(ref a[Random.Range(0, a.Length)]);
     }
 }

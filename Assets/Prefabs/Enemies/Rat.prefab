@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
-  drop: {fileID: 2329708832348443860, guid: b4e33b06c42b4f343b97a32ad2676ae5, type: 3}
   initialStatus: 1
   attackTime: 1
   pauseBetweenAttacksTime: 1
@@ -70,7 +69,8 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 44aa75e52f07e944ab7817b2f242d6f0, type: 3}
   attackTriggers:
   - {fileID: 5157813550965819626}
-  typeAttack: 3
+  typeAttack: 4
+  canDropItem: 1
 --- !u!114 &5157813550942740045
 MonoBehaviour:
   m_ObjectHideFlags: 0

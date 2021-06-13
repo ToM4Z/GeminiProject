@@ -1278,8 +1278,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4989282554079256708}
-  m_LocalRotation: {x: -8.902352e-10, y: -0.9946318, z: 0.10347734, w: -0.000000008557007}
-  m_LocalPosition: {x: 0, y: 2.983, z: 5.3999996}
+  m_LocalRotation: {x: 0.09397086, y: 0.41644168, z: -0.043324865, w: 0.9032545}
+  m_LocalPosition: {x: -4.10642, y: 2.8000002, z: -3.506752}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4989282553279940024}
@@ -1742,7 +1742,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551349591069781}
-  m_LocalRotation: {x: 7.1215417e-10, y: -0.9908375, z: 0.13505943, w: 0.0000000052245808}
+  m_LocalRotation: {x: 0.12265148, y: 0.414853, z: -0.056547944, w: 0.8998088}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1816,7 +1816,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551349749659580}
-  m_LocalRotation: {x: -4.4511764e-10, y: -0.9946318, z: 0.103477344, w: -0.0000000042785033}
+  m_LocalRotation: {x: 0.09397086, y: 0.41644168, z: -0.04332487, w: 0.90325457}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1945,7 +1945,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: -130.49628
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -2037,7 +2037,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551350439519030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.983, z: 5.3999996}
+  m_LocalPosition: {x: -4.10642, y: 2.8000002, z: -3.506752}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6050551349591069783}
@@ -2118,7 +2118,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: -130.49628
     m_SpeedMode: 0
     m_MaxSpeed: 500
     m_AccelTime: 0.3
@@ -2213,7 +2213,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551350459087309}
-  m_LocalRotation: {x: 0.0000000011745165, y: -0.99740136, z: 0.07204533, w: 0.000000016260099}
+  m_LocalRotation: {x: 0.06542651, y: 0.4176013, z: -0.03016462, w: 0.90576965}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2342,7 +2342,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: -130.49628
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -2486,7 +2486,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_XAxis:
-    Value: 0
+    Value: -130.49628
     m_SpeedMode: 0
     m_MaxSpeed: 300
     m_AccelTime: 0.1
@@ -3220,7 +3220,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1.5
+  m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &329523886967835837
 MonoBehaviour:
@@ -3761,7 +3761,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7986274134840693170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.483, z: 0}
+  m_LocalPosition: {x: 0, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8869836659946175657}
@@ -3845,7 +3845,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1.5
+  m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &329523886751755808
 MonoBehaviour:
@@ -4277,7 +4277,6 @@ MonoBehaviour:
   - {fileID: 329523887566993633}
   trails:
   - {fileID: 6430132081389902691}
-  - {fileID: 6548698064171169194}
   - {fileID: 3767144554298688683}
   crouchedHeightCollider: 0.43
   crouchedCenterCollider: {x: 0, y: 0.375, z: 0}
@@ -4291,10 +4290,14 @@ MonoBehaviour:
   boingSFX:
   - {fileID: 8300000, guid: 7dd2d80193bf61944bdfeefe36e2d5e2, type: 3}
   - {fileID: 8300000, guid: 7cc7122543dd03f41bf56cf1840a30a7, type: 3}
+  hitSFX:
+  - {fileID: 8300000, guid: bf6f38b7dd37b9f4c97737e769a52eea, type: 3}
+  - {fileID: 8300000, guid: f5a4de182ccde73459776999ccf5f1fb, type: 3}
   slideSFX: {fileID: 8300000, guid: 6b4d821a7629ccf41af2be0e1b6c4b2d, type: 3}
   jumpSFX: {fileID: 8300000, guid: 54e7b2b2cca553b4cb2f16e75a865dc1, type: 3}
   landedSFX: {fileID: 8300000, guid: f801817a1ee85cc4d98a1809064f1359, type: 3}
   mashedSFX: {fileID: 8300000, guid: 835ab6bb1f304174db60ff1a2a476003, type: 3}
+  fall_vacuumSFX: {fileID: 8300000, guid: faac0f05685855b4daf866ae1d92d6a8, type: 3}
 --- !u!114 &2872015548208122909
 MonoBehaviour:
   m_ObjectHideFlags: 0

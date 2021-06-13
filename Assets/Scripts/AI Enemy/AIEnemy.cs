@@ -170,6 +170,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             spawn = true;
             animator.SetTrigger(animVarSpawn);
         }
+        else
+            SetEnableColliders(false);
 
         //agent.autoBraking = false;
         idleTimer = -1; // this will cause a call to newRandomDestination
@@ -220,6 +222,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         else if (animStateInfo.IsName(idleStateAnim))
         {
             spawning = false;
+            SetEnableColliders(true);
             ChangeStatus(Status.IDLE);
         }
     }
@@ -426,16 +429,16 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     }
 
     // With this method, the player can hit and kill the enemy
-    public void hit()
+    public bool hit()
     {
         if (status == Status.DEAD || status == Status.INACTIVE)
-            return;
+            return false;
 
         ChangeStatus(Status.DEAD);
 
         agent.ResetPath();
-        foreach (Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = false;
+
+        SetEnableColliders(false);
 
         if (attackFase != AttackFase.NO)
             stopAttack();
@@ -457,6 +460,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         }
 
         Managers.Enemies.EnemyDie(this.gameObject);
+
+        return true;
     }
 
     // simple change the status and, if debug is enabled, prints the change
@@ -610,8 +615,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         transform.position = originPos;
         transform.rotation = originRot;
 
-        foreach (Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = true;
+        SetEnableColliders(true);
 
         m_PathDestinationNodeIndex = 1;
         agent.ResetPath();
@@ -698,6 +702,12 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         model.localRotation = originModelRot;
         model.localScale    = Vector3.one;
         this.gameObject.SetActive(false);
+    }
+
+    private void SetEnableColliders(bool enable)
+    {
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = enable;
     }
 
     void OnDrawGizmosSelected()
