@@ -88,18 +88,18 @@ public class PlayerMaterialHandler : MonoBehaviour
         _material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
     }
 
-    private void Reset()
-    {
-        resetMaterials();
-    }
+    //private void Reset()
+    //{
+    //    resetMaterials();
+    //}
 
-    private void Awake()
-    {
-        Messenger.AddListener(GlobalVariables.RESET, Reset);
-    }
+    //private void Awake()
+    //{
+    //    Messenger.AddListener(GlobalVariables.RESET, Reset);
+    //}
 
-    private void OnDestroy()
-    {
-        Messenger.RemoveListener(GlobalVariables.RESET, Reset);
-    }
+    //private void OnDestroy()
+    //{
+    //    Messenger.RemoveListener(GlobalVariables.RESET, Reset);
+    //}
 }

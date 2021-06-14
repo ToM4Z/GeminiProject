@@ -1278,7 +1278,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4989282554079256708}
-  m_LocalRotation: {x: 0.09397086, y: 0.41644168, z: -0.043324865, w: 0.9032545}
+  m_LocalRotation: {x: 0.09397086, y: 0.41644165, z: -0.04332486, w: 0.9032545}
   m_LocalPosition: {x: -4.10642, y: 2.8000002, z: -3.506752}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -4281,6 +4281,9 @@ MonoBehaviour:
   crouchedHeightCollider: 0.43
   crouchedCenterCollider: {x: 0, y: 0.375, z: 0}
   InvertDirectionRespectToCamera: 0
+  burnFX: {fileID: 924825455226071666, guid: 09d5e159c6d0f514f91c976c4638ef67, type: 3}
+  freezeFX: {fileID: 3096690529378592232, guid: 546b328ef3698c940a835ea8a8c71fe2, type: 3}
+  hitFX: {fileID: 3800609877051270332, guid: 0ed30683107fd054fb8d799cfb284a04, type: 3}
   footStepSFX:
   - {fileID: 8300000, guid: dc84e6a9849c8804194102b37c1bbf40, type: 3}
   - {fileID: 8300000, guid: 99b269c3972dc4644a00e0663d26a1a0, type: 3}
@@ -4298,6 +4301,8 @@ MonoBehaviour:
   landedSFX: {fileID: 8300000, guid: f801817a1ee85cc4d98a1809064f1359, type: 3}
   mashedSFX: {fileID: 8300000, guid: 835ab6bb1f304174db60ff1a2a476003, type: 3}
   fall_vacuumSFX: {fileID: 8300000, guid: faac0f05685855b4daf866ae1d92d6a8, type: 3}
+  burnSFX: {fileID: 8300000, guid: e07181b4f7283994a98dfc3fda1acc6a, type: 3}
+  freezeSFX: {fileID: 8300000, guid: 2bb0e8cd37492494e936b4d3e9688d7f, type: 3}
 --- !u!114 &2872015548208122909
 MonoBehaviour:
   m_ObjectHideFlags: 0

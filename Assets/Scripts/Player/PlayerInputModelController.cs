@@ -57,6 +57,7 @@ public class PlayerInputModelController : MonoBehaviour
     private DeathEvent deathEvent;
 
     [SerializeField] private GameObject followTarget;
+    private Vector3 originFollowTargetPos;
 
     private AttackTrigger armActualAttack = null;
     [SerializeField] private AttackTrigger[] hands, foots;
@@ -70,9 +71,11 @@ public class PlayerInputModelController : MonoBehaviour
 
     public bool InvertDirectionRespectToCamera = false;
 
+    [SerializeField] private GameObject burnFX, freezeFX; 
+
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX, hitSFX;
-    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX;
+    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX, burnSFX, freezeSFX;
     private bool[] footStepSoundJustPlayed = new bool[2];
 
     private void Start()
@@ -81,6 +84,8 @@ public class PlayerInputModelController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         materialHandler = GetComponent<PlayerMaterialHandler>();
         audioSource = GetComponentInChildren<AudioSource>();
+
+        originFollowTargetPos = followTarget.transform.localPosition;
 
         heightCollider = charController.height;
         centerCollider = charController.center;
@@ -97,10 +102,11 @@ public class PlayerInputModelController : MonoBehaviour
         if (deathEvent == DeathEvent.FALLED_IN_VACUUM)
         {
             followTarget.transform.SetParent(this.transform);
-            followTarget.transform.localPosition = new Vector3(0, .7f, -.3f);
+            followTarget.transform.localPosition = originFollowTargetPos;
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
 
+        materialHandler.resetMaterials();
         SetNormalCollider();
         deathEvent = 0;
         _vertSpeed = minFall;
@@ -525,12 +531,16 @@ public class PlayerInputModelController : MonoBehaviour
                 {
                     anim.speed = 0f;
                     materialHandler.burnMaterials();
+                    PlayClip(ref burnSFX);
+                    Instantiate(burnFX, transform);
                     break;
                 }
             case DeathEvent.FROZEN:
                 {
                     anim.speed = 0f;
                     materialHandler.frozenMaterials();
+                    PlayClip(ref freezeSFX);
+                    Instantiate(freezeFX, transform);
                     break;
                 }
         }
@@ -566,10 +576,32 @@ public class PlayerInputModelController : MonoBehaviour
         _contact = hit;
     }
 
-    public void PlayHurtAnimation()
+    public void PlayHurtAnimation(DeathEvent deathEvent)
     {
         anim.Play("Get hit");
-        PlayClip(ref hitSFX);
+
+        switch (deathEvent)
+        {
+            case DeathEvent.HITTED:
+            {
+                PlayClip(ref hitSFX);
+                break;
+            }
+            case DeathEvent.BURNED:
+            {
+                PlayClip(ref burnSFX);
+                materialHandler.burnMaterials();
+                Instantiate(burnFX, transform);
+                break;
+            }
+            case DeathEvent.FROZEN:
+            {
+                PlayClip(ref freezeSFX);
+                materialHandler.frozenMaterials();
+                Instantiate(freezeFX, transform);
+                break;
+            }
+        }
     }
 
     private void Awake()

@@ -133,7 +133,7 @@ public class PlayerStatisticsController : MonoBehaviour
                 print("HP: " + hp);
                 invulnerability = true;
                 invulnerabilityTimer = invulnerabilityTime;
-                GetComponent<PlayerInputModelController>().PlayHurtAnimation();
+                GetComponent<PlayerInputModelController>().PlayHurtAnimation(deathEvent);
 
                 materialHandler.ToFadeMode();
             }
