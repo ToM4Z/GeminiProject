@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     public GameObject menuPanel;
+    public GameObject optionPanel;
 
     void Start()
     {
@@ -19,10 +20,25 @@ public class MainMenu : MonoBehaviour
     }
 
     public void Play(){
-        SceneManager.LoadScene("WetaBox");
+       // SceneManager.LoadScene("Hub"); 
+    }
+
+    public void MenuToOption(){
+        menuPanel.SetActive(false);
+        optionPanel.SetActive(true);
+    }
+
+    public void OptionToMenu(){
+        optionPanel.SetActive(false);
+        menuPanel.SetActive(true);
     }
 
     public void QuitGame(){
         Application.Quit();
+    }
+
+    public void updateVolume(float v){
+        GlobalVariables.Volume = v;
+       // Debug.Log(GlobalVariables.Volume);
     }
 }

@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pausePanel;
+    public GameObject optionPanel;
     void Start()
     {
         //Cursor.visible = false;
         pausePanel.SetActive(false);
-        
     }
 
     // Update is called once per frame
@@ -43,5 +44,24 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame(){
         Application.Quit();
+    }
+
+        public void PauseToOption(){
+        pausePanel.SetActive(false);
+        optionPanel.SetActive(true);
+    }
+
+    public void OptionToPause(){
+        optionPanel.SetActive(false);
+        pausePanel.SetActive(true);
+    }
+
+    public void updateVolume(float v){
+        GlobalVariables.Volume = v;
+        //Debug.Log(GlobalVariables.Volume);
+    }
+
+    public void BackToHub(){
+       // SceneManager.LoadScene("Hub"); 
     }
 }
