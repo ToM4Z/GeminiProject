@@ -7,7 +7,6 @@ public class Gear : MonoBehaviour
     public float speedSpin = 1.0f;
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -29,7 +28,17 @@ public class Gear : MonoBehaviour
 
     public void ActivateFallDown()
     {
+        GetComponent<Rigidbody>().isKinematic = false;
         GetComponent<Rigidbody>().useGravity = true;
         GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
+
+        StartCoroutine(StopGravity());
+    }
+
+    private IEnumerator StopGravity()
+    {
+        yield return new WaitForSeconds(1f);
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 }
