@@ -78,6 +78,12 @@ public class PlayerInputModelController : MonoBehaviour
     [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX, burnSFX, freezeSFX;
     private bool[] footStepSoundJustPlayed = new bool[2];
 
+    private readonly float idleTime = 5f;
+    private float idleTimer = 0f;
+    private int idleAnimIndex = 0;
+    private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
+    private int lastIdleAnimPlayed = 0;
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -93,6 +99,7 @@ public class PlayerInputModelController : MonoBehaviour
         footStepSoundJustPlayed[0] = false;
         footStepSoundJustPlayed[1] = false;
 
+        idleTimer = idleTime;
         status = Status.IDLE;
         _vertSpeed = minFall;
     }
@@ -111,7 +118,9 @@ public class PlayerInputModelController : MonoBehaviour
         deathEvent = 0;
         _vertSpeed = minFall;
         anim.speed = 1f;
+        idleAnimIndex = lastIdleAnimPlayed = 0;
         anim.Play("Idle - Run H");
+        idleTimer = idleTime;
         status = Status.RESPAWN;
         StartCoroutine(Respawn());
     }
@@ -161,7 +170,7 @@ public class PlayerInputModelController : MonoBehaviour
 
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
         if (InvertDirectionRespectToCamera)
-            input.x = input.x * -1;
+            input.x *= -1;
         Vector3 movement = input;
 
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
@@ -178,6 +187,26 @@ public class PlayerInputModelController : MonoBehaviour
                     movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
 
                     _vertSpeed = minFall;
+
+                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && input == Vector3.zero)
+                    {
+                        idleTimer -= Time.deltaTime;
+                        if (idleTimer <= 0)
+                        {
+                            lastIdleAnimPlayed = ++lastIdleAnimPlayed % (maxIdleAnim + 1);
+                            lastIdleAnimPlayed = lastIdleAnimPlayed == 0 ? 1 : lastIdleAnimPlayed;
+                            anim.Play("Idle "+ (idleAnimIndex = lastIdleAnimPlayed));
+                            idleTimer = idleTime;
+                        }
+                    }
+                    else
+                        idleTimer = idleTime;
+
+                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && input != Vector3.zero)
+                    {
+                        idleAnimIndex = 0;
+                        anim.Play("Idle - Run H");
+                    }
 
                     if (!charController.isGrounded)
                     {
@@ -207,6 +236,7 @@ public class PlayerInputModelController : MonoBehaviour
 
                         if (GetAxis("Vertical") <= 0.3f)
                         {
+                            anim.Play("Idle - Run H");
                             anim.SetBool("Crouch", true);
 
                             status = Status.CROUCH;
@@ -214,6 +244,7 @@ public class PlayerInputModelController : MonoBehaviour
                         }
                         else
                         {
+                            anim.Play("Idle - Run H");
                             directionSlide = movement.normalized;
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
@@ -517,7 +548,7 @@ public class PlayerInputModelController : MonoBehaviour
                 }
             case DeathEvent.HITTED:
                 {
-                    anim.Play("Death 1");
+                    anim.Play("Death "+ (Random.Range(0, maxDeathAnim)+1));
                     PlayClip(ref hitSFX);
                     break;
                 }
@@ -551,7 +582,7 @@ public class PlayerInputModelController : MonoBehaviour
         if (status == Status.VICTORY)
             return;
 
-        anim.Play("Victory 1");
+        anim.Play("Victory " + (Random.Range(0, maxVictoryAnim) + 1));
         enableInput = false;
         status = Status.VICTORY;
     }

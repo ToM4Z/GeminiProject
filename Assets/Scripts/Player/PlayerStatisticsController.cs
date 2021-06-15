@@ -54,6 +54,13 @@ public class PlayerStatisticsController : MonoBehaviour
     {
         hp = maxHP;
         HUDScript.instance.updateHpBattery(hp);
+        StartCoroutine(DisableInvulnerabilityAfterRespawn());
+    }
+
+    private IEnumerator DisableInvulnerabilityAfterRespawn()
+    {
+        yield return new WaitForSeconds(.5f);
+        invulnerability = false;
     }
 
     void Update()
@@ -146,6 +153,7 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
+        //invulnerability = true;
         this.decreaseLives();
         BlackFadeScreen.instance.startFade();
         print("DEATH BY " + deathEvent.ToString());
