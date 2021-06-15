@@ -29,7 +29,6 @@ public class Gear : MonoBehaviour
 
     public void ActivateFallDown()
     {
-        GetComponent<BoxCollider>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;
         GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
     }

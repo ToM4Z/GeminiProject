@@ -618,7 +618,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         SetEnableColliders(true);
 
         m_PathDestinationNodeIndex = 1;
-        agent.ResetPath();
+        if(agent.isActiveAndEnabled)
+            agent.ResetPath();
         agent.stoppingDistance = 0f;
         fov.Reset();
 
