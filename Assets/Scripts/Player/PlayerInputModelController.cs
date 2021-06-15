@@ -38,6 +38,10 @@ public class PlayerInputModelController : MonoBehaviour
 
     private bool enableInput = true;
 
+    public bool Invulnerability { get; private set; } = false;
+    [SerializeField] private float InvulnerabilityTime = 3f;
+    private float invulnerabilityTimer = 0f;
+
     private CharacterController charController;
     private Animator anim;
     private float _vertSpeed;
@@ -127,9 +131,10 @@ public class PlayerInputModelController : MonoBehaviour
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(1f);
         yield return new WaitForEndOfFrame();
         status = Status.IDLE;
+        Invulnerability = false;
     }
 
     public bool GetButtonDown(string button)
@@ -167,6 +172,19 @@ public class PlayerInputModelController : MonoBehaviour
         if (status == Status.DEATH &&
             (deathEvent == DeathEvent.FROZEN || deathEvent == DeathEvent.BURNED))
             return;
+
+        if (Invulnerability)
+        {
+            invulnerabilityTimer -= Time.deltaTime;
+            materialHandler.setTransparencyAlpha(Mathf.PingPong(Time.time, 0.5f) / 0.5f);
+
+            if (invulnerabilityTimer < 0f)
+            {
+                Invulnerability = false;
+                invulnerabilityTimer = 0f;
+                materialHandler.resetMaterials();
+            }
+        }
 
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
         if (InvertDirectionRespectToCamera)
@@ -533,6 +551,7 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void OnDeath(DeathEvent deathEvent)
     {
+        Invulnerability = true;
         status = Status.DEATH;
         this.deathEvent = deathEvent;
         stopAttack();
@@ -607,8 +626,10 @@ public class PlayerInputModelController : MonoBehaviour
         _contact = hit;
     }
 
-    public void PlayHurtAnimation(DeathEvent deathEvent)
+    public void Hurt(DeathEvent deathEvent)
     {
+        Invulnerability = true;
+        invulnerabilityTimer = InvulnerabilityTime;
         anim.Play("Get hit");
 
         switch (deathEvent)
@@ -633,6 +654,7 @@ public class PlayerInputModelController : MonoBehaviour
                 break;
             }
         }
+        materialHandler.ToFadeMode();
     }
 
     private void Awake()

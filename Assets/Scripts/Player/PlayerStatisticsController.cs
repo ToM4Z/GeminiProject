@@ -26,57 +26,29 @@ public class PlayerStatisticsController : MonoBehaviour
     #endregion
 
 
+    private int hp;
     public int playerLives = 3;
     [SerializeField] private int maxHP;
-    private int hp;
-    public int normalGearCount {get; private set;}
+
+    public int normalGearCount { get; private set; }
     public int bonusGearCount { get; private set; }
     public int bombCount { get; private set; }
 
-
-    private bool invulnerability;
-    [SerializeField] private float invulnerabilityTime = 3f;
-    private float invulnerabilityTimer = 0f;
-
-    private PlayerMaterialHandler materialHandler;
-
+    private PlayerInputModelController playerController;
 
     void Start()
     {
-        materialHandler = GetComponent<PlayerMaterialHandler>();
         hp = maxHP;
         normalGearCount = 0;
         bonusGearCount = 0;
         bombCount = 0;
+        playerController = GetComponent<PlayerInputModelController>();
     }
 
     private void Reset()
     {
         hp = maxHP;
         HUDScript.instance.updateHpBattery(hp);
-        StartCoroutine(DisableInvulnerabilityAfterRespawn());
-    }
-
-    private IEnumerator DisableInvulnerabilityAfterRespawn()
-    {
-        yield return new WaitForSeconds(.5f);
-        invulnerability = false;
-    }
-
-    void Update()
-    {
-        if (invulnerability)
-        {
-            invulnerabilityTimer -= Time.deltaTime;
-            materialHandler.setTransparencyAlpha(Mathf.PingPong(Time.time, 0.5f) / 0.5f);
-
-            if (invulnerabilityTimer < 0f)
-            {
-                invulnerability = false;
-                invulnerabilityTimer = 0f;
-                materialHandler.resetMaterials();
-            }
-        }
     }
 
     public void increaseNormalGear(){
@@ -128,7 +100,7 @@ public class PlayerStatisticsController : MonoBehaviour
     {
         if (!fatal)
         {
-            if (invulnerability || isDeath())
+            if (playerController.Invulnerability || isDeath())
                 return;
 
             hp--;
@@ -138,11 +110,7 @@ public class PlayerStatisticsController : MonoBehaviour
             else
             {
                 print("HP: " + hp);
-                invulnerability = true;
-                invulnerabilityTimer = invulnerabilityTime;
-                GetComponent<PlayerInputModelController>().PlayHurtAnimation(deathEvent);
-
-                materialHandler.ToFadeMode();
+                playerController.Hurt(deathEvent);
             }
 
         }
@@ -153,7 +121,6 @@ public class PlayerStatisticsController : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        //invulnerability = true;
         this.decreaseLives();
         BlackFadeScreen.instance.startFade();
         print("DEATH BY " + deathEvent.ToString());
