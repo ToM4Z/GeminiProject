@@ -31,7 +31,9 @@ public class BlackFadeScreen : MonoBehaviour
         StartCoroutine(WaitTimer());
     }
 
-    private IEnumerator WaitTimer(){
+    private IEnumerator WaitTimer()
+    {
+        yield return new WaitForSeconds(.7f);
         blackScreen.CrossFadeAlpha(1.0f, 2.0f, true);
         yield return new WaitForSeconds(3.0f);
         blackScreen.CrossFadeAlpha(0.0f, 1.0f, true);

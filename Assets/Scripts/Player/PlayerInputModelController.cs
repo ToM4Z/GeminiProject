@@ -36,6 +36,12 @@ public class PlayerInputModelController : MonoBehaviour
     public float minFall = -1.5f;
     public float gravity = -9.81f;
 
+    private bool enableInput = true;
+
+    public bool Invulnerability { get; private set; } = false;
+    [SerializeField] private float InvulnerabilityTime = 3f;
+    private float invulnerabilityTimer = 0f;
+
     private CharacterController charController;
     private Animator anim;
     private float _vertSpeed;
@@ -48,38 +54,56 @@ public class PlayerInputModelController : MonoBehaviour
     private bool airAttackJustDone = false;
 
     private ControllerColliderHit _contact;
-    private string trampolineMask = "Bouncy";
-    private string enemyMask = "Enemy";
+    private readonly string trampolineMask = "Bouncy";
+    private readonly string enemyMask = "Enemy";
 
     private PlayerMaterialHandler materialHandler;
     private DeathEvent deathEvent;
 
-    [SerializeField]
-    private GameObject followTarget;
-    [SerializeField]
-    private AttackTrigger[] hands = new AttackTrigger[2];
-    [SerializeField]
-    private AttackTrigger[] foots = new AttackTrigger[2];
+    [SerializeField] private GameObject followTarget;
+    private Vector3 originFollowTargetPos;
+
     private AttackTrigger armActualAttack = null;
-
-    private bool enableInput = true;
-
-    private float heightCollider;
-    [SerializeField] private float crouchedHeightCollider;
-    private Vector3 centerCollider;
-    [SerializeField] private Vector3 crouchedCenterCollider;
+    [SerializeField] private AttackTrigger[] hands, foots;
 
     [SerializeField] private List<TrailRenderer> trails;
+
+    private float heightCollider;
+    private Vector3 centerCollider;
+    [SerializeField] private float crouchedHeightCollider;
+    [SerializeField] private Vector3 crouchedCenterCollider;
+
+    public bool InvertDirectionRespectToCamera = false;
+
+    [SerializeField] private GameObject burnFX, freezeFX; 
+
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX, hitSFX;
+    [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX, burnSFX, freezeSFX;
+    private bool[] footStepSoundJustPlayed = new bool[2];
+
+    private readonly float idleTime = 5f;
+    private float idleTimer = 0f;
+    private int idleAnimIndex = 0;
+    private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
+    private int lastIdleAnimPlayed = 0;
 
     private void Start()
     {
         charController = GetComponent<CharacterController>();
         anim = GetComponentInChildren<Animator>();
         materialHandler = GetComponent<PlayerMaterialHandler>();
+        audioSource = GetComponentInChildren<AudioSource>();
+
+        originFollowTargetPos = followTarget.transform.localPosition;
 
         heightCollider = charController.height;
         centerCollider = charController.center;
 
+        footStepSoundJustPlayed[0] = false;
+        footStepSoundJustPlayed[1] = false;
+
+        idleTimer = idleTime;
         status = Status.IDLE;
         _vertSpeed = minFall;
     }
@@ -89,24 +113,28 @@ public class PlayerInputModelController : MonoBehaviour
         if (deathEvent == DeathEvent.FALLED_IN_VACUUM)
         {
             followTarget.transform.SetParent(this.transform);
-            followTarget.transform.localPosition = new Vector3(0, .7f, -.3f);
+            followTarget.transform.localPosition = originFollowTargetPos;
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
 
+        materialHandler.resetMaterials();
         SetNormalCollider();
         deathEvent = 0;
         _vertSpeed = minFall;
         anim.speed = 1f;
+        idleAnimIndex = lastIdleAnimPlayed = 0;
         anim.Play("Idle - Run H");
+        idleTimer = idleTime;
         status = Status.RESPAWN;
         StartCoroutine(Respawn());
     }
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(1f);
         yield return new WaitForEndOfFrame();
         status = Status.IDLE;
+        Invulnerability = false;
     }
 
     public bool GetButtonDown(string button)
@@ -139,13 +167,34 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void Update()
     {
-        if (status == Status.RESPAWN) return;
+        if (status == Status.RESPAWN || status == Status.VICTORY || GlobalVariables.isPaused) return;
 
-        Vector3 movement = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
+        if (status == Status.DEATH &&
+            (deathEvent == DeathEvent.FROZEN || deathEvent == DeathEvent.BURNED))
+            return;
+
+        if (Invulnerability)
+        {
+            invulnerabilityTimer -= Time.deltaTime;
+            materialHandler.setTransparencyAlpha(Mathf.PingPong(Time.time, 0.5f) / 0.5f);
+
+            if (invulnerabilityTimer < 0f)
+            {
+                Invulnerability = false;
+                invulnerabilityTimer = 0f;
+                materialHandler.resetMaterials();
+            }
+        }
+
+        Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
+        if (InvertDirectionRespectToCamera)
+            input.x *= -1;
+        Vector3 movement = input;
 
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", movement.x, 1f, Time.deltaTime * 10f);
         anim.SetBool("IsOnGround", charController.isGrounded);
+        PlayFootStepSound();
 
         checkAttack();
 
@@ -156,6 +205,26 @@ public class PlayerInputModelController : MonoBehaviour
                     movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
 
                     _vertSpeed = minFall;
+
+                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && input == Vector3.zero)
+                    {
+                        idleTimer -= Time.deltaTime;
+                        if (idleTimer <= 0)
+                        {
+                            lastIdleAnimPlayed = ++lastIdleAnimPlayed % (maxIdleAnim + 1);
+                            lastIdleAnimPlayed = lastIdleAnimPlayed == 0 ? 1 : lastIdleAnimPlayed;
+                            anim.Play("Idle "+ (idleAnimIndex = lastIdleAnimPlayed));
+                            idleTimer = idleTime;
+                        }
+                    }
+                    else
+                        idleTimer = idleTime;
+
+                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && input != Vector3.zero)
+                    {
+                        idleAnimIndex = 0;
+                        anim.Play("Idle - Run H");
+                    }
 
                     if (!charController.isGrounded)
                     {
@@ -174,6 +243,7 @@ public class PlayerInputModelController : MonoBehaviour
                         stopAttack();
 
                         SetTrailOnOff(true);
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -184,6 +254,7 @@ public class PlayerInputModelController : MonoBehaviour
 
                         if (GetAxis("Vertical") <= 0.3f)
                         {
+                            anim.Play("Idle - Run H");
                             anim.SetBool("Crouch", true);
 
                             status = Status.CROUCH;
@@ -191,10 +262,10 @@ public class PlayerInputModelController : MonoBehaviour
                         }
                         else
                         {
+                            anim.Play("Idle - Run H");
                             directionSlide = movement.normalized;
                             actualSlideSpeed = slideSpeed;
                             movement = directionSlide * actualSlideSpeed;
-                            anim.Play("Slide");
                             attack(Status.SLIDE);
 
                             status = Status.SLIDE;
@@ -232,6 +303,7 @@ public class PlayerInputModelController : MonoBehaviour
                         anim.SetBool("Crouch", false);
 
                         SetTrailOnOff(true);
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -276,6 +348,7 @@ public class PlayerInputModelController : MonoBehaviour
                             _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;
                             anim.Play("Jump start");
 
+                            PlayClip(ref boingSFX);
                             status = Status.FALLING;
                         }
                         else
@@ -283,13 +356,16 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             _vertSpeed = jumpSpeed;
                             anim.Play("Jump start");
-                            _contact.collider.gameObject.GetComponent<IHittable>().hit();
+
+                            if(_contact.collider.gameObject.GetComponent<IHittable>().hit())
+                                PlayClip(ref hitSFX);
 
                             status = Status.FALLING;
                         }
                         else
                         {
                             SetTrailOnOff(false);
+                            PlayClip(ref landedSFX);
                             status = Status.IDLE;
                         }
                         break;
@@ -306,35 +382,26 @@ public class PlayerInputModelController : MonoBehaviour
 
                     _vertSpeed = minFall;
 
-                    if (actualSlideSpeed < 3f)
-                    {
-                        stopAttack();
-                        SetNormalCollider();
-
-                        SetTrailOnOff(false);
-                        status = Status.IDLE;
-                        break;
-                    }
+                    // I will change status from StopSlide method
 
                     if (!charController.isGrounded)
                     {
-                        SetNormalCollider();
-                        anim.Play("Falling");
-                        stopAttack();
+                        StopSlide();
 
                         SetTrailOnOff(true);
+                        anim.Play("Falling");
                         status = Status.FALLING;
                         break;
                     }
 
                     if (GetButtonDown("Jump"))
                     {
-                        SetNormalCollider();
-                        _vertSpeed = jumpSpeed;
-                        anim.Play("Jump start");
-                        stopAttack();
+                        StopSlide();
 
                         SetTrailOnOff(true);
+                        _vertSpeed = jumpSpeed;
+                        anim.Play("Jump start");
+                        PlayClip(ref jumpSFX);
                         status = Status.FALLING;
                         break;
                     }
@@ -349,12 +416,19 @@ public class PlayerInputModelController : MonoBehaviour
                         _vertSpeed = 0;
                     break;
                 }
+
         }
 
-        movement = transform.TransformDirection(movement);
-
         movement.y = _vertSpeed;
+        
+        if(input.magnitude > 0)
+        {
+            Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward * (InvertDirectionRespectToCamera ? -1 : 1), Vector3.up);
+            Quaternion rotationToCamera = Quaternion.LookRotation(projectCameraForward, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToCamera, 310f * Time.deltaTime);
 
+            movement = rotationToCamera * movement;
+        }
         movement *= Time.deltaTime;
         charController.Move(movement);
     }
@@ -374,6 +448,7 @@ public class PlayerInputModelController : MonoBehaviour
                     armActualAttack = hands[attackIndex];
                     anim.Play(comboAttacks[attackIndex]);
                     armActualAttack.EnableTrigger();
+                    PlayClip(ref missingHitSFX);
                     break;
                 }
             case Status.FALLING:
@@ -389,8 +464,12 @@ public class PlayerInputModelController : MonoBehaviour
                 }
             case Status.SLIDE:
                 {
+                    print("Start slide");
+                    anim.Play("Slide");
+
                     armActualAttack = foots[0];
                     armActualAttack.EnableTrigger();
+                    PlayClip(ref slideSFX);
                     break;
                 }
         }
@@ -425,7 +504,8 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (hands[attackIndex].EnteredTrigger)
                             {
-                                hands[attackIndex].hitted.GetComponent<IHittable>().hit();
+                                if(hands[attackIndex].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
 
@@ -441,22 +521,25 @@ public class PlayerInputModelController : MonoBehaviour
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<IHittable>().hit();
+                                if (foots[0].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
                         break;
                     }
                 case Status.SLIDE:
                     {
+                        // the slide will be stopped or here or by animation event
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
                         {
-                            stopAttack();
+                            StopSlide();
                         }
                         else
                         {
                             if (foots[0].EnteredTrigger)
                             {
-                                foots[0].hitted.GetComponent<IHittable>().hit();
+                                if (foots[0].hitted.GetComponent<IHittable>().hit())
+                                    PlayClip(ref hitSFX);
                             }
                         }
                         break;
@@ -468,6 +551,7 @@ public class PlayerInputModelController : MonoBehaviour
 
     private void OnDeath(DeathEvent deathEvent)
     {
+        Invulnerability = true;
         status = Status.DEATH;
         this.deathEvent = deathEvent;
         stopAttack();
@@ -478,23 +562,35 @@ public class PlayerInputModelController : MonoBehaviour
                 {
                     anim.speed = 0f;
                     followTarget.transform.SetParent(null);
+                    PlayClip(ref fall_vacuumSFX);
                     break;
                 }
             case DeathEvent.HITTED:
                 {
-                    anim.Play("Death 1");
+                    anim.Play("Death "+ (Random.Range(0, maxDeathAnim)+1));
+                    PlayClip(ref hitSFX);
+                    break;
+                }
+            case DeathEvent.MASHED:
+                {
+                    anim.Play("Mashed Death");
+                    PlayClip(ref mashedSFX);
                     break;
                 }
             case DeathEvent.BURNED:
                 {
                     anim.speed = 0f;
                     materialHandler.burnMaterials();
+                    PlayClip(ref burnSFX);
+                    Instantiate(burnFX, transform);
                     break;
                 }
             case DeathEvent.FROZEN:
                 {
                     anim.speed = 0f;
                     materialHandler.frozenMaterials();
+                    PlayClip(ref freezeSFX);
+                    Instantiate(freezeFX, transform);
                     break;
                 }
         }
@@ -505,14 +601,60 @@ public class PlayerInputModelController : MonoBehaviour
         if (status == Status.VICTORY)
             return;
 
-        anim.Play("Victory 1");
+        anim.Play("Victory " + (Random.Range(0, maxVictoryAnim) + 1));
         enableInput = false;
         status = Status.VICTORY;
+    }
+
+    private void PlayFootStepSound()
+    {
+        if(status == Status.IDLE || status == Status.CROUCH)
+            for( int i =0; i < 2; ++i) 
+                if(foots[i].transform.position.y <= transform.position.y+.01f && !footStepSoundJustPlayed[i])
+                {
+                    PlayClip(ref footStepSFX);
+                    footStepSoundJustPlayed[i] = true;
+                    break;
+                }
+                else
+                    if (foots[i].transform.position.y > transform.position.y + .01f)
+                        footStepSoundJustPlayed[i] = false;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
+    }
+
+    public void Hurt(DeathEvent deathEvent)
+    {
+        Invulnerability = true;
+        invulnerabilityTimer = InvulnerabilityTime;
+        anim.Play("Get hit");
+
+        switch (deathEvent)
+        {
+            case DeathEvent.HITTED:
+            {
+                PlayClip(ref hitSFX);
+                break;
+            }
+            case DeathEvent.BURNED:
+            {
+                PlayClip(ref burnSFX);
+                materialHandler.burnMaterials();
+                Instantiate(burnFX, transform);
+                break;
+            }
+            case DeathEvent.FROZEN:
+            {
+                PlayClip(ref freezeSFX);
+                materialHandler.frozenMaterials();
+                Instantiate(freezeFX, transform);
+                break;
+            }
+        }
+        materialHandler.ToFadeMode();
     }
 
     private void Awake()
@@ -532,5 +674,23 @@ public class PlayerInputModelController : MonoBehaviour
     private void EnableInput(bool b)
     {
         enableInput = b;
+    }
+
+    public void StopSlide()
+    {
+        stopAttack();
+
+        SetNormalCollider();
+        status = Status.IDLE;
+    }
+
+    private void PlayClip(ref AudioClip a)
+    {
+        audioSource.PlayOneShot(a);
+    }
+
+    private void PlayClip(ref AudioClip[] a)
+    {
+        PlayClip(ref a[Random.Range(0, a.Length)]);
     }
 }

@@ -5854,7 +5854,8 @@ MonoBehaviour:
   attackClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
   deathClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
   attackTriggers: []
-  typeAttack: 3
+  typeAttack: 4
+  canDropItem: 1
   particle: {fileID: 5301166710069466122}
   lightParticle: {fileID: 5301166709446068958}
   elementalAttackClip: {fileID: 8300000, guid: af86f44345e9f73478ab4dde12d62e2c, type: 3}

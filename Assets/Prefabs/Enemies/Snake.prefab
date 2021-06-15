@@ -69,7 +69,8 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: 0a1f177c1c53e384e92c8a5a7b78ff52, type: 3}
   attackTriggers:
   - {fileID: 1657343066575663302}
-  typeAttack: 3
+  typeAttack: 4
+  canDropItem: 1
 --- !u!114 &1657343066193493963
 MonoBehaviour:
   m_ObjectHideFlags: 0

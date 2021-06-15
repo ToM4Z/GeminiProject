@@ -22,7 +22,6 @@ public class RespawnManager : MonoBehaviour, IGameManager
         do
         {
             player = GameObject.FindGameObjectWithTag("Player");
-            //player = PlayerStatisticsController.instance.gameObject;
         } while (player == null); // wait until player is created
         
         respawnPos = transform.position;
@@ -53,7 +52,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
         print("RESPAWN");
         yield return new WaitForEndOfFrame();
 
-        Messenger.Broadcast(GlobalVariables.RESET);
+        Messenger.Broadcast(GlobalVariables.RESET, MessengerMode.DONT_REQUIRE_LISTENER);
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
     }
 

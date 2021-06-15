@@ -15,5 +15,6 @@ public enum DeathEvent
     BURNED,
     FROZEN,
     FALLED_IN_VACUUM,
+    MASHED,
     HITTED
 }

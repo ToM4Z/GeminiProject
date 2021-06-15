@@ -17,6 +17,7 @@ public class Checkpoint : MonoBehaviour
     {
         activated = true;
 
+        Managers.Audio.PlayTin();
         Managers.Respawn.setRespawn(transform.position, transform.rotation);
     }
 

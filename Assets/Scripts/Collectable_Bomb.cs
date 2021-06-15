@@ -10,6 +10,7 @@ public class Collectable_Bomb : MonoBehaviour
         //Check if the other object is a PlayerController
         if (player != null) {
             //If it is the player, increase its Bomb Counter
+            Managers.Audio.PlayTin();
             player.increaseBomb();
 
             //Destroy whole gameobject

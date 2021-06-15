@@ -68,7 +68,7 @@ public class FOVDetection : MonoBehaviour
                     lastPlayerPositionKnown = player.transform.position;
                     return isPlayerVisible = true;
                 }
-                print(hit.collider.gameObject.name);
+                //print(hit.collider.gameObject.name);
             }
         }
         return isPlayerVisible = false;
