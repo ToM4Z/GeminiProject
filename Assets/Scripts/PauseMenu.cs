@@ -5,8 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject pausePanel;
-    public GameObject optionPanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject optionPanel;
+    [SerializeField] private AudioSource clickClip;
+    [SerializeField] private AudioSource pauseClip;
+    [SerializeField] private AudioSource unpauseClip;
     void Start()
     {
         //Cursor.visible = false;
@@ -25,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     void Pause(){
+        pauseClip.Play();
         pausePanel.gameObject.SetActive(true);
         Time.timeScale = 0f;
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
@@ -34,6 +38,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void Unpause(){
+        unpauseClip.Play();
         pausePanel.gameObject.SetActive(false);
         Time.timeScale = 1f;
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
@@ -63,5 +68,9 @@ public class PauseMenu : MonoBehaviour
 
     public void BackToHub(){
        // SceneManager.LoadScene("Hub"); 
+    }
+
+    public void playClick(){
+        clickClip.Play();
     }
 }

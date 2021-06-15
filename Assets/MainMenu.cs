@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menuPanel;
-    public GameObject optionPanel;
+    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject optionPanel;
+    [SerializeField] private AudioSource clickClip;
 
     void Start()
     {
@@ -40,5 +41,9 @@ public class MainMenu : MonoBehaviour
     public void updateVolume(float v){
         GlobalVariables.Volume = v;
        // Debug.Log(GlobalVariables.Volume);
+    }
+
+        public void playClick(){
+        clickClip.Play();
     }
 }
