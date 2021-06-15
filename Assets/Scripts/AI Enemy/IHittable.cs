@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHittable
 {
-    public void hit();
+    public bool hit();
 }

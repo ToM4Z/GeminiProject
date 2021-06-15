@@ -5253,13 +5253,14 @@ MonoBehaviour:
   attackClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
   deathClip: {fileID: 8300000, guid: 8536872bb6e2944409c11eecc27fa07d, type: 3}
   attackTriggers: []
-  typeAttack: 3
+  typeAttack: 4
+  canDropItem: 1
   particle: {fileID: 2299844699125125002}
   lightParticle: {fileID: 2299844699538772318}
   elementalAttackClip: {fileID: 8300000, guid: af86f44345e9f73478ab4dde12d62e2c, type: 3}
   MeleeAttack: 1
   distanceMeleeAttack: 2
-  MeleeAttackTime: 2
+  MeleeAttackTime: 1
   attackTriggersForMeleeAttackElementalEnemy:
   - {fileID: 5727883689779858382}
 --- !u!114 &2299844699893867751

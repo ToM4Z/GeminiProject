@@ -142,6 +142,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
     [SerializeField] protected DeathEvent typeAttack = DeathEvent.HITTED;
 
+    [SerializeField] public bool canDropItem = true;
+
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
     {
@@ -168,6 +170,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             spawn = true;
             animator.SetTrigger(animVarSpawn);
         }
+        else
+            SetEnableColliders(false);
 
         //agent.autoBraking = false;
         idleTimer = -1; // this will cause a call to newRandomDestination
@@ -218,6 +222,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         else if (animStateInfo.IsName(idleStateAnim))
         {
             spawning = false;
+            SetEnableColliders(true);
             ChangeStatus(Status.IDLE);
         }
     }
@@ -424,16 +429,16 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     }
 
     // With this method, the player can hit and kill the enemy
-    public void hit()
+    public bool hit()
     {
         if (status == Status.DEAD || status == Status.INACTIVE)
-            return;
+            return false;
 
         ChangeStatus(Status.DEAD);
 
         agent.ResetPath();
-        foreach (Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = false;
+
+        SetEnableColliders(false);
 
         if (attackFase != AttackFase.NO)
             stopAttack();
@@ -448,7 +453,15 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         OnDeath();
 
+        if (canDropItem)
+        {
+            GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity);
+            gear.GetComponent<Gear>().ActivateFallDown();
+        }
+
         Managers.Enemies.EnemyDie(this.gameObject);
+
+        return true;
     }
 
     // simple change the status and, if debug is enabled, prints the change
@@ -602,11 +615,11 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         transform.position = originPos;
         transform.rotation = originRot;
 
-        foreach (Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = true;
+        SetEnableColliders(true);
 
         m_PathDestinationNodeIndex = 1;
-        agent.ResetPath();
+        if(agent.isActiveAndEnabled)
+            agent.ResetPath();
         agent.stoppingDistance = 0f;
         fov.Reset();
 
@@ -679,11 +692,6 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         yield return new WaitForSeconds(2.5f);
         if (status == Status.DEAD)  // if the enemy is still dead (during this 2.5 seconds the player should be die) 
         {
-            GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity);
-            gear.GetComponent<BoxCollider>().enabled = true;
-            gear.GetComponent<Rigidbody>().useGravity = true;
-            gear.GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
-
             animator.SetTrigger("Despawn"); // I start Despawn
         }
     }
@@ -695,6 +703,12 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         model.localRotation = originModelRot;
         model.localScale    = Vector3.one;
         this.gameObject.SetActive(false);
+    }
+
+    private void SetEnableColliders(bool enable)
+    {
+        foreach (Collider c in GetComponentsInChildren<Collider>())
+            c.enabled = enable;
     }
 
     void OnDrawGizmosSelected()

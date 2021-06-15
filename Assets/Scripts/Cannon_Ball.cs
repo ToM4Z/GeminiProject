@@ -25,8 +25,8 @@ public class Cannon_Ball : MonoBehaviour
             //If it is the player, damage it
             player.hurt(DeathEvent.HITTED);
         }
-
-        Destroy(this.gameObject);
         
+        if(!other.isTrigger)
+            Destroy(this.gameObject);
     }
 }

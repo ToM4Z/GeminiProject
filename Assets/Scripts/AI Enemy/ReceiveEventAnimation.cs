@@ -44,4 +44,9 @@ public class ReceiveEventAnimation : MonoBehaviour
         go.SendMessage("Disable");
     }
 
+    public void StopSlide()
+    {
+        go.SendMessage("StopSlide");
+    }
+
 }

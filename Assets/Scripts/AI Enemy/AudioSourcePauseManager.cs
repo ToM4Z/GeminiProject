@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAudioManager : MonoBehaviour
+public class AudioSourcePauseManager : MonoBehaviour
 {
 
     private void TogglePlayResume(bool isEnabled)

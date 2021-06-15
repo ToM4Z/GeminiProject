@@ -10,27 +10,44 @@ public class BoulderPath : MonoBehaviour, IResettable
     [SerializeField] public PatrolPath patrolPath;
     int m_PathDestinationNodeIndex = 1;
     public bool isActive;
-    // Start is called before the first frame update
+    private Vector3 originPos;
+    private Quaternion originRot;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         isActive = false;
-        
+
+        originPos = transform.position;
+        originRot = transform.rotation;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (agent.remainingDistance < 0.25f && isActive)//fov.distanceTo(GetDestinationOnPath()) <=
+        if (isActive && agent.remainingDistance < 0.25f)
         {
-            m_PathDestinationNodeIndex = (m_PathDestinationNodeIndex + 1); //% patrolPath.PathNodes.Count;
-            agent.SetDestination(GetDestinationOnPath());
+            m_PathDestinationNodeIndex++;
+
+            if (m_PathDestinationNodeIndex == patrolPath.GetPathLength())
+            {
+                isActive = false;
+                gameObject.SetActive(false);
+            }
+            else
+                agent.SetDestination(GetDestinationOnPath());
         }
     }
 
-    public void Reset() {
+    public void Reset()
+    {
+        isActive = false;
+        m_PathDestinationNodeIndex = 1;
 
+        transform.position = originPos;
+        transform.rotation = originRot;
+
+        agent.ResetPath();
     }
 
     protected Vector3 GetDestinationOnPath()
@@ -40,7 +57,17 @@ public class BoulderPath : MonoBehaviour, IResettable
 
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
-            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.HITTED,true);
+            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.MASHED,true);
         }
+        else if (collision.gameObject.tag == "Enemy")
+        {
+            collision.GetComponent<AIEnemy>().hit();
+        }
+    }
+
+    public void Active()
+    {
+        isActive = true;
+        agent.SetDestination(GetDestinationOnPath());
     }
 }

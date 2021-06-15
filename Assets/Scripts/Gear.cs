@@ -7,7 +7,6 @@ public class Gear : MonoBehaviour
     public float speedSpin = 1.0f;
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -21,11 +20,25 @@ public class Gear : MonoBehaviour
         //Check if the other object is a PlayerController
         if (player != null) {
             //If it is the player, increase Gear Counter
+            Managers.Audio.PlayTin();
             player.increaseNormalGear();
             Destroy(this.gameObject);
         }
+    }
 
-        
-        
+    public void ActivateFallDown()
+    {
+        GetComponent<Rigidbody>().isKinematic = false;
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
+
+        StartCoroutine(StopGravity());
+    }
+
+    private IEnumerator StopGravity()
+    {
+        yield return new WaitForSeconds(1f);
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Rigidbody>().useGravity = false;
     }
 }

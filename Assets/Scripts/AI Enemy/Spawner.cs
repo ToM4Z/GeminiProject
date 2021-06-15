@@ -46,7 +46,11 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
                 
                 Instantiate(particleSpawnPrefab, position, Quaternion.identity);
                 audioSource.PlayOneShot(spawnClip);
-                enemiesSpawned.Add( Instantiate(enemyPrefab, position, Quaternion.identity));
+
+                GameObject e = Instantiate(enemyPrefab, position, Quaternion.identity);
+                e.GetComponent<AIEnemy>().canDropItem = false;
+                enemiesSpawned.Add(e);
+
                 timer = timeBeforeSpawn;
             }
 
@@ -70,7 +74,7 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
         Destroy(toRemove);
     }
 
-    public void hit()
+    public bool hit()
     {
         activate = false;
 
@@ -78,12 +82,13 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
             c.enabled = false;
 
         GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity) as GameObject;
-        gear.GetComponent<Rigidbody>().useGravity = true;
-        gear.GetComponent<Rigidbody>().AddExplosionForce(5f, transform.position, 4f, 1f, ForceMode.Impulse);
+        gear.GetComponent<Gear>().ActivateFallDown();
 
         particle.Stop();
         animator.Play("Despawn");
         audioSource.PlayOneShot(destroyClip);
+
+        return true;
     }
 
     public void Disable()

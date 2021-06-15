@@ -22,7 +22,6 @@ public class RespawnManager : MonoBehaviour, IGameManager
         do
         {
             player = GameObject.FindGameObjectWithTag("Player");
-            //player = PlayerStatisticsController.instance.gameObject;
         } while (player == null); // wait until player is created
         
         respawnPos = transform.position;
