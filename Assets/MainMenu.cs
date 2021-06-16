@@ -9,6 +9,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject optionPanel;
     [SerializeField] private AudioSource clickClip;
 
+    [SerializeField] private GameObject keyboardMappingImage;
+    [SerializeField] private GameObject gamepadMappingImage;
+
     void Start()
     {
         
@@ -17,7 +20,7 @@ public class MainMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Play(){
@@ -41,6 +44,16 @@ public class MainMenu : MonoBehaviour
     public void updateVolume(float v){
         GlobalVariables.Volume = v;
        // Debug.Log(GlobalVariables.Volume);
+    }
+
+    public void goToController(){
+        keyboardMappingImage.SetActive(false);
+        gamepadMappingImage.SetActive(true);
+    }
+
+    public void goToKeyboard(){
+        gamepadMappingImage.SetActive(false);
+        keyboardMappingImage.SetActive(true);
     }
 
         public void playClick(){

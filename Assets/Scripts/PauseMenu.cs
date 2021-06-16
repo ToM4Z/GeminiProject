@@ -7,9 +7,12 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject optionPanel;
+    [SerializeField] private GameObject controlsPanel;
     [SerializeField] private AudioSource clickClip;
     [SerializeField] private AudioSource pauseClip;
     [SerializeField] private AudioSource unpauseClip;
+    [SerializeField] private GameObject keyboardMappingImage;
+    [SerializeField] private GameObject gamepadMappingImage;
     void Start()
     {
         //Cursor.visible = false;
@@ -60,6 +63,14 @@ public class PauseMenu : MonoBehaviour
         optionPanel.SetActive(false);
         pausePanel.SetActive(true);
     }
+    public void OptionToControls(){
+        optionPanel.SetActive(false);
+        controlsPanel.SetActive(true);
+    }
+    public void ControlsToOption(){
+        controlsPanel.SetActive(false);
+        optionPanel.SetActive(true);
+    }
 
     public void updateVolume(float v){
         GlobalVariables.Volume = v;
@@ -68,6 +79,15 @@ public class PauseMenu : MonoBehaviour
 
     public void BackToHub(){
        // SceneManager.LoadScene("Hub"); 
+    }
+        public void goToController(){
+        keyboardMappingImage.SetActive(false);
+        gamepadMappingImage.SetActive(true);
+    }
+
+    public void goToKeyboard(){
+        gamepadMappingImage.SetActive(false);
+        keyboardMappingImage.SetActive(true);
     }
 
     public void playClick(){
