@@ -15,7 +15,9 @@ public class VictoryScreen : MonoBehaviour
     [SerializeField] private Text score;
     [SerializeField] private AudioSource scoreSfx;
     [SerializeField] private AudioSource victorySfx;
+    [SerializeField] private AudioSource clickSfx;
     private int scoreToShow = 0;
+    private bool actived = false;
     void Start()
     {
         this.gameObject.SetActive(false);
@@ -30,11 +32,27 @@ public class VictoryScreen : MonoBehaviour
     public void ActiveVictoryScreen(){
 
         this.gameObject.SetActive(true);
-        
+        actived = true;
         victorySfx.Play();
         StartCoroutine(CountNormalGear());
         StartCoroutine(CountBonusGear());
         
+    }
+
+    public void PlayClickAudio(){
+        clickSfx.Play();
+    }
+
+    public void BackToHub(){
+        //Load HUB Scene
+    }
+
+    public void RestartLevel(){
+        //Load this scene again
+    }
+
+    public bool getActived(){
+        return actived;
     }
 
     private IEnumerator CountNormalGear(){
