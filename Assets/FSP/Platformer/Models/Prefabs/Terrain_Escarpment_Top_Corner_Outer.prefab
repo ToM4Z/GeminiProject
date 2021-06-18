@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4313677775447743392}
   - component: {fileID: 8536274263420814536}
   - component: {fileID: 8761162841228341734}
-  - component: {fileID: 4319728029916198387}
   m_Layer: 0
   m_Name: Dirt
   m_TagString: Untagged
@@ -55,6 +54,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,20 +80,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &4319728029916198387
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63581411565929378}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: a9122674a90b0b34d93ac0b3d2dbe812, type: 2}
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &2360418804684113183
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,18 +127,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f6be16025ec88e4c88efb60e6a61e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  categoryID: 0
-  placeInsideOthers: 1
-  offsetPos: {x: 0, y: 0, z: 0}
-  rotationFactor: {x: 90, y: 90, z: 90}
-  scalable: 0
+  allowOverlap: 1
+  offsetPosition: {x: 0, y: 0, z: 0}
+  rotationStep: {x: 0, y: 90, z: 0}
+  paintAreaStretch: 0
+  placementRaycast:
+    useRaycast: 0
+    direction: 1
+    startOffset: {x: 0, y: 0, z: 0}
   randomizer:
-    randomizable: 0
-    replaceable: 0
-    rotate: {x: 1, y: 1, z: 1}
+    useRandomizer: 0
+    allowReplacement: 0
+    replacementID: 0
+    replacementWeight: 0
+    allowSequentialRepeat: 0
+    rotateMin: {x: 0, y: -180, z: 0}
+    rotateMax: {x: 0, y: 180, z: 0}
+    rotateStep: {x: 1, y: 1, z: 1}
     scaleMin: {x: 0.75, y: 0.75, z: 0.75}
     scaleMax: {x: 1.25, y: 1.25, z: 1.25}
     scaleLock: 1
+    flipX: 0
+    flipY: 0
+    flipZ: 0
     posMin: {x: -0.5, y: -0.1, z: -0.5}
     posMax: {x: 0.5, y: 0.1, z: 0.5}
   includeInMerge: 1
@@ -165,7 +164,6 @@ GameObject:
   - component: {fileID: 7618586060324291529}
   - component: {fileID: 1201978347995255566}
   - component: {fileID: 6290611959568006676}
-  - component: {fileID: 7481833131409805248}
   m_Layer: 0
   m_Name: Grass
   m_TagString: Untagged
@@ -209,6 +207,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -233,20 +233,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &7481833131409805248
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3401043954861091776}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 0b8741023b4bbf549ae1a513004b5105, type: 2}
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &5443116840997602875
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,7 +245,7 @@ GameObject:
   - component: {fileID: 4560705378279769879}
   - component: {fileID: 4050930644930361558}
   - component: {fileID: 2051625808435058346}
-  - component: {fileID: 370857876027953919}
+  - component: {fileID: 3767161255508614460}
   m_Layer: 0
   m_Name: Hidden
   m_TagString: Untagged
@@ -302,6 +289,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -326,8 +315,9 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &370857876027953919
-MeshCollider:
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3767161255508614460
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -336,7 +326,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300000, guid: 577b05f5418a507408173ce963a18710, type: 2}
+  serializedVersion: 2
+  m_Size: {x: 0.625, y: 1.25, z: 0.625}
+  m_Center: {x: -0.1875, y: -0.375, z: -0.1875}
