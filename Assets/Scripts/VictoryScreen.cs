@@ -12,6 +12,7 @@ public class VictoryScreen : MonoBehaviour
         else if(instance != this)
             Destroy(gameObject);
     }
+    
     [SerializeField] private Text score;
     [SerializeField] private AudioSource scoreSfx;
     [SerializeField] private AudioSource victorySfx;

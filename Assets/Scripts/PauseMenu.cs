@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Cancel") && !VictoryScreen.instance.getActived()){
+        if(Input.GetButtonDown("Cancel") && !VictoryScreen.instance.getActived() && !GameOverScreen.instance.getActived()){
             if (GlobalVariables.isPaused)
                 Unpause();
             else
