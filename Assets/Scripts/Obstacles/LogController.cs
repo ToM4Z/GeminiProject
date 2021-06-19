@@ -26,6 +26,10 @@ public class LogController : MonoBehaviour
             GameObject log = Instantiate(LogPrefab) as GameObject;
             log.GetComponent<LogBehaviour>().SetPos(startPos.transform.position,endPos.transform.position);
             log.transform.position = startPos.transform.position;
+            if(this.transform.rotation.eulerAngles.y == 90 || this.transform.rotation.eulerAngles.y == 270) {
+
+                log.transform.Rotate(0,this.transform.rotation.eulerAngles.y,0);
+            }
             _logs.Add(log);
             startTime = 0;
         }
