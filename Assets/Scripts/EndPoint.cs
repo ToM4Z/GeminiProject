@@ -40,6 +40,7 @@ public class EndPoint : MonoBehaviour
         {
             activated = true;
             other.GetComponent<PlayerInputModelController>().OnVictory();
+            VictoryScreen.instance.ActiveVictoryScreen();
             GetComponentInChildren<Animator>().SetTrigger("EndScene");
             vrcam.Priority = 20;
 

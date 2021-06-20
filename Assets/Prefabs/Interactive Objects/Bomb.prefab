@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireFusePrefab: {fileID: 6115890892088976233, guid: 9cf6b440326644e4ab5b22b2183938d6, type: 3}
   bombExplosionPrefab: {fileID: 6457622696630643955, guid: 1e1166462cee4c84593bde60f1655cac, type: 3}
+  explosionClip: {fileID: 0}
   detonationTime: 5
   radiusExplosion: 5
   power: 5
