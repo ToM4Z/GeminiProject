@@ -5,14 +5,6 @@ using UnityEngine.UI;
 
 public class BlackFadeScreen : MonoBehaviour
 {
-    public static BlackFadeScreen instance = null;
-
-    void Awake() {
-        if (instance == null)
-            instance = this;
-        else if(instance != this)
-            Destroy(gameObject);
-    }
     public Image blackScreen;
     // Start is called before the first frame update
     void Start()
