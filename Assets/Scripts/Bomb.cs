@@ -6,6 +6,7 @@ public class Bomb : MonoBehaviour
 {
     [SerializeField] private GameObject fireFusePrefab;
     [SerializeField] private GameObject bombExplosionPrefab;
+
     private GameObject _fireFuse;
     private GameObject _explosionParticle;
     private Transform _fuse;
@@ -20,6 +21,7 @@ public class Bomb : MonoBehaviour
         _bomb = this.gameObject.transform;
         _fireFuse = Instantiate(fireFusePrefab);
         
+        
         StartCoroutine(Detonation());
 
     }
@@ -32,11 +34,12 @@ public class Bomb : MonoBehaviour
 
     private IEnumerator Detonation(){
         yield return new WaitForSeconds(detonationTime);
+        
         ExplosionDamage(_bomb.position, radiusExplosion);
     }
 
     void ExplosionDamage(Vector3 center, float radius)
-    {
+    {        
         //Instantion of the explosion particle system
         _explosionParticle = Instantiate(bombExplosionPrefab);
         _explosionParticle.transform.position = this.gameObject.transform.position;
