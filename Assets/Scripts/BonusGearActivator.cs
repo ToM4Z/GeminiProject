@@ -6,6 +6,7 @@ public class BonusGearActivator : MonoBehaviour
 {
     [SerializeField] private GameObject bonusGearPrefab;
     [SerializeField] private GameObject particlePrefab;
+    [SerializeField] private AudioSource activationSFX;
     private GameObject _bonusGear;
     private GameObject _particle;
     public Animation anim;
@@ -27,8 +28,8 @@ public class BonusGearActivator : MonoBehaviour
         anim.Play("BonusBlockActivation");
         if(firstTime){
             PlayerStatisticsController player = other.GetComponentInParent<PlayerStatisticsController>();
-            Debug.Log(other.name);
             if (player != null) {
+                activationSFX.Play();
                 spawnBonusGears();
             }
             firstTime = false;

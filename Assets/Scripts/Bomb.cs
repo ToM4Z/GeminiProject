@@ -6,6 +6,7 @@ public class Bomb : MonoBehaviour
 {
     [SerializeField] private GameObject fireFusePrefab;
     [SerializeField] private GameObject bombExplosionPrefab;
+    [SerializeField] private AudioSource bombFuseSFX;
 
     private GameObject _fireFuse;
     private GameObject _explosionParticle;
@@ -21,7 +22,7 @@ public class Bomb : MonoBehaviour
         _bomb = this.gameObject.transform;
         _fireFuse = Instantiate(fireFusePrefab);
         
-        
+        bombFuseSFX.Play();
         StartCoroutine(Detonation());
 
     }

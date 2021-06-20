@@ -21,6 +21,7 @@ public class Cannon : MonoBehaviour
     [SerializeField] private GameObject smokeShootPrefab;
     private GameObject _cannonBall;
     private GameObject _smoke;
+    [SerializeField] private AudioSource shotSFX;
     
     void Start()
     {
@@ -65,6 +66,7 @@ public class Cannon : MonoBehaviour
 
     //Instantation of the cannonball
     public void Shoot(){
+        shotSFX.Play();
         _cannonBall = Instantiate(cannonBallPrefab) as GameObject;
         _cannonBall.transform.position = puntoSparo.position;
         _cannonBall.transform.rotation = puntoSparo.rotation;

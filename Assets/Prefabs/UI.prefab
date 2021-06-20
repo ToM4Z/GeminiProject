@@ -2573,6 +2573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 377821918550598826}
+  - component: {fileID: 1787097207557201447}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -2603,6 +2604,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1787097207557201447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377821918550598827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e402d12d0f3a848a706df922c84f92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hudPanel: {fileID: 377821917952350766}
+  blackScreenPanel: {fileID: 4753711448367421197}
+  victoryScreenPanel: {fileID: 4992869996706772798}
+  gameOverPanel: {fileID: 3929440064142715240}
+  pausePanel: {fileID: 377821916824720106}
 --- !u!1 &486818422979046484
 GameObject:
   m_ObjectHideFlags: 0
@@ -3155,7 +3173,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e87ec2aa7a2ff6847805c6efb67bb5d9, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -3765,7 +3783,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 59d9b5bf90e39fd4d9f29a358621c597, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
