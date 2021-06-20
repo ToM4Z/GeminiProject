@@ -5,13 +5,6 @@ using UnityEngine.UI;
 
 public class VictoryScreen : MonoBehaviour
 {
-    public static VictoryScreen instance = null;
-    void Awake() {
-        if (instance == null)
-            instance = this;
-        else if(instance != this)
-            Destroy(gameObject);
-    }
     
     [SerializeField] private Text score;
     [SerializeField] private AudioSource scoreSfx;
@@ -57,7 +50,7 @@ public class VictoryScreen : MonoBehaviour
     }
 
     private IEnumerator CountNormalGear(){
-        for(int i = 1; i <= PlayerStatisticsController.instance.normalGearCount; i++){
+        for(int i = 1; i <= PlayerStatisticsController.instance.normalGearCountToCalculateScore; i++){
             scoreToShow += 10;
             score.text = scoreToShow + "";
             scoreSfx.Play();

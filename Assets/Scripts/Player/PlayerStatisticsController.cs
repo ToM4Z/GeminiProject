@@ -31,6 +31,10 @@ public class PlayerStatisticsController : MonoBehaviour
     [SerializeField] private int maxHP;
 
     public int normalGearCount { get; private set; }
+
+    //This variable is used to calculate the score, because the normal count will be setted to 0 when we have
+    //100 of them and so we will avoid to calculate the final score with 0.
+    public int normalGearCountToCalculateScore { get; private set; }
     public int bonusGearCount { get; private set; }
     public int bombCount { get; private set; }
 
@@ -40,6 +44,7 @@ public class PlayerStatisticsController : MonoBehaviour
     {
         hp = maxHP;
         normalGearCount = 0;
+        normalGearCountToCalculateScore = 0;
         bonusGearCount = 0;
         bombCount = 0;
         playerController = GetComponent<PlayerInputModelController>();
@@ -48,12 +53,13 @@ public class PlayerStatisticsController : MonoBehaviour
     private void Reset()
     {
         hp = maxHP;
-        HUDScript.instance.updateHpBattery(hp);
+        UIManager.instance.GetHUD().updateHpBattery(hp);
     }
 
     public void increaseNormalGear(){
+        normalGearCountToCalculateScore++;
         normalGearCount++;
-        HUDScript.instance.setGearCounter(normalGearCount);
+        UIManager.instance.GetHUD().setGearCounter(normalGearCount);
         if (normalGearCount == 100){
             playerLives++;
             normalGearCount = 0;
@@ -62,29 +68,29 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseBonusGear(){
         bonusGearCount++;
-        HUDScript.instance.setGearBonusCounter(bonusGearCount);
+        UIManager.instance.GetHUD().setGearBonusCounter(bonusGearCount);
     }
 
     public void increaseBomb(){
         bombCount++;
-        HUDScript.instance.setBombCounter(bombCount);
+        UIManager.instance.GetHUD().setBombCounter(bombCount);
     }
     public void decreaseBomb()
     {
         bombCount--;
-        HUDScript.instance.setBombCounter(bombCount);
+        UIManager.instance.GetHUD().setBombCounter(bombCount);
     }
 
     public void increaseLives(){
         playerLives++;
-        HUDScript.instance.setLifeCounter(playerLives);
+        UIManager.instance.GetHUD().setLifeCounter(playerLives);
     }
     public void decreaseLives(){
         playerLives--;
         if(playerLives < 0){
             //TODO GAME OVER
         }
-        HUDScript.instance.setLifeCounter(playerLives);
+        UIManager.instance.GetHUD().setLifeCounter(playerLives);
     }
 
     public bool isDeath() { return hp == 0; }
@@ -93,7 +99,7 @@ public class PlayerStatisticsController : MonoBehaviour
 
     public void increaseHP(){
         hp++;
-        HUDScript.instance.updateHpBattery(hp);
+        UIManager.instance.GetHUD().updateHpBattery(hp);
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
@@ -104,7 +110,7 @@ public class PlayerStatisticsController : MonoBehaviour
                 return;
 
             hp--;
-            HUDScript.instance.updateHpBattery(hp);
+            UIManager.instance.GetHUD().updateHpBattery(hp);
             if (hp == 0) 
                 death(deathEvent);
             else
@@ -122,7 +128,7 @@ public class PlayerStatisticsController : MonoBehaviour
     {
         hp = 0;
         this.decreaseLives();
-        BlackFadeScreen.instance.startFade();
+        UIManager.instance.GetBlackFadeScreen().startFade();
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
