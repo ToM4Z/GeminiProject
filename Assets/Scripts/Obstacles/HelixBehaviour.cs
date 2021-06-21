@@ -42,7 +42,7 @@ public class HelixBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
-            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.HITTED,false);
+            collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.HITTED,false);
         }
     }
 }

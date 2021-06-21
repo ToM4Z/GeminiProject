@@ -26,7 +26,7 @@ public class ElementalSpit : MonoBehaviour
     void Start()
     {
         particle = GetComponent<ParticleSystem>();
-        particle.trigger.AddCollider(PlayerStatisticsController.instance.GetComponent<Collider>());
+        particle.trigger.AddCollider(PlayerStatistics.instance.GetComponent<Collider>());
     }
 
     // there is no need to check if the gameobject that triggered the particles is the player
@@ -36,7 +36,7 @@ public class ElementalSpit : MonoBehaviour
         int insideCount = particle.GetTriggerParticles(ParticleSystemTriggerEventType.Inside, new List<ParticleSystem.Particle>());
 
         if (insideCount >= numberParticleTrigger)
-            PlayerStatisticsController.instance.hurt( 
+            PlayerStatistics.instance.hurt( 
                 element == Element.FIRE ? 
                     DeathEvent.BURNED
                 :

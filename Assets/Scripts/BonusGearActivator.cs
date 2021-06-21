@@ -27,7 +27,7 @@ public class BonusGearActivator : MonoBehaviour
         //It will be activated only the first time that the player jumps under it
         anim.Play("BonusBlockActivation");
         if(firstTime){
-            PlayerStatisticsController player = other.GetComponentInParent<PlayerStatisticsController>();
+            PlayerStatistics player = other.GetComponentInParent<PlayerStatistics>();
             if (player != null) {
                 activationSFX.Play();
                 spawnBonusGears();

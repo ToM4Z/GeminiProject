@@ -42,8 +42,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void updateVolume(float v){
-        GlobalVariables.Volume = v;
-       // Debug.Log(GlobalVariables.Volume);
+        Managers.Audio.soundVolume = v;
     }
 
     public void goToController(){

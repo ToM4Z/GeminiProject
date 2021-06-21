@@ -57,7 +57,7 @@ public class BoulderPath : MonoBehaviour, IResettable
 
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
-            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.MASHED,true);
+            collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.MASHED,true);
         }
         else if (collision.gameObject.tag == "Enemy")
         {

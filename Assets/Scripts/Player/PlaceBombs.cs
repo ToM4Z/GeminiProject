@@ -12,16 +12,16 @@ using UnityEngine;
 */
 public class PlaceBombs : MonoBehaviour
 {
-    PlayerStatisticsController statistics;
-    PlayerInputModelController player;
+    PlayerStatistics statistics;
+    PlayerController player;
 
     [SerializeField] GameObject bomb;
     GameObject lastBomb;
 
     void Start()
     {
-        player = GetComponent<PlayerInputModelController>();
-        statistics = PlayerStatisticsController.instance;
+        player = GetComponent<PlayerController>();
+        statistics = PlayerStatistics.instance;
     }
 
     void Update()
@@ -39,7 +39,7 @@ public class PlaceBombs : MonoBehaviour
 
     private bool canPlaceBomb()
     {
-        return player.status == PlayerInputModelController.Status.IDLE
-            || player.status == PlayerInputModelController.Status.CROUCH;
+        return player.status == PlayerController.Status.IDLE
+            || player.status == PlayerController.Status.CROUCH;
     }
 }

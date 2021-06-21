@@ -22,7 +22,7 @@ public class NewMovingPlatform : MonoBehaviour
 
     void Start()
     {
-        player = PlayerStatisticsController.instance.transform;
+        player = PlayerStatistics.instance.transform;
         playerParent = player.parent;
 
 

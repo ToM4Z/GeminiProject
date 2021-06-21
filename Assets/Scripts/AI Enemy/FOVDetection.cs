@@ -30,14 +30,14 @@ public class FOVDetection : MonoBehaviour
     // Indicates that the player is actually visible
     public bool isPlayerVisible { get; private set; } = false;
 
-    private PlayerStatisticsController player;
+    private PlayerStatistics player;
     public Vector3 lastPlayerPositionKnown { get;  private set; }
 
     private float originVA, originVR;
 
     void Start()
     {
-        player = PlayerStatisticsController.instance;
+        player = PlayerStatistics.instance;
         targetMask = LayerMask.GetMask("Player");
         obstacleMask = LayerMask.GetMask("Static"); //Default
         originVA = viewAngle;

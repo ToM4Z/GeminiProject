@@ -147,7 +147,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     // General Start Method in which the enemy start from IDLE state
     protected virtual void Start()
     {
-        player = PlayerStatisticsController.instance.transform;
+        player = PlayerStatistics.instance.transform;
         agent = GetComponent<NavMeshAgent>();
         fov = GetComponent<FOVDetection>();
         animator = GetComponentInChildren<Animator>();
@@ -504,7 +504,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         foreach (AttackTrigger t in attackTriggers)
             if (t.EnteredTrigger)
             {
-                PlayerStatisticsController.instance.hurt(typeAttack);
+                PlayerStatistics.instance.hurt(typeAttack);
                 break;
             }
     }
