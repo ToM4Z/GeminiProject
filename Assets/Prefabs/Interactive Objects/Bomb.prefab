@@ -292,7 +292,7 @@ MonoBehaviour:
   bombExplosionPrefab: {fileID: 6457622696630643955, guid: 1e1166462cee4c84593bde60f1655cac, type: 3}
   bombFuseSFX: {fileID: 8892080643339987363}
   detonationTime: 5
-  radiusExplosion: 5
+  radiusExplosion: 2
   power: 5
   upforce: 1
 --- !u!54 &3560575844088867680
