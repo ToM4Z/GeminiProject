@@ -18,7 +18,7 @@ public class PoolBehaviour : MonoBehaviour
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
             Debug.Log("SONO ENTRATO NELLA POZZA DI VELENO");
-            collision.GetComponent<PlayerStatisticsController>().hurt(DeathEvent.HITTED,true);
+            collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.HITTED,true);
         }
     }
 }

@@ -17,7 +17,7 @@ public class LifeUP : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other) {
-        PlayerStatisticsController player = other.GetComponent<PlayerStatisticsController>();
+        PlayerStatistics player = other.GetComponent<PlayerStatistics>();
         //Check if the other object is a PlayerController
         if (player != null) {
             //If it is the player, increase its HP

@@ -22,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Cancel") && !UIManager.instance.GetVictoryScreen().getActived() /*&& !UIManager.instance.GetGameOverScreen().getActived()*/){
+        if(Input.GetButtonDown("Escape") && !UIManager.instance.GetVictoryScreen().getActived() /*&& !UIManager.instance.GetGameOverScreen().getActived()*/){
             if (GlobalVariables.isPaused)
                 Unpause();
             else
@@ -54,7 +54,7 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
-        public void PauseToOption(){
+    public void PauseToOption(){
         pausePanel.SetActive(false);
         optionPanel.SetActive(true);
     }
@@ -73,14 +73,14 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void updateVolume(float v){
-        GlobalVariables.Volume = v;
-        //Debug.Log(GlobalVariables.Volume);
+        Managers.Audio.soundVolume = v;
     }
 
     public void BackToHub(){
        // SceneManager.LoadScene("Hub"); 
     }
-        public void goToController(){
+
+    public void goToController(){
         keyboardMappingImage.SetActive(false);
         gamepadMappingImage.SetActive(true);
     }

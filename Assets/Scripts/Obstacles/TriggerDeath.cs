@@ -13,7 +13,7 @@ public class TriggerDeath : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerStatisticsController.instance.hurt(DeathEvent.FALLED_IN_VACUUM, true);
+            PlayerStatistics.instance.hurt(DeathEvent.FALLED_IN_VACUUM, true);
         }
     }
 }

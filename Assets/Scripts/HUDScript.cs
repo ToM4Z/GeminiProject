@@ -35,10 +35,10 @@ public class HUDScript : MonoBehaviour
         orangeHP = Resources.Load<Sprite>("HUD/Orange_HP");
         redHP = Resources.Load<Sprite>("HUD/Red_HP");
 
-        this.setBombCounter(PlayerStatisticsController.instance.bombCount);
-        this.setLifeCounter(PlayerStatisticsController.instance.playerLives);
-        this.setGearBonusCounter(PlayerStatisticsController.instance.bonusGearCount);
-        this.setGearCounter(PlayerStatisticsController.instance.normalGearCount);
+        this.setBombCounter(PlayerStatistics.instance.bombCount);
+        this.setLifeCounter(PlayerStatistics.instance.lives);
+        this.setGearBonusCounter(PlayerStatistics.instance.bonusGearCount);
+        this.setGearCounter(PlayerStatistics.instance.normalGearCount);
         
     }
 

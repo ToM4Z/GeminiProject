@@ -61,7 +61,7 @@ public class AIElementalEnemy : AIEnemy
         foreach (AttackTrigger t in attackTriggersForMeleeAttackElementalEnemy)
             if (t.EnteredTrigger)
             {
-                PlayerStatisticsController.instance.hurt(typeAttack);
+                PlayerStatistics.instance.hurt(typeAttack);
                 break;
             }
 

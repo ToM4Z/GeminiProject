@@ -33,7 +33,17 @@ public class RespawnManager : MonoBehaviour, IGameManager
 
     private void OnPlayerDeath(DeathEvent deathEvent) {
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
-        StartCoroutine(Respawn());
+
+        if (PlayerStatistics.instance.lives > 0)
+        {
+            UIManager.instance.GetBlackFadeScreen().startFade();
+            StartCoroutine(Respawn());
+        }
+        else
+        {
+            GlobalVariables.GameOver = true;
+            GameOverScreen.instance.ActiveGameOverScreen();
+        }
     }
 
     public void setRespawn(Vector3 pos, Quaternion rot)

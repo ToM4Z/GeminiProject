@@ -39,7 +39,9 @@ public class EndPoint : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             activated = true;
-            other.GetComponent<PlayerInputModelController>().OnVictory();
+            GlobalVariables.Win = true;
+
+            other.GetComponent<PlayerController>().OnVictory();
             UIManager.instance.GetVictoryScreen().ActiveVictoryScreen();
             GetComponentInChildren<Animator>().SetTrigger("EndScene");
             vrcam.Priority = 20;

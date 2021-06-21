@@ -50,7 +50,7 @@ public class VictoryScreen : MonoBehaviour
     }
 
     private IEnumerator CountNormalGear(){
-        for(int i = 1; i <= PlayerStatisticsController.instance.normalGearCountToCalculateScore; i++){
+        for(int i = 1; i <= PlayerStatistics.instance.normalGearCountToCalculateScore; i++){
             scoreToShow += 10;
             score.text = scoreToShow + "";
             scoreSfx.Play();
@@ -59,7 +59,7 @@ public class VictoryScreen : MonoBehaviour
     }
 
     private IEnumerator CountBonusGear(){
-        for(int i = 1; i <= PlayerStatisticsController.instance.bonusGearCount; i++){
+        for(int i = 1; i <= PlayerStatistics.instance.bonusGearCount; i++){
             scoreToShow += 50;
             score.text = scoreToShow + "";
             scoreSfx.Play();

@@ -9,8 +9,8 @@
 public static class GlobalVariables
 {
     public static bool isPaused = false;
-
-    public static float Volume = 1f;
+    public static bool Win = false;
+    public static bool GameOver = false;
 
     public const string DEATH = "DEATH";
     public const string RESET = "RESET";
