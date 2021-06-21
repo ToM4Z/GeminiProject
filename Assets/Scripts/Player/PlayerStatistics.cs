@@ -30,12 +30,12 @@ public class PlayerStatistics : MonoBehaviour
     public int lives = 3;
     [SerializeField] private int maxHP;
 
-    public int normalGearCount { get; private set; }
+    public int normalGearCount;
 
     //This variable is used to calculate the score, because the normal count will be setted to 0 when we have
     //100 of them and so we will avoid to calculate the final score with 0.
     public int normalGearCountToCalculateScore { get; private set; }
-    public int bonusGearCount { get; private set; }
+    public int bonusGearCount;
     public int bombCount { get; private set; }
 
     private PlayerController playerController;
@@ -126,6 +126,7 @@ public class PlayerStatistics : MonoBehaviour
         hp = 0;
         decreaseLives();
         print("DEATH BY " + deathEvent.ToString());
+        Managers.Collectables.RespawnCollectables();
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
     }

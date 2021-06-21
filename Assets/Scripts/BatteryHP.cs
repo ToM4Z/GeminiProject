@@ -23,9 +23,11 @@ public class BatteryHP : MonoBehaviour
         if (player != null) {
             //If it is the player, increase its HP
             player.increaseHP();
+            Managers.Collectables.CollectedItem(this.gameObject);
+            this.gameObject.SetActive(false);
         }
 
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
         
     }
 }
