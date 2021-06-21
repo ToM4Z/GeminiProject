@@ -126,3 +126,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  maxDistance: 15
+  explosionFX: {fileID: 6457622696630643955, guid: 1e1166462cee4c84593bde60f1655cac, type: 3}
