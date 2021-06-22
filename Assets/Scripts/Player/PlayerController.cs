@@ -464,7 +464,6 @@ public class PlayerController : MonoBehaviour
                 }
             case Status.SLIDE:
                 {
-                    print("Start slide");
                     anim.Play("Slide");
 
                     armActualAttack = foots[0];

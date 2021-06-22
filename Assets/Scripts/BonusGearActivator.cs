@@ -28,11 +28,12 @@ public class BonusGearActivator : MonoBehaviour
         anim.Play("BonusBlockActivation");
         if(firstTime){
             PlayerStatistics player = other.GetComponentInParent<PlayerStatistics>();
-            if (player != null) {
+            if (player != null)
+            {
+                firstTime = false;
                 activationSFX.Play();
                 spawnBonusGears();
             }
-            firstTime = false;
         }
         
     }
