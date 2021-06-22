@@ -9,6 +9,7 @@ TagManager:
   - TriggerDeath
   - MovingPlatform
   - Collectable
+  - Ambiental Object to Reset
   layers:
   - Default
   - TransparentFX
