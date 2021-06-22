@@ -43,6 +43,9 @@ public class AttackTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         if (other.CompareTag(collisionTag))
         {
             hitted = other.gameObject;
@@ -52,6 +55,9 @@ public class AttackTrigger : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        if (other.isTrigger)
+            return;
+
         if (other.CompareTag(collisionTag))
         {
             hitted = null;
