@@ -124,7 +124,10 @@ public class PlayerStatistics : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        decreaseLives();
+        if (lives > 0)
+            decreaseLives();
+        else
+            lives--;
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
