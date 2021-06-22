@@ -28,6 +28,7 @@ public class Checkpoint : MonoBehaviour
             myRenderer.material = activatedMAT;
 
             ActivateCheckPoint();
+            Managers.Collectables.ClearCollectedList();
         }
     }
 }
