@@ -43,6 +43,8 @@ public class PauseMenu : MonoBehaviour
     public void Unpause(){
         unpauseClip.Play();
         pausePanel.gameObject.SetActive(false);
+        optionPanel.gameObject.SetActive(false);
+        controlsPanel.gameObject.SetActive(false);
         Time.timeScale = 1f;
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
         Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, true, MessengerMode.DONT_REQUIRE_LISTENER);
