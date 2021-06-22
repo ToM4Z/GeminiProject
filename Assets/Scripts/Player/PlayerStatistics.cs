@@ -132,7 +132,6 @@ public class PlayerStatistics : MonoBehaviour
         else
             lives--;
         print("DEATH BY " + deathEvent.ToString());
-        Managers.Collectables.RespawnCollectables();
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
     }
