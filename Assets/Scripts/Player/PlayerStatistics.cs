@@ -95,8 +95,11 @@ public class PlayerStatistics : MonoBehaviour
     public int getHP() { return hp; }
 
     public void increaseHP(){
-        hp++;
-        UIManager.instance.GetHUD().updateHpBattery(hp);
+        if(hp + 1 <= maxHP)
+        {
+            hp++;
+            UIManager.instance.GetHUD().updateHpBattery(hp);
+        }
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)

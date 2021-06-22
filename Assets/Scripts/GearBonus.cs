@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class GearBonus : MonoBehaviour
 {
-    public float speedSpin = 1.0f;
     public float time = 10f;
+
     void Start()
     {
-        
+        Destroy(gameObject, time);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(0,0,speedSpin);
-        Destroy (gameObject, time);
-    }
 
     void OnTriggerEnter(Collider other) {
         PlayerStatistics player = other.GetComponent<PlayerStatistics>();
@@ -24,11 +18,9 @@ public class GearBonus : MonoBehaviour
         if (player != null) {
             //If it is the player, increas its Bonus Gear Counter
             player.increaseBonusGear();
+            Managers.Audio.PlayTin();
             Destroy(this.gameObject);
         }
-
-        
-        
     }
 
     public void setTime(float t){
