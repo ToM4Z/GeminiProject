@@ -21,8 +21,10 @@ public class Gear : MonoBehaviour
         if (player != null) {
             //If it is the player, increase Gear Counter
             Managers.Audio.PlayTin();
+            Managers.Collectables.CollectedItem(this.gameObject);
             player.increaseNormalGear();
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 
