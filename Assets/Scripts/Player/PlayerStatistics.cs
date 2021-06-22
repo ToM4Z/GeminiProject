@@ -101,11 +101,11 @@ public class PlayerStatistics : MonoBehaviour
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
     {
-        if (playerController.Invulnerability || isDeath())
-            return;
-
         if (!fatal)
         {
+            if (playerController.Invulnerability || isDeath())
+                return;
+
             hp--;
             UIManager.instance.GetHUD().updateHpBattery(hp);
             if (hp == 0) 
@@ -117,7 +117,7 @@ public class PlayerStatistics : MonoBehaviour
             }
 
         }
-        else
+        else if(hp > 0)
             death(deathEvent);
     }
 

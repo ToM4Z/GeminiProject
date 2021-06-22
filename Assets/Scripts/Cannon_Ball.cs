@@ -2,31 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Authors: Andrea De Seta
+ *          Thomas Voce
+ */
 public class Cannon_Ball : MonoBehaviour
 {
-    // Start is called before the first frame update
     public float speed = 0.1f;
+    public float maxDistance = 10;
+    private Vector3 originPos;
+    [SerializeField] GameObject explosionFX;
+
     void Start()
     {
-        
+        originPos = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(0,0,speed * Time.deltaTime);
-        Destroy (gameObject, 10);
+
+        // if I'm over the limit distance from where I shoot, I explode
+        if (Vector3.Distance(originPos, transform.position) > maxDistance)
+            Explode();
     }
 
     void OnTriggerEnter(Collider other) {
-        PlayerStatistics player = other.GetComponent<PlayerStatistics>();
-        //Check if the other object is a PlayerController
-        if (player != null) {
-            //If it is the player, damage it
-            player.hurt(DeathEvent.HITTED);
-        }
-        
-        if(!other.isTrigger)
-            Destroy(this.gameObject);
+        // if the gameobject hitted is the player, damage him
+        if (other.GetComponent<PlayerStatistics>() != null)
+            PlayerStatistics.instance.hurt(DeathEvent.HITTED);
+
+        // if the gameobject hitted can be hitted, damage him
+        else if (other.GetComponent<IHittable>() != null)
+            other.GetComponent<IHittable>().hit();
+
+        // if the other object isn't a trigger, explode
+        if (!other.isTrigger)
+            Explode();
+    }
+
+    private void Explode()
+    {
+        Instantiate(explosionFX, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
     }
 }

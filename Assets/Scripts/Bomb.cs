@@ -48,12 +48,20 @@ public class Bomb : MonoBehaviour
         //I take all the colliders in the spheric overlap and I loop on them
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         foreach (var hitCollider in hitColliders)
-        {   
+        {
             //If I collide with a destroyable wall, I call its function in order to destroy it
-            if (hitCollider.GetComponent<DestroyableWallController>() != null){
+            if (hitCollider.GetComponent<DestroyableWallController>() != null)
+            {
                 DestroyableWallController controller = hitCollider.GetComponent<DestroyableWallController>();
                 controller.DestroyWall(power, center, radius, upforce, ForceMode.Impulse);
             }
+            // If I collide an enemy, I hit it 
+            else if (hitCollider.GetComponent<IHittable>() != null)
+                hitCollider.GetComponent<IHittable>().hit();
+
+            // If I collide player, I hit him
+            else if (hitCollider.GetComponent<PlayerStatistics>() != null)
+                PlayerStatistics.instance.hurt(DeathEvent.HITTED);
                 
         }
         
