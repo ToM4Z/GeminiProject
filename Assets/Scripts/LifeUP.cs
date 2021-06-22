@@ -10,9 +10,8 @@ public class LifeUP : MonoBehaviour
         if (player != null) {
             //If it is the player, increase its HP
             player.increaseLives();
-        }
-
-        Destroy(this.gameObject);
-        
+            Managers.Audio.PlayTin();
+            Destroy(this.gameObject);
+        }        
     }
 }

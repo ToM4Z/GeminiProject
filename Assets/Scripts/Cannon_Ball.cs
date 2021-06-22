@@ -27,7 +27,11 @@ public class Cannon_Ball : MonoBehaviour
             Explode();
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.isTrigger)
+            return;
+
         // if the gameobject hitted is the player, damage him
         if (other.GetComponent<PlayerStatistics>() != null)
             PlayerStatistics.instance.hurt(DeathEvent.HITTED);
@@ -36,9 +40,7 @@ public class Cannon_Ball : MonoBehaviour
         else if (other.GetComponent<IHittable>() != null)
             other.GetComponent<IHittable>().hit();
 
-        // if the other object isn't a trigger, explode
-        if (!other.isTrigger)
-            Explode();
+        Explode();
     }
 
     private void Explode()
