@@ -1173,12 +1173,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4989282553279940024}
+  - component: {fileID: 5836968414984652735}
   - component: {fileID: 9096950253279595113}
   - component: {fileID: 4633881489081153315}
-  - component: {fileID: 5836968414984652735}
+  - component: {fileID: 147043764854402814}
   - component: {fileID: 5415413729844539319}
   m_Layer: 0
-  m_Name: Player Manager
+  m_Name: Manager and Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1201,6 +1202,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5836968414984652735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4989282553279939975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f541c0735ea23a54f815422f6767b82c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &9096950253279595113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1226,7 +1239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DropItem: {fileID: 2329708832348443860, guid: b4e33b06c42b4f343b97a32ad2676ae5, type: 3}
---- !u!114 &5836968414984652735
+--- !u!114 &147043764854402814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1235,7 +1248,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4989282553279939975}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f541c0735ea23a54f815422f6767b82c, type: 3}
+  m_Script: {fileID: 11500000, guid: 03ae076c31dda3a45b9bdd4f587aea72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5415413729844539319
@@ -1278,8 +1291,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4989282554079256708}
-  m_LocalRotation: {x: 0.09397086, y: 0.41644165, z: -0.04332486, w: 0.9032545}
-  m_LocalPosition: {x: -4.10642, y: 2.8000002, z: -3.506752}
+  m_LocalRotation: {x: -0.043324843, y: 0.90325457, z: -0.09397081, w: -0.4164417}
+  m_LocalPosition: {x: 4.10642, y: 2.8, z: 3.506753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4989282553279940024}
@@ -1742,7 +1755,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551349591069781}
-  m_LocalRotation: {x: 0.12265148, y: 0.414853, z: -0.056547944, w: 0.8998088}
+  m_LocalRotation: {x: -0.056547914, y: 0.8998089, z: -0.122651435, w: -0.414853}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1816,7 +1829,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551349749659580}
-  m_LocalRotation: {x: 0.09397086, y: 0.41644168, z: -0.04332487, w: 0.90325457}
+  m_LocalRotation: {x: -0.04332484, y: 0.90325457, z: -0.09397081, w: -0.41644165}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2037,7 +2050,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551350439519030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.10642, y: 2.8000002, z: -3.506752}
+  m_LocalPosition: {x: 4.10642, y: 2.8, z: 3.506753}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6050551349591069783}
@@ -2213,7 +2226,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6050551350459087309}
-  m_LocalRotation: {x: 0.06542651, y: 0.4176013, z: -0.03016462, w: 0.90576965}
+  m_LocalRotation: {x: -0.030164601, y: 0.9057697, z: -0.06542649, w: -0.41760126}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4268,6 +4281,7 @@ MonoBehaviour:
   terminalVelocity: -10
   minFall: -1.5
   gravity: -9.81
+  InvulnerabilityTime: 3
   followTarget: {fileID: 7986274134840693170}
   hands:
   - {fileID: 329523886967835837}
@@ -4283,7 +4297,6 @@ MonoBehaviour:
   InvertDirectionRespectToCamera: 0
   burnFX: {fileID: 924825455226071666, guid: 09d5e159c6d0f514f91c976c4638ef67, type: 3}
   freezeFX: {fileID: 3096690529378592232, guid: 546b328ef3698c940a835ea8a8c71fe2, type: 3}
-  hitFX: {fileID: 3800609877051270332, guid: 0ed30683107fd054fb8d799cfb284a04, type: 3}
   footStepSFX:
   - {fileID: 8300000, guid: dc84e6a9849c8804194102b37c1bbf40, type: 3}
   - {fileID: 8300000, guid: 99b269c3972dc4644a00e0663d26a1a0, type: 3}
@@ -4315,9 +4328,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a303ebb45920a14c8a45d663c366c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLives: 3
+  lives: 3
   maxHP: 3
-  invulnerabilityTime: 3
+  normalGearCount: 0
+  bonusGearCount: 0
 --- !u!114 &8607938967456505970
 MonoBehaviour:
   m_ObjectHideFlags: 0
