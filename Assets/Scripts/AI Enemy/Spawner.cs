@@ -24,6 +24,7 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
     private Animator animator;
 
     private bool activate = false;
+    private bool hitted = false;
 
     private void Start()
     {
@@ -76,6 +77,10 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
 
     public bool hit()
     {
+        if (hitted)
+            return false;
+
+        hitted = true;
         activate = false;
 
         foreach (Collider c in GetComponentsInChildren<Collider>())
@@ -103,6 +108,7 @@ public class Spawner : MonoBehaviour, IHittable, IResettable
         material.DisableKeyword("_EMISSION");
         particle.Stop();
         activate = false;
+        hitted = false;
 
         foreach (Collider c in GetComponentsInChildren<Collider>())
             c.enabled = true;

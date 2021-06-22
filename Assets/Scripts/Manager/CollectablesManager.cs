@@ -7,7 +7,6 @@ public class CollectablesManager : MonoBehaviour, IGameManager
     public ManagerStatus status { get; private set; }
     private List<GameObject> collectables = new List<GameObject>();
     private List<GameObject> collectedItems = new List<GameObject>();
-    [SerializeField] private GameObject playerStatistics;
     private int gearCount;
     private int bonusGearCount;
 
@@ -33,8 +32,8 @@ public class CollectablesManager : MonoBehaviour, IGameManager
     public void ClearCollectedList()
     {
         collectedItems.Clear();
-        this.gearCount = playerStatistics.GetComponent<PlayerStatistics>().normalGearCount;
-        this.bonusGearCount = playerStatistics.GetComponent<PlayerStatistics>().bonusGearCount;
+        this.gearCount = PlayerStatistics.instance.normalGearCount;
+        this.bonusGearCount = PlayerStatistics.instance.bonusGearCount;
 
     }
 
@@ -51,8 +50,8 @@ public class CollectablesManager : MonoBehaviour, IGameManager
             collectables.Add(collectable);
         }
         collectedItems.Clear();
-        playerStatistics.GetComponent<PlayerStatistics>().normalGearCount = gearCount;
-        playerStatistics.GetComponent<PlayerStatistics>().bonusGearCount = this.bonusGearCount;
+        PlayerStatistics.instance.normalGearCount = gearCount;
+        PlayerStatistics.instance.bonusGearCount = this.bonusGearCount;
         UIManager.instance.GetHUD().setGearCounter(gearCount);
         UIManager.instance.GetHUD().setGearBonusCounter(bonusGearCount);
     }

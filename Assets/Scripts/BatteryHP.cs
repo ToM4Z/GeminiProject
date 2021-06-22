@@ -5,18 +5,6 @@ using UnityEngine;
 public class BatteryHP : MonoBehaviour
 {
 
-    public float speedSpin = 1.0f;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(0,speedSpin,0);
-    }
-
     void OnTriggerEnter(Collider other) {
         PlayerStatistics player = other.GetComponent<PlayerStatistics>();
         //Check if the other object is a PlayerController
@@ -24,10 +12,8 @@ public class BatteryHP : MonoBehaviour
             //If it is the player, increase its HP
             player.increaseHP();
             Managers.Collectables.CollectedItem(this.gameObject);
+            Managers.Audio.PlayTin();
             this.gameObject.SetActive(false);
-        }
-
-        //Destroy(this.gameObject);
-        
+        }        
     }
 }

@@ -49,6 +49,9 @@ public class Bomb : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         foreach (var hitCollider in hitColliders)
         {
+            if (hitCollider.isTrigger)
+                continue;
+
             //If I collide with a destroyable wall, I call its function in order to destroy it
             if (hitCollider.GetComponent<DestroyableWallController>() != null)
             {

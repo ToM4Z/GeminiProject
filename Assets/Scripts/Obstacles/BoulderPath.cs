@@ -2,58 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
+using PathCreation;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class BoulderPath : MonoBehaviour, IResettable
 {
-    protected NavMeshAgent agent;
-    [SerializeField] public PatrolPath patrolPath;
-    int m_PathDestinationNodeIndex = 1;
     public bool isActive;
     private Vector3 originPos;
     private Quaternion originRot;
+    public PathCreator pathCreator;
+    public float speed = 7;
+    float distanceTravelled = 0;
+    Vector3 endpoint;
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        agent.autoBraking = false;
         isActive = false;
 
         originPos = transform.position;
         originRot = transform.rotation;
+
+        transform.position = pathCreator.path.GetPointAtDistance(0);
+        endpoint = pathCreator.path.GetPoint(pathCreator.path.NumPoints - 1);
     }
 
     void Update()
     {
-        if (isActive && agent.remainingDistance < 0.25f)
+        if (isActive)
         {
-            m_PathDestinationNodeIndex++;
+            distanceTravelled += speed * Time.deltaTime;
+            transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled);
 
-            if (m_PathDestinationNodeIndex == patrolPath.GetPathLength())
-            {
+            if (Vector3.Distance(transform.position, endpoint) < 2)
                 isActive = false;
-                gameObject.SetActive(false);
-            }
-            else
-                agent.SetDestination(GetDestinationOnPath());
         }
     }
 
     public void Reset()
     {
         isActive = false;
-        m_PathDestinationNodeIndex = 1;
 
         transform.position = originPos;
         transform.rotation = originRot;
-
-        agent.ResetPath();
+        distanceTravelled = 0;
     }
 
-    protected Vector3 GetDestinationOnPath()
-    {
-        return patrolPath.GetPositionOfPathNode(m_PathDestinationNodeIndex);
-    }
 
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
@@ -63,11 +55,5 @@ public class BoulderPath : MonoBehaviour, IResettable
         {
             collision.GetComponent<AIEnemy>().hit();
         }
-    }
-
-    public void Active()
-    {
-        isActive = true;
-        agent.SetDestination(GetDestinationOnPath());
     }
 }

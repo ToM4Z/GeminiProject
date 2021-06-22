@@ -95,8 +95,11 @@ public class PlayerStatistics : MonoBehaviour
     public int getHP() { return hp; }
 
     public void increaseHP(){
-        hp++;
-        UIManager.instance.GetHUD().updateHpBattery(hp);
+        if(hp + 1 <= maxHP)
+        {
+            hp++;
+            UIManager.instance.GetHUD().updateHpBattery(hp);
+        }
     }
 
     public void hurt(DeathEvent deathEvent, bool fatal = false)
@@ -124,9 +127,11 @@ public class PlayerStatistics : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
-        decreaseLives();
+        if (lives > 0)
+            decreaseLives();
+        else
+            lives--;
         print("DEATH BY " + deathEvent.ToString());
-        Managers.Collectables.RespawnCollectables();
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
     }
