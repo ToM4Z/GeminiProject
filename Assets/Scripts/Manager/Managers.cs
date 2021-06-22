@@ -14,6 +14,7 @@ using UnityEngine;
 [RequireComponent(typeof(RespawnManager))]
 [RequireComponent(typeof(AudioManager))]
 [RequireComponent(typeof(CollectablesManager))]
+[RequireComponent(typeof(AmbientalObjectsManager))]
 //[RequireComponent(typeof())]
 public class Managers : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class Managers : MonoBehaviour
     public static RespawnManager Respawn { get; private set; }
     public static AudioManager Audio { get; private set; }
     public static CollectablesManager Collectables { get; private set; }
+    public static AmbientalObjectsManager ResetSceneObjects { get; private set; }
 
     private List<IGameManager> _startSequence;
 
@@ -31,12 +33,14 @@ public class Managers : MonoBehaviour
         Respawn = GetComponent<RespawnManager>();
         Audio = GetComponent<AudioManager>();
         Collectables = GetComponent<CollectablesManager>();
+        ResetSceneObjects = GetComponent<AmbientalObjectsManager>();
 
         _startSequence = new List<IGameManager>();
         _startSequence.Add(Enemies);
         _startSequence.Add(Respawn);
         _startSequence.Add(Audio);
         _startSequence.Add(Collectables);
+        _startSequence.Add(ResetSceneObjects);
 
         StartCoroutine(StartupManagers());
     }
