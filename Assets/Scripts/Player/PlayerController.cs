@@ -75,7 +75,8 @@ public class PlayerController : MonoBehaviour
 
     public bool InvertDirectionRespectToCamera = false;
 
-    [SerializeField] private GameObject burnFX, freezeFX; 
+    [SerializeField] private GameObject burnFX, freezeFX;
+    [SerializeField] private ParticleSystem hitFX;
 
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX, hitSFX;
@@ -103,6 +104,7 @@ public class PlayerController : MonoBehaviour
         footStepSoundJustPlayed[0] = false;
         footStepSoundJustPlayed[1] = false;
 
+        hitFX.Stop();
         idleTimer = idleTime;
         status = Status.IDLE;
         _vertSpeed = minFall;
@@ -183,6 +185,7 @@ public class PlayerController : MonoBehaviour
                 Invulnerability = false;
                 invulnerabilityTimer = 0f;
                 materialHandler.resetMaterials();
+                hitFX.Stop();
             }
         }
 
@@ -636,6 +639,7 @@ public class PlayerController : MonoBehaviour
             case DeathEvent.HITTED:
             {
                 PlayClip(ref hitSFX);
+                hitFX.Play();
                 break;
             }
             case DeathEvent.BURNED:
