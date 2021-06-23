@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
 
                     _vertSpeed = minFall;
 
-                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && input == Vector3.zero)
+                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && anim.GetCurrentAnimatorStateInfo(1).IsName("Empty") && input == Vector3.zero)
                     {
                         idleTimer -= Time.deltaTime;
                         if (idleTimer <= 0)
@@ -223,7 +223,8 @@ public class PlayerController : MonoBehaviour
                     else
                         idleTimer = idleTime;
 
-                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && input != Vector3.zero)
+                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && 
+                        (input != Vector3.zero || !anim.GetCurrentAnimatorStateInfo(1).IsName("Empty")))
                     {
                         idleAnimIndex = 0;
                         anim.Play("Idle - Run H");
