@@ -40,6 +40,7 @@ public class PlaceBombs : MonoBehaviour
     private bool canPlaceBomb()
     {
         return player.status == PlayerController.Status.IDLE
-            || player.status == PlayerController.Status.CROUCH;
+            || player.status == PlayerController.Status.CROUCH
+            || player.status == PlayerController.Status.FALLING;
     }
 }

@@ -10,6 +10,8 @@ public class CollectablesManager : MonoBehaviour, IGameManager
     private int gearCount;
     private int bonusGearCount;
 
+    public GameObject eventFX;
+
     public void Startup()
     {
         collectables.AddRange(GameObject.FindGameObjectsWithTag("Collectable"));

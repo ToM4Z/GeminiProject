@@ -19,6 +19,8 @@ public class GearBonus : MonoBehaviour
             //If it is the player, increas its Bonus Gear Counter
             player.increaseBonusGear();
             Managers.Audio.PlayTin();
+            Instantiate(Managers.Collectables.eventFX, transform.position, Quaternion.identity);
+
             Destroy(this.gameObject);
         }
     }

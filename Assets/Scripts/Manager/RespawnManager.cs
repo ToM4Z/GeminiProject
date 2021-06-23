@@ -51,6 +51,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
         respawnPos = pos;
         respawnRot = rot;
         Managers.Enemies.ClearEnemyDeadList();
+        Managers.Collectables.ClearCollectedList();
     }
 
     private IEnumerator Respawn()

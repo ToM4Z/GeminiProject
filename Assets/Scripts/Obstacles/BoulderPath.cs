@@ -31,6 +31,7 @@ public class BoulderPath : MonoBehaviour, IResettable
         {
             distanceTravelled += speed * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled);
+            transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled);
 
             if (Vector3.Distance(transform.position, endpoint) < 2)
                 isActive = false;
