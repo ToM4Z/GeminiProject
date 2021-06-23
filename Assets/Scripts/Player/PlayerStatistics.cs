@@ -127,6 +127,7 @@ public class PlayerStatistics : MonoBehaviour
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
+        UIManager.instance.GetHUD().updateHpBattery(hp);
         if (lives > 0)
             decreaseLives();
         else

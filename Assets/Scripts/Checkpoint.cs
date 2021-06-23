@@ -16,7 +16,7 @@ public class Checkpoint : MonoBehaviour
     private void ActivateCheckPoint()
     {
         activated = true;
-
+        UIManager.instance.GetHUD().ActivateCheckpointImage();
         Vector3 pos = transform.position;
         pos.y += 1;
         Instantiate(Managers.Collectables.eventFX, pos, Quaternion.identity);

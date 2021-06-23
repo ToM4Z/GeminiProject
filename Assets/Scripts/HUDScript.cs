@@ -12,8 +12,11 @@ public class HUDScript : MonoBehaviour
     Text lifeCounter;
 
     Image hpBattery;
+    [SerializeField] private GameObject Checkpoint;
 
-    Sprite greenHP, orangeHP, redHP;
+    AudioSource checkpointSFX;
+
+    Sprite greenHP, orangeHP, redHP, emptyHP;
 
     private T GetChildComponentByName<T>(string name) where T : Component {
         foreach (T component in GetComponentsInChildren<T>(true)) {
@@ -30,10 +33,14 @@ public class HUDScript : MonoBehaviour
         gearBonusCounter = this.GetChildComponentByName<Text>("GearBonusCounter");
         bombCounter = this.GetChildComponentByName<Text>("BombCounter");
         hpBattery = this.GetChildComponentByName<Image>("HP");
+        checkpointSFX = this.GetChildComponentByName<AudioSource>("Checkpoint Audio");
+
+        Checkpoint.SetActive(false);
 
         greenHP = Resources.Load<Sprite>("HUD/Green_HP");
         orangeHP = Resources.Load<Sprite>("HUD/Orange_HP");
         redHP = Resources.Load<Sprite>("HUD/Red_HP");
+        emptyHP = Resources.Load<Sprite>("HUD/Empty_HP");
 
         this.setBombCounter(PlayerStatistics.instance.bombCount);
         this.setLifeCounter(PlayerStatistics.instance.lives);
@@ -75,6 +82,20 @@ public class HUDScript : MonoBehaviour
         else if(hp == 1){
             hpBattery.sprite = redHP;
         }
+        else if(hp == 0){
+            hpBattery.sprite = emptyHP;
+        }
         
+    }
+
+    public void ActivateCheckpointImage(){
+        Checkpoint.SetActive(true);
+        checkpointSFX.Play();
+        StartCoroutine(CheckpointOnScreen());
+    }
+
+    private IEnumerator CheckpointOnScreen(){
+        yield return new WaitForSeconds(4.0f);
+        Checkpoint.SetActive(false);
     }
 }
