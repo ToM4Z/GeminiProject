@@ -13,6 +13,8 @@ public class BatteryHP : MonoBehaviour
             player.increaseHP();
             Managers.Collectables.CollectedItem(this.gameObject);
             Managers.Audio.PlayTin();
+            Instantiate(Managers.Collectables.eventFX, transform.position, Quaternion.identity);
+
             this.gameObject.SetActive(false);
         }        
     }

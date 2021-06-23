@@ -39,6 +39,8 @@ public class BombSpawner : MonoBehaviour
             Managers.Audio.PlayTin();
             player.increaseBomb();
 
+            Instantiate(Managers.Collectables.eventFX, transform.position, Quaternion.identity);
+
             // disactivate object and wait respawn time
             timer = RespawnTime;
             _trigger.enabled = false;
