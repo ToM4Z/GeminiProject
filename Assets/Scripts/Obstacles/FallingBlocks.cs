@@ -16,6 +16,7 @@ public class FallingBlocks : MonoBehaviour
     public float speed;
     public bool isTimed;
     [SerializeField] private BoxCollider FallingBoxCollider;
+    AudioSource _audio;
     void Start()
     {
         this.startPos = transform.position;
@@ -30,6 +31,7 @@ public class FallingBlocks : MonoBehaviour
         if(isTimed) {
             deltaFall = 5.0f;
         }
+        _audio = this.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -57,6 +59,7 @@ public class FallingBlocks : MonoBehaviour
         if(transform.position == endPos && descending) {
             descending = false;
             startTime = 0;
+            _audio.Play();
         }
         if(transform.position == startPos && !descending) {
             triggered = false;

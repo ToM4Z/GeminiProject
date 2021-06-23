@@ -13,6 +13,7 @@ public class HelixBehaviour : MonoBehaviour
     public ClockVerse clockVerse;
     private Quaternion startRot;
     private Quaternion endRot;
+    AudioSource _audio;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +22,15 @@ public class HelixBehaviour : MonoBehaviour
         this.durationTime = 10.0f;
         startRot.eulerAngles = transform.rotation.eulerAngles;
         endRot.eulerAngles = new Vector3(transform.rotation.eulerAngles.x,(int)clockVerse*45,transform.rotation.eulerAngles.z);
+        _audio = this.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!_audio.isPlaying) {
+            _audio.Play();
+        }
         this.transform.rotation = Quaternion.Lerp(startRot,endRot,startTime/durationTime);
         if(Approx((transform.rotation.eulerAngles.y + 0.01f)%45, 0.0f) && startTime > 0) {
             Quaternion temp = startRot;
