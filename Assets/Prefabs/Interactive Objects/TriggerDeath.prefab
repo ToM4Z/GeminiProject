@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3924173037024404373}
   - component: {fileID: 3924173037024404360}
   - component: {fileID: 3924173037024404372}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TriggerDeath
   m_TagString: TriggerDeath
   m_Icon: {fileID: 0}

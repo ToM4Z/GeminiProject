@@ -17,6 +17,10 @@ public class Checkpoint : MonoBehaviour
     {
         activated = true;
 
+        Vector3 pos = transform.position;
+        pos.y += 1;
+        Instantiate(Managers.Collectables.eventFX, pos, Quaternion.identity);
+
         Managers.Audio.PlayTin();
         Managers.Respawn.setRespawn(transform.position, transform.rotation);
     }
@@ -28,7 +32,6 @@ public class Checkpoint : MonoBehaviour
             myRenderer.material = activatedMAT;
 
             ActivateCheckPoint();
-            Managers.Collectables.ClearCollectedList();
         }
     }
 }

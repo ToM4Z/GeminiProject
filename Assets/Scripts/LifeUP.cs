@@ -11,6 +11,8 @@ public class LifeUP : MonoBehaviour
             //If it is the player, increase its HP
             player.increaseLives();
             Managers.Audio.PlayTin();
+            Instantiate(Managers.Collectables.eventFX, transform.position, Quaternion.identity);
+
             Destroy(this.gameObject);
         }        
     }
