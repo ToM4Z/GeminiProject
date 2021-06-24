@@ -46,7 +46,14 @@ public static class GlobalVariables
         }
     }
 
-    public static int SceneToLoad;
+    public static int PlayerLivesToReset = 3;
+
+    private static int _playerLives = 3;
+    public static int PlayerLives
+    {
+        get { return _playerLives; }
+        set {_playerLives = value; }
+    }
 
     public const string DEATH = "DEATH";
     public const string RESET = "RESET";
