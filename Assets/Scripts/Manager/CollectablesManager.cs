@@ -7,8 +7,10 @@ public class CollectablesManager : MonoBehaviour, IGameManager
     public ManagerStatus status { get; private set; }
     private List<GameObject> collectables = new List<GameObject>();
     private List<GameObject> collectedItems = new List<GameObject>();
+    private List<GameObject> gearDropped = new List<GameObject>();
     private int gearCount;
     private int bonusGearCount;
+    private int bombCount;
 
     public GameObject eventFX;
 
@@ -27,20 +29,20 @@ public class CollectablesManager : MonoBehaviour, IGameManager
         }
     }
 
-    private void UpdatePlayerStats() {
-        
-    }
-
     public void ClearCollectedList()
     {
         collectedItems.Clear();
         this.gearCount = PlayerStatistics.instance.normalGearCount;
         this.bonusGearCount = PlayerStatistics.instance.bonusGearCount;
-
+        this.bombCount = PlayerStatistics.instance.bombCount;
     }
 
     public void RespawnCollectables()
     {
+        foreach (GameObject gear in gearDropped)
+            Destroy(gear);
+        gearDropped.Clear();
+
         foreach (GameObject collectable in collectables) {
             if(collectable.name.Contains("SpawnerController") && collectable != null) {
                 collectable.GetComponent<BonusGearActivator>().firstTime = true;
@@ -53,9 +55,16 @@ public class CollectablesManager : MonoBehaviour, IGameManager
         }
         collectedItems.Clear();
         PlayerStatistics.instance.normalGearCount = gearCount;
-        PlayerStatistics.instance.bonusGearCount = this.bonusGearCount;
+        PlayerStatistics.instance.bonusGearCount = bonusGearCount;
+        PlayerStatistics.instance.bombCount = bombCount;
         UIManager.instance.GetHUD().setGearCounter(gearCount);
         UIManager.instance.GetHUD().setGearBonusCounter(bonusGearCount);
+        UIManager.instance.GetHUD().setBombCounter(bombCount);
+    }
+
+    public void AddGearDropped(GameObject go)
+    {
+        gearDropped.Add(go);
     }
 
     private void Awake()

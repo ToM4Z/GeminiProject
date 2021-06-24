@@ -35,7 +35,7 @@ public class PlayerStatistics : MonoBehaviour
     //100 of them and so we will avoid to calculate the final score with 0.
     public int normalGearCountToCalculateScore { get; private set; }
     public int bonusGearCount;
-    public int bombCount { get; private set; }
+    public int bombCount;
 
     private PlayerController playerController;
 
