@@ -12,7 +12,6 @@ public class GameOverScreen : MonoBehaviour
             Destroy(gameObject);
     }
 
-    [SerializeField] private AudioSource gameOverSfx;
     [SerializeField] private AudioSource clickSfx;
     [SerializeField] private GameObject gameOverPanel;
     private bool actived = false;
@@ -23,17 +22,10 @@ public class GameOverScreen : MonoBehaviour
         gameOverPanel.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void ActiveGameOverScreen(){
-        
+    public void ActiveGameOverScreen(){        
         actived = true;
         this.gameObject.SetActive(true);
-        gameOverSfx.Play();
+        Managers.Audio.PlayGameOver();
         StartCoroutine(WaitForThePianoSound());
     }
 
@@ -47,12 +39,16 @@ public class GameOverScreen : MonoBehaviour
         clickSfx.Play();
     }
 
-    public void BackToHub(){
-        //Load HUB Scene
+    public void BackToHub()
+    {
+        Time.timeScale = 1f;
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
-    public void RestartLevel(){
-        //Load this scene again
+    public void RestartLevel()
+    {
+        Time.timeScale = 1f;
+        LevelLoader.instance.ReloadLevel();
     }
     public bool getActived(){
         return actived;

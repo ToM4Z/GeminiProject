@@ -12,19 +12,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void Play(){
-       // SceneManager.LoadScene("Hub"); 
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE); 
     }
 
     public void MenuToOption(){
@@ -42,7 +32,12 @@ public class MainMenu : MonoBehaviour
     }
 
     public void updateVolume(float v){
-        Managers.Audio.soundVolume = v;
+        GlobalVariables.SoundVolume = v;
+    }
+
+    public void updateMusicVolume(float v)
+    {
+        GlobalVariables.MusicVolume = v;
     }
 
     public void goToController(){
@@ -55,7 +50,7 @@ public class MainMenu : MonoBehaviour
         keyboardMappingImage.SetActive(true);
     }
 
-        public void playClick(){
+    public void playClick(){
         clickClip.Play();
     }
 }
