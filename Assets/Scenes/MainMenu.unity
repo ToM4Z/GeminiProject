@@ -123,37 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &55274158
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 55274159}
-  m_Layer: 0
-  m_Name: MusicMenu
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &55274159
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55274158}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 825085000}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &91098021
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +675,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8908164144956211533}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -856,7 +825,7 @@ GameObject:
   - component: {fileID: 825085000}
   - component: {fileID: 825085001}
   m_Layer: 0
-  m_Name: Audio Source
+  m_Name: MusicMenuSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -869,12 +838,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825084999}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -960, y: -540.2214, z: 0}
+  m_LocalScale: {x: 3.5424354, y: 3.5424354, z: 3.5424354}
   m_Children: []
-  m_Father: {fileID: 55274159}
-  m_RootOrder: 0
+  m_Father: {fileID: 8908164144956211533}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &825085001
 AudioSource:
@@ -2801,6 +2770,7 @@ GameObject:
   - component: {fileID: 8908164144956211535}
   - component: {fileID: 8908164144956211534}
   - component: {fileID: 8908164144956211522}
+  - component: {fileID: 8908164144956211523}
   m_Layer: 5
   m_Name: Menu_Canvas
   m_TagString: Untagged
@@ -2825,6 +2795,20 @@ MonoBehaviour:
   clickClip: {fileID: 632906292}
   keyboardMappingImage: {fileID: 296028208}
   gamepadMappingImage: {fileID: 1834514455}
+--- !u!114 &8908164144956211523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8908164144956211521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dbb68742ac63c946807c9f4705d19ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundSource: {fileID: 632906292}
+  musicSource: {fileID: 825085001}
 --- !u!223 &8908164144956211532
 Canvas:
   m_ObjectHideFlags: 0
@@ -2859,6 +2843,7 @@ RectTransform:
   m_Children:
   - {fileID: 8908164144767331589}
   - {fileID: 200395365}
+  - {fileID: 825085000}
   - {fileID: 632906291}
   m_Father: {fileID: 8908164145608521473}
   m_RootOrder: 0

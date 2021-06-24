@@ -74,8 +74,14 @@ public class PauseMenu : MonoBehaviour
         optionPanel.SetActive(true);
     }
 
-    public void updateVolume(float v){
-        Managers.Audio.soundVolume = v;
+    public void updateVolume(float v)
+    {
+        GlobalVariables.SoundVolume = v;
+    }
+
+    public void updateMusicVolume(float v)
+    {
+        GlobalVariables.MusicVolume = v;
     }
 
     public void BackToHub(){

@@ -12,7 +12,6 @@ public class GameOverScreen : MonoBehaviour
             Destroy(gameObject);
     }
 
-    [SerializeField] private AudioSource gameOverSfx;
     [SerializeField] private AudioSource clickSfx;
     [SerializeField] private GameObject gameOverPanel;
     private bool actived = false;
@@ -29,11 +28,10 @@ public class GameOverScreen : MonoBehaviour
         
     }
 
-    public void ActiveGameOverScreen(){
-        
+    public void ActiveGameOverScreen(){        
         actived = true;
         this.gameObject.SetActive(true);
-        gameOverSfx.Play();
+        Managers.Audio.PlayGameOver();
         StartCoroutine(WaitForThePianoSound());
     }
 

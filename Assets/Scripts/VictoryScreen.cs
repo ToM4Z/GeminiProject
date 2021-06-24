@@ -8,7 +8,6 @@ public class VictoryScreen : MonoBehaviour
     
     [SerializeField] private Text score;
     [SerializeField] private AudioSource scoreSfx;
-    [SerializeField] private AudioSource victorySfx;
     [SerializeField] private AudioSource clickSfx;
     private int scoreToShow = 0;
     private bool actived = false;
@@ -27,7 +26,7 @@ public class VictoryScreen : MonoBehaviour
 
         this.gameObject.SetActive(true);
         actived = true;
-        victorySfx.Play();
+        Managers.Audio.PlayVictory();
         StartCoroutine(CountNormalGear());
         StartCoroutine(CountBonusGear());
         
