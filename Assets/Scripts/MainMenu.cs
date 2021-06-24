@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
 
 
     public void Play(){
-       // SceneManager.LoadScene("Hub"); 
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE); 
     }
 
     public void MenuToOption(){

@@ -36,12 +36,16 @@ public class VictoryScreen : MonoBehaviour
         clickSfx.Play();
     }
 
-    public void BackToHub(){
-        //Load HUB Scene
+    public void BackToHub()
+    {
+        Time.timeScale = 1f;
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
-    public void RestartLevel(){
-        //Load this scene again
+    public void RestartLevel()
+    {
+        Time.timeScale = 1f;
+        LevelLoader.instance.ReloadLevel();
     }
 
     public bool getActived(){

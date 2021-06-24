@@ -84,8 +84,11 @@ public class PauseMenu : MonoBehaviour
         GlobalVariables.MusicVolume = v;
     }
 
-    public void BackToHub(){
-       // SceneManager.LoadScene("Hub"); 
+    public void BackToHub()
+    {
+        unpauseClip.Play();
+        Time.timeScale = 1f;
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
     public void goToController(){
