@@ -42,12 +42,14 @@ public class GameOverScreen : MonoBehaviour
     public void BackToHub()
     {
         Time.timeScale = 1f;
+        GlobalVariables.PlayerLives = GlobalVariables.PlayerLivesToReset;
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
     public void RestartLevel()
     {
         Time.timeScale = 1f;
+        GlobalVariables.PlayerLives = GlobalVariables.PlayerLivesToReset;
         LevelLoader.instance.ReloadLevel();
     }
     public bool getActived(){
