@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject menuPanel;
     [SerializeField] private GameObject optionPanel;
+    [SerializeField] private GameObject videoSettingsPanel;
     [SerializeField] private AudioSource clickClip;
 
     [SerializeField] private GameObject keyboardMappingImage;
@@ -25,6 +26,16 @@ public class MainMenu : MonoBehaviour
     public void OptionToMenu(){
         optionPanel.SetActive(false);
         menuPanel.SetActive(true);
+    }
+
+    public void OptionToVideoSettings(){
+        optionPanel.SetActive(false);
+        videoSettingsPanel.SetActive(true);
+    }
+
+    public void VideoSettingsToOption(){
+        videoSettingsPanel.SetActive(false);
+        optionPanel.SetActive(true);
     }
 
     public void QuitGame(){
