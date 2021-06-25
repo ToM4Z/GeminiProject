@@ -28,6 +28,7 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadLevel(int x)
     {
+        GlobalVariables.GameOver = GlobalVariables.Win = false;
         StartCoroutine(LoadLevelAsync(x));
     }
 

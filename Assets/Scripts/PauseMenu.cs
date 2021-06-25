@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -13,16 +13,20 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private AudioSource unpauseClip;
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
+    [SerializeField] private Slider soundSlider, musicSlider;
     void Start()
     {
         //Cursor.visible = false;
         pausePanel.SetActive(false);
+
+        soundSlider.value = GlobalVariables.SoundVolume;
+        musicSlider.value = GlobalVariables.MusicVolume;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Escape") && !UIManager.instance.GetVictoryScreen().getActived() /*&& !UIManager.instance.GetGameOverScreen().getActived()*/){
+        if(Input.GetButtonDown("Escape") && !GlobalVariables.Win && !GlobalVariables.GameOver){
             if (GlobalVariables.isPaused)
                 Unpause();
             else
