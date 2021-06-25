@@ -43,7 +43,7 @@ public class HUDScript : MonoBehaviour
         emptyHP = Resources.Load<Sprite>("HUD/Empty_HP");
 
         this.setBombCounter(PlayerStatistics.instance.bombCount);
-        this.setLifeCounter(PlayerStatistics.instance.lives);
+        this.setLifeCounter(GlobalVariables.PlayerLives);
         this.setGearBonusCounter(PlayerStatistics.instance.bonusGearCount);
         this.setGearCounter(PlayerStatistics.instance.normalGearCount);
         

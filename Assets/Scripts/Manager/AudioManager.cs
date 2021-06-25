@@ -10,16 +10,25 @@ public class AudioManager : MonoBehaviour, IGameManager
     [SerializeField] private AudioSource musicSource;
 
     [SerializeField] private AudioClip tinSFX;
+    private AudioClip GameOverMusic, VictoryMusic, LevelMusic;
+
+    private readonly string folderMusicPrexif = "Musics/";
 
     public void Startup()
     {
         musicSource.ignoreListenerVolume = true;
         musicSource.ignoreListenerPause = true;
 
-        soundVolume = 1f;
-        musicVolume = 1f;
+        UpdateVariables();
 
         status = ManagerStatus.Started;
+    }
+
+    private void UpdateVariables()
+    {
+        soundVolume = GlobalVariables.SoundVolume;
+        musicVolume = GlobalVariables.MusicVolume;
+        soundMute = GlobalVariables.SoundMute;
     }
 
 
@@ -52,20 +61,30 @@ public class AudioManager : MonoBehaviour, IGameManager
         set { if (musicSource != null) musicSource.mute = value; }
     }
 
-    public void PlaySound(AudioClip clip)
+    public void PlayClip(AudioClip clip)
     {
         soundSource.PlayOneShot(clip);
-    }
-
-    public void PlayLevelMusic()
-    {
-        //PlayMusic((AudioClip)Resources.Load("Music/?"));
     }
 
     private void PlayMusic(AudioClip clip)
     {
         musicSource.clip = clip;
         musicSource.Play();
+    }
+
+    public void PlayLevelMusic(int i)
+    {
+        PlayMusic(LevelMusic == null ? LevelMusic = (AudioClip)Resources.Load(folderMusicPrexif + "Level "+i) : LevelMusic);
+    }
+
+    public void PlayGameOver()
+    {
+        PlayMusic(GameOverMusic == null ? GameOverMusic = (AudioClip)Resources.Load(folderMusicPrexif + "GameOverMusic") : GameOverMusic);
+    }
+
+    public void PlayVictory()
+    {
+        PlayMusic(VictoryMusic == null ? VictoryMusic = (AudioClip)Resources.Load(folderMusicPrexif + "VictoryMusic") : VictoryMusic);
     }
 
     public void StopMusic()
@@ -112,6 +131,16 @@ public class AudioManager : MonoBehaviour, IGameManager
 
     public void PlayTin()
     {
-        PlaySound(tinSFX);
+        PlayClip(tinSFX);
+    }
+
+    private void Awake()
+    {
+        Messenger.AddListener(GlobalVariables.AUDIO_SETTINGS_CHANGED, UpdateVariables);
+    }
+
+    private void OnDestroy()
+    {
+        Messenger.RemoveListener(GlobalVariables.AUDIO_SETTINGS_CHANGED, UpdateVariables);
     }
 }

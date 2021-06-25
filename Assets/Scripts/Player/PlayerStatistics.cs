@@ -27,7 +27,6 @@ public class PlayerStatistics : MonoBehaviour
 
 
     private int hp;
-    public int lives = 3;
     [SerializeField] private int maxHP;
 
     public int normalGearCount;
@@ -36,7 +35,7 @@ public class PlayerStatistics : MonoBehaviour
     //100 of them and so we will avoid to calculate the final score with 0.
     public int normalGearCountToCalculateScore { get; private set; }
     public int bonusGearCount;
-    public int bombCount { get; private set; }
+    public int bombCount;
 
     private PlayerController playerController;
 
@@ -61,7 +60,7 @@ public class PlayerStatistics : MonoBehaviour
         normalGearCount++;
         UIManager.instance.GetHUD().setGearCounter(normalGearCount);
         if (normalGearCount == 100){
-            lives++;
+            GlobalVariables.PlayerLives++;
             normalGearCount = 0;
         }
     }
@@ -82,12 +81,12 @@ public class PlayerStatistics : MonoBehaviour
     }
 
     public void increaseLives(){
-        lives++;
-        UIManager.instance.GetHUD().setLifeCounter(lives);
+        GlobalVariables.PlayerLives++;
+        UIManager.instance.GetHUD().setLifeCounter(GlobalVariables.PlayerLives);
     }
     public void decreaseLives(){
-        lives--;
-        UIManager.instance.GetHUD().setLifeCounter(lives);
+        GlobalVariables.PlayerLives--;
+        UIManager.instance.GetHUD().setLifeCounter(GlobalVariables.PlayerLives);
     }
 
     public bool isDeath() { return hp == 0; }
@@ -128,10 +127,10 @@ public class PlayerStatistics : MonoBehaviour
     {
         hp = 0;
         UIManager.instance.GetHUD().updateHpBattery(hp);
-        if (lives > 0)
+        if (GlobalVariables.PlayerLives > 0)
             decreaseLives();
         else
-            lives--;
+            GlobalVariables.PlayerLives--;
         print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         

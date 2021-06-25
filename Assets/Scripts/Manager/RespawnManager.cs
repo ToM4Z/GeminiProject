@@ -34,7 +34,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
     private void OnPlayerDeath(DeathEvent deathEvent) {
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
 
-        if (PlayerStatistics.instance.lives >= 0)
+        if (GlobalVariables.PlayerLives >= 0)
         {
             UIManager.instance.GetBlackFadeScreen().startFade();
             StartCoroutine(Respawn());

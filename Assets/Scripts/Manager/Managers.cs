@@ -72,5 +72,7 @@ public class Managers : MonoBehaviour
             yield return null;
         }
         print("All managers started up");
+
+        GlobalVariables.isPaused = false;
     }
 }

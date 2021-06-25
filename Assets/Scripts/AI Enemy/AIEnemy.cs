@@ -457,6 +457,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         {
             GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity);
             gear.GetComponent<Gear>().ActivateFallDown();
+            Managers.Collectables.AddGearDropped(gear);
         }
 
         Managers.Enemies.EnemyDie(this.gameObject);

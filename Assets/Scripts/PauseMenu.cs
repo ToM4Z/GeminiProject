@@ -74,12 +74,21 @@ public class PauseMenu : MonoBehaviour
         optionPanel.SetActive(true);
     }
 
-    public void updateVolume(float v){
-        Managers.Audio.soundVolume = v;
+    public void updateVolume(float v)
+    {
+        GlobalVariables.SoundVolume = v;
     }
 
-    public void BackToHub(){
-       // SceneManager.LoadScene("Hub"); 
+    public void updateMusicVolume(float v)
+    {
+        GlobalVariables.MusicVolume = v;
+    }
+
+    public void BackToHub()
+    {
+        unpauseClip.Play();
+        Time.timeScale = 1f;
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
     public void goToController(){
