@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -32,6 +33,15 @@ public class PauseMenu : MonoBehaviour
             else
                 Pause();
         }
+
+        if (GlobalVariables.isPaused && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.Return)))
+        {
+            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+
+            if (button != null)
+                button.onClick.Invoke();
+
+        }
     }
 
     void Pause(){
@@ -41,6 +51,8 @@ public class PauseMenu : MonoBehaviour
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
         Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, false, MessengerMode.DONT_REQUIRE_LISTENER);
         GlobalVariables.isPaused = true;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("ResumeButton"));
         //Cursor.visible = true;
     }
 
@@ -63,19 +75,27 @@ public class PauseMenu : MonoBehaviour
     public void PauseToOption(){
         pausePanel.SetActive(false);
         optionPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("Back Button"));
     }
 
     public void OptionToPause(){
         optionPanel.SetActive(false);
         pausePanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("ResumeButton"));
     }
     public void OptionToControls(){
         optionPanel.SetActive(false);
         controlsPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("Back Button"));
     }
     public void ControlsToOption(){
         controlsPanel.SetActive(false);
         optionPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("Controls Button"));
     }
 
     public void updateVolume(float v){
@@ -104,11 +124,25 @@ public class PauseMenu : MonoBehaviour
     public void goToController(){
         keyboardMappingImage.SetActive(false);
         gamepadMappingImage.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("LeftButton"));
+
+        Navigation customNav = new Navigation();
+        customNav.mode = Navigation.Mode.Explicit;
+        customNav.selectOnLeft = GameObject.Find("LeftButton").GetComponent<Button>();
+        GameObject.Find("Back Button").GetComponent<Button>().navigation = customNav;
     }
 
     public void goToKeyboard(){
         gamepadMappingImage.SetActive(false);
         keyboardMappingImage.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("RightButton"));
+
+        Navigation customNav = new Navigation();
+        customNav.mode = Navigation.Mode.Explicit;
+        customNav.selectOnRight = GameObject.Find("RightButton").GetComponent<Button>();
+        GameObject.Find("Back Button").GetComponent<Button>().navigation = customNav;
     }
 
     public void playClick(){

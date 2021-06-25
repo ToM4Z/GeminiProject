@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class VictoryScreen : MonoBehaviour
 {
@@ -19,7 +20,13 @@ public class VictoryScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.Return))
+        {
+            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+
+            if (button != null)
+                button.onClick.Invoke();
+        }
     }
 
     public void ActiveVictoryScreen(){
@@ -27,6 +34,8 @@ public class VictoryScreen : MonoBehaviour
         this.gameObject.SetActive(true);
         actived = true;
         Managers.Audio.PlayVictory();
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(GameObject.Find("HubButton"));
         StartCoroutine(CountNormalGear());
         StartCoroutine(CountBonusGear());
         
