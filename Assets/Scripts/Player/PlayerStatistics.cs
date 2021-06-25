@@ -33,7 +33,7 @@ public class PlayerStatistics : MonoBehaviour
 
     //This variable is used to calculate the score, because the normal count will be setted to 0 when we have
     //100 of them and so we will avoid to calculate the final score with 0.
-    public int normalGearCountToCalculateScore { get; private set; }
+    public int normalGearCountToCalculateScore;
     public int bonusGearCount;
     public int bombCount;
 
