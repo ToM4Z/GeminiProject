@@ -1493,6 +1493,8 @@ MonoBehaviour:
   unpauseClip: {fileID: 502653989723296537}
   keyboardMappingImage: {fileID: 1843055049101986953}
   gamepadMappingImage: {fileID: 4211991163854307874}
+  soundSlider: {fileID: 4177446763144378900}
+  musicSlider: {fileID: 9176648961095771873}
 --- !u!1 &1353731642950070359
 GameObject:
   m_ObjectHideFlags: 0
