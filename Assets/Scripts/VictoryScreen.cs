@@ -29,7 +29,27 @@ public class VictoryScreen : MonoBehaviour
         Managers.Audio.PlayVictory();
         StartCoroutine(CountNormalGear());
         StartCoroutine(CountBonusGear());
-        
+
+        int score = (PlayerStatistics.instance.normalGearCountToCalculateScore * GlobalVariables.GearScore) 
+            + (PlayerStatistics.instance.bonusGearCount * GlobalVariables.GearBonusScore);
+
+        if (!GlobalVariables.scores.ContainsKey(GlobalVariables.ACTUAL_SCENE))
+        {
+            GlobalVariables.scores.Add(GlobalVariables.ACTUAL_SCENE, score);
+        }
+        else
+            if (GlobalVariables.scores[GlobalVariables.ACTUAL_SCENE] < score)
+        {
+            // new record
+            GlobalVariables.scores.Add(GlobalVariables.ACTUAL_SCENE, score);
+        }
+
+        string scoress = "";
+        foreach(KeyValuePair<int, int> item in GlobalVariables.scores) {
+            scoress += item.Key + "(" + item.Value + ") ";
+        }
+        print(scoress);
+
     }
 
     public void PlayClickAudio(){
@@ -54,7 +74,7 @@ public class VictoryScreen : MonoBehaviour
 
     private IEnumerator CountNormalGear(){
         for(int i = 1; i <= PlayerStatistics.instance.normalGearCountToCalculateScore; i++){
-            scoreToShow += 10;
+            scoreToShow += GlobalVariables.GearScore;
             score.text = scoreToShow + "";
             scoreSfx.Play();
             yield return new WaitForSeconds(0.3f);
@@ -63,7 +83,7 @@ public class VictoryScreen : MonoBehaviour
 
     private IEnumerator CountBonusGear(){
         for(int i = 1; i <= PlayerStatistics.instance.bonusGearCount; i++){
-            scoreToShow += 50;
+            scoreToShow += GlobalVariables.GearBonusScore;
             score.text = scoreToShow + "";
             scoreSfx.Play();
             yield return new WaitForSeconds(0.3f);

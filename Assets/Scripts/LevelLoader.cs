@@ -21,6 +21,12 @@ public class LevelLoader : MonoBehaviour
 
     public Slider slider;
 
+    private void Start()
+    {
+        GlobalVariables.GameOver = GlobalVariables.Win = false;
+        GlobalVariables.ACTUAL_SCENE = SceneManager.GetActiveScene().buildIndex;
+    }
+
     public void ReloadLevel()
     {
         StartCoroutine(LoadLevelAsync(SceneManager.GetActiveScene().buildIndex));
@@ -28,7 +34,6 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadLevel(int x)
     {
-        GlobalVariables.GameOver = GlobalVariables.Win = false;
         StartCoroutine(LoadLevelAsync(x));
     }
 

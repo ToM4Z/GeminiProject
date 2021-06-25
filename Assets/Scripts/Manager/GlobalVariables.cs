@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+
 /*
- *  Class: GameEvent
+ *  Class: GlobalVariables
  *  
  *  Description:
  *  This class contain some constants and global variables
@@ -61,6 +64,11 @@ public static class GlobalVariables
     public const string TOGGLE_AUDIO_ON_OFF = "TOGGLE_AUDIO_ON_OFF";
     public const string AUDIO_SETTINGS_CHANGED = "AUDIO_SETTINGS_CHANGED";
 
+    public static Dictionary<int, int> scores = new Dictionary<int, int>();
+
+    public static int GearScore = 10, GearBonusScore = 50;
+
+    public static int ACTUAL_SCENE = 0;
 
     public const int MAIN_MENU_SCENE = 0;
     public const int HUB_SCENE = 1;
