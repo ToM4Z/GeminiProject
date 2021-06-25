@@ -51,10 +51,6 @@ public class MainMenu : MonoBehaviour
         GlobalVariables.MusicVolume = v;
     }
 
-    public void updateMusic(float v){
-        Managers.Audio.musicVolume = v;
-    }
-
     public void goToController(){
         keyboardMappingImage.SetActive(false);
         gamepadMappingImage.SetActive(true);
