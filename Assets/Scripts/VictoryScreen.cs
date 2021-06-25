@@ -10,6 +10,7 @@ public class VictoryScreen : MonoBehaviour
     [SerializeField] private Text score;
     [SerializeField] private AudioSource scoreSfx;
     [SerializeField] private AudioSource clickSfx;
+    [SerializeField] private GameObject newRecord;
     private int scoreToShow = 0;
     private bool actived = false;
     void Start()
@@ -20,7 +21,7 @@ public class VictoryScreen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
         {
             Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
@@ -42,23 +43,11 @@ public class VictoryScreen : MonoBehaviour
         int score = (PlayerStatistics.instance.normalGearCountToCalculateScore * GlobalVariables.GearScore) 
             + (PlayerStatistics.instance.bonusGearCount * GlobalVariables.GearBonusScore);
 
-        if (!GlobalVariables.scores.ContainsKey(GlobalVariables.ACTUAL_SCENE))
+        if (!GlobalVariables.scores.ContainsKey(GlobalVariables.ACTUAL_SCENE) || GlobalVariables.scores[GlobalVariables.ACTUAL_SCENE] < score)
         {
+            newRecord.SetActive(true);
             GlobalVariables.scores.Add(GlobalVariables.ACTUAL_SCENE, score);
         }
-        else
-            if (GlobalVariables.scores[GlobalVariables.ACTUAL_SCENE] < score)
-        {
-            // new record
-            GlobalVariables.scores.Add(GlobalVariables.ACTUAL_SCENE, score);
-        }
-
-        string scoress = "";
-        foreach(KeyValuePair<int, int> item in GlobalVariables.scores) {
-            scoress += item.Key + "(" + item.Value + ") ";
-        }
-        print(scoress);
-
     }
 
     public void PlayClickAudio(){

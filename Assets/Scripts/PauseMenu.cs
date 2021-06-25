@@ -34,7 +34,7 @@ public class PauseMenu : MonoBehaviour
                 Pause();
         }
 
-        if (GlobalVariables.isPaused && (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.Return)))
+        if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
         {
             Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 

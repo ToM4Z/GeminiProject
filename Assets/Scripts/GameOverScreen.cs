@@ -26,7 +26,7 @@ public class GameOverScreen : MonoBehaviour
 
     private void Update() {
 
-        if (Input.GetButtonDown("Submit") || Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
         {
             Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
