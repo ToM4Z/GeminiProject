@@ -67,4 +67,10 @@ public static class GlobalVariables
     public const int LEVEL_1_SCENE = 2;
     public const int LEVEL_2_SCENE = 3;
     public const int LEVEL_3_SCENE = 4;
+
+    public static readonly string[] Dialogues = new string[] 
+    {
+        "Ciao Timmy", "Devi riparare l'astronave"
+    }; 
+
 }
