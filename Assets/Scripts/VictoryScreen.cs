@@ -57,7 +57,7 @@ public class VictoryScreen : MonoBehaviour
             scoreToShow += 10;
             score.text = scoreToShow + "";
             scoreSfx.Play();
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
@@ -66,7 +66,7 @@ public class VictoryScreen : MonoBehaviour
             scoreToShow += 50;
             score.text = scoreToShow + "";
             scoreSfx.Play();
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
