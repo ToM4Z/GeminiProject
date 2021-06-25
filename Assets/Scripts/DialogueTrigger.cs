@@ -11,7 +11,7 @@ public class DialogueTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             DialogueUI.instance.StartDialogue(DialogueStart, DialogueEnd);
-            gameObject.SetActive(false);
+            Destroy(this);
         }
     }
 }
