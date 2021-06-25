@@ -17,7 +17,7 @@ public class PoolBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
-            collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.HITTED,true);
+            collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.BURNED,true);
         }
     }
 }
