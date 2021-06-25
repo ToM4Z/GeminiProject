@@ -94,6 +94,13 @@ public class PauseMenu : MonoBehaviour
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
+    public void BackToMainMenu()
+    {
+        unpauseClip.Play();
+        Time.timeScale = 1f;
+        LevelLoader.instance.LoadLevel(GlobalVariables.MAIN_MENU_SCENE);
+    }
+
     public void goToController(){
         keyboardMappingImage.SetActive(false);
         gamepadMappingImage.SetActive(true);
