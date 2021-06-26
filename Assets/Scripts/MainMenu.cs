@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,6 +16,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
 
+    private void Start() {
+        ConfigSaveSystem.Load();
+        Cursor.visible = true;
+    }
     private void Update() {
 
         if ( Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
@@ -27,12 +32,17 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    public void Play(){
+    public void NewGame(){
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
+    }
+    public void Play(){
+        if(File.Exists(Application.dataPath + "/player.txt")) {
+            PlayerSaveSystem.Load();
+            LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
+        }
     }
 
     public void MenuToOption(){
-
         menuPanel.SetActive(false);
         optionPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);

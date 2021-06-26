@@ -35,7 +35,8 @@ public class LevelLoader : MonoBehaviour
         yield return new WaitForSeconds(transitionTime);
 
         slider.gameObject.SetActive(true);
-
+        PlayerSaveSystem.Save();
+        
         GlobalVariables.ACTUAL_SCENE = levelIndex;
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelIndex);
 
