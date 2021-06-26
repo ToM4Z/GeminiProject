@@ -76,11 +76,35 @@ public static class GlobalVariables
     public const int LEVEL_2_SCENE = 2;
     public const int LEVEL_3_SCENE = 3;
 
+    public static readonly string 
+        PATH_MUSIC = "Musics/",
+        MAIN_MENU_MUSIC     = PATH_MUSIC + "MenuMusic",
+        GAMEOVER_MUSIC      = PATH_MUSIC + "GameOverMusic",
+        VICTORY_MUSIC       = PATH_MUSIC + "VictoryMusic"
+        ;
+
+    public static readonly string[] LEVEL_MUSICS =
+    {
+        PATH_MUSIC + "LV1 OST",
+        PATH_MUSIC + "LV2 OST",
+        PATH_MUSIC + "LV3 OST",
+        PATH_MUSIC + "HUB OST",
+    };
+
+    public static string GetLevelMusic() { return LEVEL_MUSICS[ACTUAL_SCENE-1]; }
+
+    private static List<int> dialoguesAlreadyDone = new List<int>();
+
+    public static bool isDialogueDone(int x) { return dialoguesAlreadyDone.Contains(x); }
+
+    public static void addDialogueDone(int x) { dialoguesAlreadyDone.Add(x); }
+
+
     public static readonly string[] Dialogues = new string[]
     {
         // [0, 1] testo per visualizzare il punteggio
         "Records: ", 
-        "Vedi di fare di meglio!!",
+        "Non hai fatto ancora nessun punteggio!\nDatti una mossa!!",
 
         // [2, 7] Hub, D1 all'inizio della partita
         "Stupido Timmy, ti mando ad esplorare nuove dimensioni al posto mio e la prima cosa che fai e' rompere l'astronave!!",

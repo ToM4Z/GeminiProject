@@ -7,12 +7,19 @@ public class DialogueTrigger : MonoBehaviour
     public int DialogueStart, DialogueEnd;
     public int condition = 0;
 
-    private bool IsConditionTrue()
+    private void Start()
     {
-        switch (condition)
+        if (!IsConditionTrue(0))
+            Destroy(this);
+    }
+
+    private bool IsConditionTrue() { return IsConditionTrue(condition); }
+    private bool IsConditionTrue(int x)
+    {
+        switch (x)
         {
             case 1: return GlobalVariables.scores.Keys.Count == 3;
-            default: return true;
+            default: return !GlobalVariables.isDialogueDone(DialogueStart);
         }
     }
 
@@ -20,6 +27,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && IsConditionTrue())
         {
+            GlobalVariables.addDialogueDone(DialogueStart);
             DialogueUI.instance.StartDialogue(DialogueStart, DialogueEnd);
             Destroy(this);
         }

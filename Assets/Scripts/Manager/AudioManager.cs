@@ -12,14 +12,14 @@ public class AudioManager : MonoBehaviour, IGameManager
     [SerializeField] private AudioClip tinSFX;
     private AudioClip GameOverMusic, VictoryMusic, LevelMusic;
 
-    private readonly string folderMusicPrexif = "Musics/";
-
     public void Startup()
     {
         musicSource.ignoreListenerVolume = true;
         musicSource.ignoreListenerPause = true;
 
         UpdateVariables();
+
+        PlayLevelMusic();
 
         status = ManagerStatus.Started;
     }
@@ -72,19 +72,19 @@ public class AudioManager : MonoBehaviour, IGameManager
         musicSource.Play();
     }
 
-    public void PlayLevelMusic(int i)
+    public void PlayLevelMusic()
     {
-        PlayMusic(LevelMusic == null ? LevelMusic = (AudioClip)Resources.Load(folderMusicPrexif + "Level "+i) : LevelMusic);
+        PlayMusic(LevelMusic == null ? LevelMusic = (AudioClip)Resources.Load(GlobalVariables.GetLevelMusic()) : LevelMusic);
     }
 
     public void PlayGameOver()
     {
-        PlayMusic(GameOverMusic == null ? GameOverMusic = (AudioClip)Resources.Load(folderMusicPrexif + "GameOverMusic") : GameOverMusic);
+        PlayMusic(GameOverMusic == null ? GameOverMusic = (AudioClip)Resources.Load(GlobalVariables.GAMEOVER_MUSIC) : GameOverMusic);
     }
 
     public void PlayVictory()
     {
-        PlayMusic(VictoryMusic == null ? VictoryMusic = (AudioClip)Resources.Load(folderMusicPrexif + "VictoryMusic") : VictoryMusic);
+        PlayMusic(VictoryMusic == null ? VictoryMusic = (AudioClip)Resources.Load(GlobalVariables.VICTORY_MUSIC) : VictoryMusic);
     }
 
     public void StopMusic()
