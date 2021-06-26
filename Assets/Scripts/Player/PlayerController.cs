@@ -346,7 +346,9 @@ public class PlayerController : MonoBehaviour
                     {
                         stopAttack();
 
-                        string layer = LayerMask.LayerToName(_contact.gameObject.layer);
+                        string layer = "";
+                        if(_contact != null)
+                            layer = LayerMask.LayerToName(_contact.gameObject.layer);
                         if (layer.Equals(trampolineMask))
                         {
                             _vertSpeed = jumpSpeed * multiplierJumpSpeedOnTrampoline;

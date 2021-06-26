@@ -3875,7 +3875,7 @@ MonoBehaviour:
   NextImg: {fileID: 1726885033029882271}
   ExitImg: {fileID: 1726885033521268222}
   textComponent: {fileID: 1726885032140991259}
-  textSpeed: 0.1
+  textSpeed: 0.05
 --- !u!1 &1843055049101986953
 GameObject:
   m_ObjectHideFlags: 0

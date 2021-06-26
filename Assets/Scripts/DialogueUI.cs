@@ -64,14 +64,42 @@ public class DialogueUI : MonoBehaviour
     {
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
         DialogueBox.SetActive(true);
+        textComponent.text = string.Empty;
         index = startIndex;
         this.endIndex = endIndex;
         coroutine = StartCoroutine(TypeLine());
+
+        //if(index != 0)
+        //{
+        //    coroutine = StartCoroutine(TypeLine());
+        //}
+        //else
+        //{
+        //    if(GlobalVariables.scores.Count == 0)
+        //    {
+        //        coroutine = StartCoroutine(TypeLine());
+        //    }
+        //    else
+        //    {
+        //        string scores = GlobalVariables.Dialogues[index];
+        //        foreach (KeyValuePair<int, int> score in GlobalVariables.scores)
+        //        {
+        //            scores += "\nLevel " + score.Key + " : " + score.Value;
+        //        }
+        //        coroutine = StartCoroutine(TypeLine(scores));
+        //    }
+        //    index++;
+        //}
     }
 
     IEnumerator TypeLine()
     {
-        foreach(char c in GlobalVariables.Dialogues[index].ToCharArray())
+        return TypeLine(GlobalVariables.Dialogues[index]);
+    }
+
+    IEnumerator TypeLine(string x)
+    {
+        foreach (char c in x.ToCharArray())
         {
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
