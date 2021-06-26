@@ -15,6 +15,7 @@ public class LevelLoader : MonoBehaviour
     void Awake()
     {
         instance = this;
+        Cursor.visible = false;
         GlobalVariables.GameOver = GlobalVariables.Win = false;
     }
 

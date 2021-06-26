@@ -18,21 +18,22 @@ public class VictoryScreen : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
-        {
-            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
+    //    {
+    //        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
-            if (button != null)
-                button.onClick.Invoke();
-        }
-    }
+    //        if (button != null)
+    //            button.onClick.Invoke();
+    //    }
+    //}
 
     public void ActiveVictoryScreen(){
 
         this.gameObject.SetActive(true);
+        Cursor.visible = true;
         actived = true;
         Managers.Audio.PlayVictory();
         EventSystem.current.SetSelectedGameObject(null);

@@ -15,35 +15,41 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
     [SerializeField] private Slider soundSlider, musicSlider;
+    [SerializeField] private Button loadGameButton;
 
-    private void Start() {
+    private void Start()
+    {
         ConfigSaveSystem.Load();
         Cursor.visible = true;
 
         soundSlider.value = GlobalVariables.SoundVolume;
         musicSlider.value = GlobalVariables.MusicVolume;
-    }
 
-    private void Update() {
-
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
+        if (!File.Exists(Application.dataPath + "/player.txt"))
         {
-            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-
-            if (button != null)
-                button.onClick.Invoke();
+            loadGameButton.interactable = false;
         }
-
     }
+
+    //private void Update() {
+
+    //    if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
+    //    {
+    //        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+
+    //        if (button != null)
+    //            button.onClick.Invoke();
+    //    }
+
+    //}
 
     public void NewGame(){
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
-    public void Play(){
-        if(File.Exists(Application.dataPath + "/player.txt")) {
-            PlayerSaveSystem.Load();
-            LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
-        }
+
+    public void LoadGame(){
+        PlayerSaveSystem.Load();
+        LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
     public void MenuToOption(){
@@ -51,10 +57,11 @@ public class MainMenu : MonoBehaviour
         optionPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("Back Button"));
-        
     }
 
     public void OptionToMenu(){
+        ConfigSaveSystem.Save();
+
         optionPanel.SetActive(false);
         menuPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);

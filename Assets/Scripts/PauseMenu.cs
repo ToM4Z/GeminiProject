@@ -33,15 +33,15 @@ public class PauseMenu : MonoBehaviour
             else
                 Pause();
         }
+        //else
+        //if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
+        //{
+        //    Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
-        if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
-        {
-            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        //    if (button != null)
+        //        button.onClick.Invoke();
 
-            if (button != null)
-                button.onClick.Invoke();
-
-        }
+        //}
     }
 
     void Pause(){

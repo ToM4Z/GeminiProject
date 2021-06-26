@@ -15,13 +15,16 @@ public static class ConfigSaveSystem
     }
 
     public static void Load() {
-        if(File.Exists(Application.dataPath + "/config.txt")) {
+        if (File.Exists(Application.dataPath + "/config.txt"))
+        {
             string saveString = File.ReadAllText(Application.dataPath + "/config.txt");
 
             SaveObject saveObject = JsonUtility.FromJson<SaveObject>(saveString);
             GlobalVariables.SoundVolume = saveObject.soundVolume;
             GlobalVariables.MusicVolume = saveObject.musicVolume;
         }
+        else
+            Save();
     }
 
     private class SaveObject {

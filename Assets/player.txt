@@ -1,1 +1,1 @@
-{"lifes":3,"scores":[0,130],"dialoguesDone":[2,8,16,19,22]}
+{"lifes":3,"scores":[0],"dialoguesDone":[16]}
