@@ -71,6 +71,7 @@ public static class GlobalVariables
 
     public static int ACTUAL_SCENE => SceneManager.GetActiveScene().buildIndex;
 
+    public const int NUMBER_OF_LEVELS = 3;
     public const int MAIN_MENU_SCENE = 0;
     public const int HUB_SCENE = 4;
     public const int LEVEL_1_SCENE = 1;

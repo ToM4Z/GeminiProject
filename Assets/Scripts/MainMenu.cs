@@ -4,7 +4,6 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -15,11 +14,16 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
+    [SerializeField] private Slider soundSlider, musicSlider;
 
     private void Start() {
         ConfigSaveSystem.Load();
         Cursor.visible = true;
+
+        soundSlider.value = GlobalVariables.SoundVolume;
+        musicSlider.value = GlobalVariables.MusicVolume;
     }
+
     private void Update() {
 
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
