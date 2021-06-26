@@ -70,6 +70,7 @@ public class DialogueUI : MonoBehaviour
         textComponent.text = string.Empty;
         index = startIndex;
         this.endIndex = endIndex;
+
         coroutine = StartCoroutine(TypeLine());
     }
 

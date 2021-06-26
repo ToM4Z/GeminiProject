@@ -76,6 +76,13 @@ public static class GlobalVariables
     public const int LEVEL_2_SCENE = 2;
     public const int LEVEL_3_SCENE = 3;
 
+    private static List<int> dialoguesAlreadyDone = new List<int>();
+
+    public static bool isDialogueDone(int x) { return dialoguesAlreadyDone.Contains(x); }
+
+    public static void addDialogueDone(int x) { dialoguesAlreadyDone.Add(x); }
+
+
     public static readonly string[] Dialogues = new string[]
     {
         // [0, 1] testo per visualizzare il punteggio
