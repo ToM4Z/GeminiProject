@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
 
     private void Update() {
 
-        if ( Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Joystick1Button0))
         {
             Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
