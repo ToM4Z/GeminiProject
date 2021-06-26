@@ -5,24 +5,16 @@ using UnityEngine.UI;
 
 public class LevelLoader : MonoBehaviour
 {
-    #region Singleton
-
     public static LevelLoader instance;
-
-    void Awake()
-    {
-        instance = this;
-    }
-
-    #endregion
 
     public Animator transition;
     public float transitionTime = 1;
 
     public Slider slider;
 
-    private void Start()
+    void Awake()
     {
+        instance = this;
         GlobalVariables.GameOver = GlobalVariables.Win = false;
         GlobalVariables.ACTUAL_SCENE = SceneManager.GetActiveScene().buildIndex;
     }
@@ -44,6 +36,7 @@ public class LevelLoader : MonoBehaviour
 
         slider.gameObject.SetActive(true);
 
+        GlobalVariables.ACTUAL_SCENE = levelIndex;
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelIndex);
 
         while (!operation.isDone)
