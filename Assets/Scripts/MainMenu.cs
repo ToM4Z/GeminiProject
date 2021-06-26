@@ -43,7 +43,9 @@ public class MainMenu : MonoBehaviour
 
     //}
 
-    public void NewGame(){
+    public void NewGame()
+    {
+        PlayerSaveSystem.Save();    // resetto il salvataggio
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
