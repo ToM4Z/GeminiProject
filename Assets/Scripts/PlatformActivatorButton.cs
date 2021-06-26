@@ -7,6 +7,7 @@ public class PlatformActivatorButton : MonoBehaviour
     public Animation anim;
     public bool firstTime = true;
     public MovingPlatformController movingPlatformController;
+    [SerializeField] private AudioSource activationSFX;
     void Start()
     {
         anim = GetComponentInChildren<Animation>();
@@ -28,6 +29,7 @@ public class PlatformActivatorButton : MonoBehaviour
             PlayerStatistics player = other.GetComponent<PlayerStatistics>();
             if (player != null) {
                 anim.Play("PlatformActivatorButton_Enter 1");
+                activationSFX.Play();
                 movingPlatformController.ActivatePlatforms();
             }
             firstTime = false;

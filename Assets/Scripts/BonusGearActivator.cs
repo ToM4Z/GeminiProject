@@ -7,10 +7,11 @@ public class BonusGearActivator : MonoBehaviour
     [SerializeField] private GameObject bonusGearPrefab;
     [SerializeField] private GameObject particlePrefab;
     [SerializeField] private AudioSource activationSFX;
+    [SerializeField] private AudioSource timerSFX;
     private GameObject _bonusGear;
     private GameObject _particle;
     public Animation anim;
-    public float timeStay = 5f;
+    public float timeStay = 8f;
     public bool firstTime = true;
     void Start()
     {
@@ -32,6 +33,8 @@ public class BonusGearActivator : MonoBehaviour
             {
                 firstTime = false;
                 activationSFX.Play();
+                timerSFX.Play();
+                Destroy(timerSFX, timeStay);
                 spawnBonusGears();
             }
         }
