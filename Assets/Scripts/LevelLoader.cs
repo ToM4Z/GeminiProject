@@ -16,7 +16,6 @@ public class LevelLoader : MonoBehaviour
     {
         instance = this;
         GlobalVariables.GameOver = GlobalVariables.Win = false;
-        GlobalVariables.ACTUAL_SCENE = SceneManager.GetActiveScene().buildIndex;
     }
 
     public void ReloadLevel()
@@ -37,7 +36,6 @@ public class LevelLoader : MonoBehaviour
         slider.gameObject.SetActive(true);
         PlayerSaveSystem.Save();
         
-        GlobalVariables.ACTUAL_SCENE = levelIndex;
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelIndex);
 
         while (!operation.isDone)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /*
  *  Class: GlobalVariables
@@ -68,7 +69,7 @@ public static class GlobalVariables
 
     public static int GearScore = 10, GearBonusScore = 50;
 
-    public static int ACTUAL_SCENE = 0;
+    public static int ACTUAL_SCENE => SceneManager.GetActiveScene().buildIndex;
 
     public const int MAIN_MENU_SCENE = 0;
     public const int HUB_SCENE = 4;
@@ -91,7 +92,13 @@ public static class GlobalVariables
         PATH_MUSIC + "HUB OST",
     };
 
-    public static string GetLevelMusic() { return LEVEL_MUSICS[ACTUAL_SCENE-1]; }
+    public static string GetLevelMusic() 
+    { 
+        return (ACTUAL_SCENE < 1 || ACTUAL_SCENE > 4) ?
+            LEVEL_MUSICS[0]
+            :
+            LEVEL_MUSICS[ ACTUAL_SCENE - 1 ]; 
+    }
 
     public static List<int> dialoguesAlreadyDone = new List<int>();
 

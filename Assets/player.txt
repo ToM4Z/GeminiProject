@@ -1,1 +1,1 @@
-{"lifes":3,"dialoguesDone":[]}
+{"lifes":1,"dialoguesDone":[16,19,22]}
