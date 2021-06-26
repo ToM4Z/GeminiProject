@@ -34,6 +34,9 @@ public class DialogueUI : MonoBehaviour
 
     void Update()
     {
+        if (!DialogueBox.activeSelf)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             if(textComponent.text == GlobalVariables.Dialogues[index])
