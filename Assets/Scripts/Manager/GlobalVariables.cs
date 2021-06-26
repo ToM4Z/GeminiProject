@@ -80,7 +80,7 @@ public static class GlobalVariables
     {
         // [0, 1] testo per visualizzare il punteggio
         "Records: ", 
-        "Vedi di fare di meglio!!",
+        "Non hai fatto ancora nessun punteggio!\nDatti una mossa!!",
 
         // [2, 7] Hub, D1 all'inizio della partita
         "Stupido Timmy, ti mando ad esplorare nuove dimensioni al posto mio e la prima cosa che fai e' rompere l'astronave!!",

@@ -8,7 +8,7 @@ public class DialogueScoreTrigger : MonoBehaviour
 
     private void Update()
     {
-        if(isInside && Input.GetMouseButtonDown(0))
+        if(isInside && Input.GetButtonDown("Submit"))
             DialogueScoreUI.instance.ShowScores();
     }
 

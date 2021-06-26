@@ -37,7 +37,7 @@ public class DialogueUI : MonoBehaviour
         if (!DialogueBox.activeSelf)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("Submit"))
         {
             if(textComponent.text == GlobalVariables.Dialogues[index])
             {
@@ -71,28 +71,6 @@ public class DialogueUI : MonoBehaviour
         index = startIndex;
         this.endIndex = endIndex;
         coroutine = StartCoroutine(TypeLine());
-
-        //if(index != 0)
-        //{
-        //    coroutine = StartCoroutine(TypeLine());
-        //}
-        //else
-        //{
-        //    if(GlobalVariables.scores.Count == 0)
-        //    {
-        //        coroutine = StartCoroutine(TypeLine());
-        //    }
-        //    else
-        //    {
-        //        string scores = GlobalVariables.Dialogues[index];
-        //        foreach (KeyValuePair<int, int> score in GlobalVariables.scores)
-        //        {
-        //            scores += "\nLevel " + score.Key + " : " + score.Value;
-        //        }
-        //        coroutine = StartCoroutine(TypeLine(scores));
-        //    }
-        //    index++;
-        //}
     }
 
     IEnumerator TypeLine()

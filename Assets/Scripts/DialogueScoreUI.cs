@@ -36,7 +36,7 @@ public class DialogueScoreUI : MonoBehaviour
         if (!DialogueBox.activeSelf)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("Submit"))
         {
             if (textComponent.text == text)
             {
