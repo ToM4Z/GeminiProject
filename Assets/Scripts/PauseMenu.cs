@@ -4,6 +4,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/*
+ *  Class: Pause Menu
+ *  
+ *  Description:
+ *  This script manages the Pause Menu GUI.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
@@ -15,35 +24,29 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject keyboardMappingImage;
     [SerializeField] private GameObject gamepadMappingImage;
     [SerializeField] private Slider soundSlider, musicSlider;
+
     void Start()
     {
-        //Cursor.visible = false;
         pausePanel.SetActive(false);
 
         soundSlider.value = GlobalVariables.SoundVolume;
         musicSlider.value = GlobalVariables.MusicVolume;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
+        //When I press "ESC", the Pause appears or diseappers
         if(Input.GetButtonDown("Escape") && !GlobalVariables.Win && !GlobalVariables.GameOver){
             if (GlobalVariables.isPaused)
                 Unpause();
             else
                 Pause();
         }
-        //else
-        //if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
-        //{
-        //    Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-
-        //    if (button != null)
-        //        button.onClick.Invoke();
-
-        //}
+   
     }
 
+    //Pausing the menu, the time will be setted to 0 and the player will not able to move.
     void Pause(){
         pauseClip.Play();
         pausePanel.gameObject.SetActive(true);
@@ -56,6 +59,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
+    //Pausing the menu, the time will be setted to 1 and the player can move again.
     public void Unpause(){
         unpauseClip.Play();
         pausePanel.gameObject.SetActive(false);
@@ -73,6 +77,7 @@ public class PauseMenu : MonoBehaviour
         Application.Quit();
     }
 
+    //It tooks us from Pause to Option panel.
     public void PauseToOption(){
         pausePanel.SetActive(false);
         optionPanel.SetActive(true);
@@ -80,6 +85,7 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(GameObject.Find("Back Button"));
     }
 
+    //It tooks us from Option to Pause panel.
     public void OptionToPause(){
         optionPanel.SetActive(false);
         pausePanel.SetActive(true);
@@ -87,12 +93,16 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(GameObject.Find("ResumeButton"));
         ConfigSaveSystem.Save();
     }
+
+    //It tooks us from Option to Controls panel.
     public void OptionToControls(){
         optionPanel.SetActive(false);
         controlsPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("Back Button"));
     }
+
+    //It tooks us from Controls to Option panel.
     public void ControlsToOption(){
         controlsPanel.SetActive(false);
         optionPanel.SetActive(true);
@@ -100,10 +110,12 @@ public class PauseMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(GameObject.Find("Controls Button"));
     }
 
+    //Update the value of Sound Volume by its slider
     public void updateVolume(float v){
         GlobalVariables.SoundVolume = v;
     }
 
+    //Update the value of Music Volume by its slider
     public void updateMusicVolume(float v)
     {
         GlobalVariables.MusicVolume = v;
@@ -128,7 +140,7 @@ public class PauseMenu : MonoBehaviour
         gamepadMappingImage.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("LeftButton"));
-
+        //I have to re edit the navigation of this button because he will disabled when I change mapping screen.
         Navigation customNav = new Navigation();
         customNav.mode = Navigation.Mode.Explicit;
         customNav.selectOnLeft = GameObject.Find("LeftButton").GetComponent<Button>();
@@ -140,7 +152,7 @@ public class PauseMenu : MonoBehaviour
         keyboardMappingImage.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("RightButton"));
-
+        //Same as above.
         Navigation customNav = new Navigation();
         customNav.mode = Navigation.Mode.Explicit;
         customNav.selectOnRight = GameObject.Find("RightButton").GetComponent<Button>();

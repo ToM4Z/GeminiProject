@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 /*
- *  Class: GameOverScreen
+ *  Class: Main Menu
  *  
  *  Description:
  *  This script manages the Main Menu GUI.
