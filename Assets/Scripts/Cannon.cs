@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: Cannon
+ *  
+ *  Description:
+ *  This script handles the Cannon behaviour.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class Cannon : MonoBehaviour
 {
     public enum ShootMode {

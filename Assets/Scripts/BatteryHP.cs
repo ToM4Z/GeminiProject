@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: BatteryHP
+ *  
+ *  Description:
+ *  This script allows player to gain HP.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class BatteryHP : MonoBehaviour
 {
 

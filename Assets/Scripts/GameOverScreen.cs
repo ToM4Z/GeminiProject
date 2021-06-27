@@ -4,6 +4,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/*
+ *  Class: GameOverScreen
+ *  
+ *  Description:
+ *  This script manages the Game Over Screen.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class GameOverScreen : MonoBehaviour
 {
     public static GameOverScreen instance = null;
@@ -24,17 +33,7 @@ public class GameOverScreen : MonoBehaviour
         gameOverPanel.SetActive(false);
     }
 
-    //private void Update() {
-
-    //    if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
-    //    {
-    //        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-
-    //        if (button != null)
-    //            button.onClick.Invoke();
-    //    }
-    //}
-
+    //This method activates the Game Over Screen routine
     public void ActiveGameOverScreen(){        
         actived = true;
         this.gameObject.SetActive(true);
@@ -42,6 +41,8 @@ public class GameOverScreen : MonoBehaviour
         StartCoroutine(WaitForThePianoSound());
     }
 
+    //The effective panel that handle the Game Over screen.
+    //It will appear after 7 seconds to make a better effect with the background music.
     private IEnumerator WaitForThePianoSound(){
         yield return new WaitForSeconds(7.0f);
         Time.timeScale = 0;
@@ -55,6 +56,7 @@ public class GameOverScreen : MonoBehaviour
         clickSfx.Play();
     }
 
+    //It tooks the player back to hub.
     public void BackToHub()
     {
         Time.timeScale = 1f;
@@ -62,6 +64,7 @@ public class GameOverScreen : MonoBehaviour
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 
+    //It tooks the player back to the main menu.
     public void RestartLevel()
     {
         Time.timeScale = 1f;

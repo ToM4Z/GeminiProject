@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: UI Manager
+ *  
+ *  Description:
+ *  I created this script to manage all the GUI components in easy way.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance = null;

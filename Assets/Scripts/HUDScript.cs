@@ -2,7 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
+ *  Class: GameOverScreen
+ *  
+ *  Description:
+ *  This script manages the HUD.
+ *  
+ *  Author: Andrea De Seta
+*/
 public class HUDScript : MonoBehaviour
 {
 
@@ -18,6 +25,7 @@ public class HUDScript : MonoBehaviour
 
     Sprite greenHP, orangeHP, redHP, emptyHP;
 
+    //Method found on internet. It allows us to search a Child Component by its name.
     private T GetChildComponentByName<T>(string name) where T : Component {
         foreach (T component in GetComponentsInChildren<T>(true)) {
             if (component.gameObject.name == name) {
@@ -49,28 +57,27 @@ public class HUDScript : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Set the Gear Counter placed in the HUD with a new number.
     public void setGearCounter(int newCount){
         gearCounter.text = "x" + newCount;
     }
 
+    //Set the Gear Bonus Counter placed in the HUD with a new number.
     public void setGearBonusCounter(int newCount){
         gearBonusCounter.text = "x" + newCount;
     }
 
+    //Set the Bomb Counter placed in the HUD with a new number.
     public void setBombCounter(int newCount){
         bombCounter.text = "x" + newCount;
     }
 
+    //Set the Life Counter placed in the HUD with a new number.
     public void setLifeCounter(int newCount){
         lifeCounter.text = "x" + newCount;
     }
 
+    //Update the Battery placed in the HUD.
     public void updateHpBattery(int hp){
         
         if(hp == 3){
@@ -88,6 +95,7 @@ public class HUDScript : MonoBehaviour
         
     }
 
+    //Active a Checkpoint image in the middle of the screen. It stays on the screen for 4 seconds.
     public void ActivateCheckpointImage(){
         Checkpoint.SetActive(true);
         checkpointSFX.Play();
