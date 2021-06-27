@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: Bomb
+ *  
+ *  Description:
+ *  This script handles the behaviour of a bomb.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class Bomb : MonoBehaviour
 {
     [SerializeField] private GameObject fireFusePrefab;

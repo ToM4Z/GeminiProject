@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: Platform Activaotr Button
+ *  
+ *  Description:
+ *  This script handles the Red Button behaviour.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class PlatformActivatorButton : MonoBehaviour
 {
     public Animation anim;
@@ -15,12 +24,6 @@ public class PlatformActivatorButton : MonoBehaviour
 
         //We need the controller of the moving platforms in order to activate them
         movingPlatformController = goParent.GetComponentInChildren<MovingPlatformController>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnTriggerEnter(Collider other) {

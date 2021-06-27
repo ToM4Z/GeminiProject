@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: BonusGearActivator
+ *  
+ *  Description:
+ *  This script handles the Bonus Block behaviour.
+ *  
+ *  Author: Andrea De Seta
+*/
+
 public class BonusGearActivator : MonoBehaviour
 {
     [SerializeField] private GameObject bonusGearPrefab;

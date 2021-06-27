@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ *  Class: Gear
+ *  
+ *  Description:
+ *  This script handles the Gear behaviour.
+ *  
+ *  Author: Andrea De Seta, Thomas Voce
+*/
 public class Gear : MonoBehaviour
 {
 
     void OnTriggerEnter(Collider other) {
         PlayerStatistics player = other.GetComponent<PlayerStatistics>();
-        //Check if the other object is a PlayerController
+        //Check if the other object is a PlayerController (Andrea)
         if (player != null) {
-            //If it is the player, increase Gear Counter
+            //If it is the player, increase Gear Counter (Andrea)
             Managers.Audio.PlayTin();
             Instantiate(Managers.Collectables.eventFX, transform.position, Quaternion.identity);
 
