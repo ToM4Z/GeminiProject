@@ -43,6 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2717755576056670435}
   - component: {fileID: 1668749219280537276}
+  - component: {fileID: 1099195210007229460}
   m_Layer: 0
   m_Name: TimerSFX
   m_TagString: Untagged
@@ -160,6 +161,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1099195210007229460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1477818071347399177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 611951f460bb8cd4fb0005c4f9b26151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7238567660432305107
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,6 +738,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9055908863104782596}
   - component: {fileID: 629129878324828348}
+  - component: {fileID: 8303488614355019730}
   m_Layer: 0
   m_Name: ActivationSFX
   m_TagString: Untagged
@@ -842,3 +856,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8303488614355019730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7791923702437733796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 611951f460bb8cd4fb0005c4f9b26151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

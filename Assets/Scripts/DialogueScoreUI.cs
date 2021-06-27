@@ -60,7 +60,7 @@ public class DialogueScoreUI : MonoBehaviour
         InteractImage.SetActive(active);
     }
 
-    public void ShowScores()
+    public void ShowScores(int level)
     {
         if (!activable)
             return;
@@ -70,19 +70,10 @@ public class DialogueScoreUI : MonoBehaviour
         DialogueBox.SetActive(true);
         textComponent.text = string.Empty;
 
-        if (GlobalVariables.scores.Count == 0)
-        {
-            coroutine = StartCoroutine(TypeLine(text = GlobalVariables.Dialogues[1]));
-        }
+        if (GlobalVariables.scores.TryGetValue(level, out int score))
+            coroutine = StartCoroutine(TypeLine(text = GlobalVariables.Dialogues[0] + score));
         else
-        {
-            string scores = GlobalVariables.Dialogues[0];
-            foreach (KeyValuePair<int, int> score in GlobalVariables.scores)
-            {
-                scores += "\nLevel " + score.Key + " : " + score.Value;
-            }
-            coroutine = StartCoroutine(TypeLine(text = scores));
-        }
+            coroutine = StartCoroutine(TypeLine(text = GlobalVariables.Dialogues[1]));
     }
 
     IEnumerator TypeLine(string x)
