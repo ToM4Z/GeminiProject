@@ -712,6 +712,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             c.enabled = enable;
     }
 
+    #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         if(originPos != null && originPos != Vector3.zero)
@@ -732,4 +733,5 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             Handles.DrawWireDisc(originPos, Vector3.up, maxDistancePatrol * .8f);            
         }
     }
+    #endif
 }

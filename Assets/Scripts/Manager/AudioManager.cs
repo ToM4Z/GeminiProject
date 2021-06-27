@@ -79,11 +79,13 @@ public class AudioManager : MonoBehaviour, IGameManager
 
     public void PlayGameOver()
     {
+        musicSource.loop = false;
         PlayMusic(GameOverMusic == null ? GameOverMusic = (AudioClip)Resources.Load(GlobalVariables.GAMEOVER_MUSIC) : GameOverMusic);
     }
 
     public void PlayVictory()
     {
+        musicSource.loop = false;
         PlayMusic(VictoryMusic == null ? VictoryMusic = (AudioClip)Resources.Load(GlobalVariables.VICTORY_MUSIC) : VictoryMusic);
     }
 

@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 4641395927699582929}
   - component: {fileID: 1468671519814896790}
   - component: {fileID: 5386657940085848757}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Destroyable_Wall
   m_TagString: Ambiental Object to Reset
   m_Icon: {fileID: 0}

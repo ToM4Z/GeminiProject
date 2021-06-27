@@ -15,8 +15,8 @@ public class LevelLoader : MonoBehaviour
     void Awake()
     {
         instance = this;
+        Cursor.visible = false;
         GlobalVariables.GameOver = GlobalVariables.Win = false;
-        GlobalVariables.ACTUAL_SCENE = SceneManager.GetActiveScene().buildIndex;
     }
 
     public void ReloadLevel()
@@ -35,8 +35,8 @@ public class LevelLoader : MonoBehaviour
         yield return new WaitForSeconds(transitionTime);
 
         slider.gameObject.SetActive(true);
-
-        GlobalVariables.ACTUAL_SCENE = levelIndex;
+        PlayerSaveSystem.Save();
+        
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelIndex);
 
         while (!operation.isDone)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /*
  *  Class: GlobalVariables
@@ -68,8 +69,9 @@ public static class GlobalVariables
 
     public static int GearScore = 10, GearBonusScore = 50;
 
-    public static int ACTUAL_SCENE = 0;
+    public static int ACTUAL_SCENE => SceneManager.GetActiveScene().buildIndex;
 
+    public const int NUMBER_OF_LEVELS = 3;
     public const int MAIN_MENU_SCENE = 0;
     public const int HUB_SCENE = 4;
     public const int LEVEL_1_SCENE = 1;
@@ -91,9 +93,15 @@ public static class GlobalVariables
         PATH_MUSIC + "HUB OST",
     };
 
-    public static string GetLevelMusic() { return LEVEL_MUSICS[ACTUAL_SCENE-1]; }
+    public static string GetLevelMusic() 
+    { 
+        return (ACTUAL_SCENE < 1 || ACTUAL_SCENE > 4) ?
+            LEVEL_MUSICS[0]
+            :
+            LEVEL_MUSICS[ ACTUAL_SCENE - 1 ]; 
+    }
 
-    private static List<int> dialoguesAlreadyDone = new List<int>();
+    public static List<int> dialoguesAlreadyDone = new List<int>();
 
     public static bool isDialogueDone(int x) { return dialoguesAlreadyDone.Contains(x); }
 
@@ -139,7 +147,7 @@ public static class GlobalVariables
         "Mmm... quel muro sembra fragile... Li vicino c'e' una bomba, usa il tasto E, o Y del Joypad, per piazzarla e distruggere quel muro.",
 
         // [22, 25] Level 1, D7, davanti al fungo
-        "I tuoi radar mi segnalano che qui sopra c'e' molta attività... ti consiglio di prepararti!",
+        "I tuoi radar mi segnalano che qui sopra c'e' molta attivitï¿½... ti consiglio di prepararti!",
         "Se qualche creatura ti volesse attaccare, usa il tasto sinistro del mouse, o X del Joypad, per attaccare.",
         "Oppure puoi sempre ricorrere all'antica arte della fuga...",
         "Quando sei in movimento, usa il tasto C, o B del Joypad, per eseguire una scivolata.",
@@ -149,7 +157,7 @@ public static class GlobalVariables
         "Non rilevo pericoli, raccoglila pure!!",
 
         // [28, 28] Level 1, D9, davanti alla vita
-        "Hai trovato una vita! Vabbe è inutile, tanto morirai miseramente...",
+        "Hai trovato una vita! Vabbe ï¿½ inutile, tanto morirai miseramente...",
 
         // [29, 29] Level 2, D8, davanti al primo masso
         "Preparati a fare una bellissima e tranquillissima passeggiata... ;)",

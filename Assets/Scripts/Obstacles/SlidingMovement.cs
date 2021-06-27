@@ -23,7 +23,7 @@ public class SlidingMovement : MonoBehaviour
     private LeftOrRight platformDirection = LeftOrRight.Default;
     public Type type;
     private bool triggerPopUp;
-    private bool isPop;
+    private bool once;
     private bool isScaling;
     private float TimePassed;
     public MeshCollider childWithColl;
@@ -46,7 +46,7 @@ public class SlidingMovement : MonoBehaviour
         this.end_rotation = Quaternion.Euler(start_rotation.eulerAngles.x + distance, start_rotation.eulerAngles.y, start_rotation.eulerAngles.z);
         this.TimePassed = 0;
         this.durationTime = 1.0f * distance;
-        this.isPop = true;
+        this.once = true;
         this.isScaling = false;
     }
 
@@ -66,31 +66,32 @@ public class SlidingMovement : MonoBehaviour
                     if (!isScaling) {
                         if (TimePassed < 2.0f) {
                             this.transform.rotation = Quaternion.Slerp(start_rotation, end_rotation, startTime/durationTime);   // ruoto da start_' a end_' rotation
-                            this.startTime += Time.fixedDeltaTime * speed * 5;
+                            this.startTime += Time.fixedDeltaTime * speed * 4;
                             this.TimePassed += Time.fixedDeltaTime;
                         } else if (TimePassed >= 2.0f) {
                             this.childWithColl.enabled = false;
                             this.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, startTime/durationTime);
                             startTime += Time.fixedDeltaTime * speed * 4;
-                            StartCoroutine(PopUp());
+                            if(once) {
+                                StartCoroutine(PopUp());
+                                once = false;
+                            }
                         }
                     }
-                    if(this.childWithColl.enabled && !isPop) {
+                    if(this.childWithColl.enabled && isScaling) {
                         if(this.transform.localScale == Vector3.zero) {
-                            isScaling = true;
-                            Vector3 scale = new Vector3(1,1,1);
                             Quaternion rot = new Quaternion();
-                            rot.eulerAngles = new Vector3(0,this.transform.rotation.eulerAngles.y,0);
+                            rot.eulerAngles = Vector3.zero;
                             this.transform.rotation = rot;
-                            startTime = 0;
-                        }
-                        if (this.transform.localScale == Vector3.one) {
-                            this.triggerPopUp = false;
-                            isPop = true;
-                            isScaling = false;
+                            this.startTime = 0;
                         }
                         startTime += Time.fixedDeltaTime * speed * 4;
                         this.transform.localScale = Vector3.Lerp(this.transform.localScale, Vector3.one, startTime/durationTime);
+                        if (this.transform.localScale == Vector3.one) {
+                            this.triggerPopUp = false;
+                            isScaling = false;
+                            this.startTime = 0;
+                        }
                     }
                 } 
             }
@@ -110,8 +111,8 @@ public class SlidingMovement : MonoBehaviour
                 startTime = 0;
             }
             else if(this.type == Type.PopUp && 
-                    (  (platformDirection == LeftOrRight.Right && Mathf.Approximately(transform.rotation.eulerAngles.x, distance))  // Approximately fa la stessa cosa del check '< d+eps'
-                    || (platformDirection == LeftOrRight.Left  && Mathf.Approximately(transform.rotation.eulerAngles.x, 360-distance)) // quando il grado va in negativo in realt� scende da 360 (es. -1 sarebbe 359)
+                    (  (platformDirection == LeftOrRight.Right && Approx(transform.rotation.eulerAngles.x, distance))  // Approximately fa la stessa cosa del check '< d+eps'
+                    || (platformDirection == LeftOrRight.Left  && Approx(transform.rotation.eulerAngles.x, 360-distance)) // quando il grado va in negativo in realt� scende da 360 (es. -1 sarebbe 359)
                     )) {
                 SwitchDirection();
                 this.start_rotation = end_rotation;
@@ -119,6 +120,10 @@ public class SlidingMovement : MonoBehaviour
                 this.startTime = 0;
             }
         }
+    }
+
+    private bool Approx(float a, float b) {
+        return Mathf.Abs(a-b) <= 0.1f;
     }
 
     private void SwitchDirection() {
@@ -133,7 +138,6 @@ public class SlidingMovement : MonoBehaviour
 
     void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
-            Debug.Log("Player g is: ");
             player.transform.SetParent(this.transform);
         } else if (this.type == Type.PopUp) {
             this.triggerPopUp = true;
@@ -154,9 +158,10 @@ public class SlidingMovement : MonoBehaviour
 
     private IEnumerator PopUp(){
         yield return new WaitForSeconds(3.0f);
-        this.isPop = false;
+        this.isScaling = true;
         this.childWithColl.enabled = true;
         this.TimePassed = 0.0f;
+        this.once = true;
     }
 
     public void SetPlatformActivated(bool activated) {

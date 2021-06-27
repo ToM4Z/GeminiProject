@@ -24,16 +24,16 @@ public class GameOverScreen : MonoBehaviour
         gameOverPanel.SetActive(false);
     }
 
-    private void Update() {
+    //private void Update() {
 
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
-        {
-            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+    //    if (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return))
+    //    {
+    //        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
-            if (button != null)
-                button.onClick.Invoke();
-        }
-    }
+    //        if (button != null)
+    //            button.onClick.Invoke();
+    //    }
+    //}
 
     public void ActiveGameOverScreen(){        
         actived = true;
@@ -45,6 +45,7 @@ public class GameOverScreen : MonoBehaviour
     private IEnumerator WaitForThePianoSound(){
         yield return new WaitForSeconds(7.0f);
         Time.timeScale = 0;
+        Cursor.visible = true;
         gameOverPanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("HubButton"));

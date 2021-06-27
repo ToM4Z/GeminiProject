@@ -52,6 +52,10 @@ public class DialogueUI : MonoBehaviour
                 textComponent.text = GlobalVariables.Dialogues[index];
                 ShowNextImg();
             }
+        } else if (Input.GetButtonDown("Escape"))
+        {
+            StartCoroutine(DelayEnableInput());
+            DialogueBox.SetActive(false);
         }
     }
 

@@ -33,15 +33,15 @@ public class PauseMenu : MonoBehaviour
             else
                 Pause();
         }
+        //else
+        //if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
+        //{
+        //    Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
 
-        if (GlobalVariables.isPaused && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Return)))
-        {
-            Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        //    if (button != null)
+        //        button.onClick.Invoke();
 
-            if (button != null)
-                button.onClick.Invoke();
-
-        }
+        //}
     }
 
     void Pause(){
@@ -53,7 +53,7 @@ public class PauseMenu : MonoBehaviour
         GlobalVariables.isPaused = true;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("ResumeButton"));
-        //Cursor.visible = true;
+        Cursor.visible = true;
     }
 
     public void Unpause(){
@@ -65,7 +65,8 @@ public class PauseMenu : MonoBehaviour
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
         Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, true, MessengerMode.DONT_REQUIRE_LISTENER);
         GlobalVariables.isPaused = false;
-        //Cursor.visible = false;
+        ConfigSaveSystem.Save();
+        Cursor.visible = false;
     }
 
     public void QuitGame(){
@@ -84,6 +85,7 @@ public class PauseMenu : MonoBehaviour
         pausePanel.SetActive(true);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(GameObject.Find("ResumeButton"));
+        ConfigSaveSystem.Save();
     }
     public void OptionToControls(){
         optionPanel.SetActive(false);
