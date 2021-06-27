@@ -1,6 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/*
+ *  Class: Gear Bonus
+ *  
+ *  Description:
+ *  This script handles the Gear Bonus behaviour.
+ *  
+ *  Author: Andrea De Seta
+*/
 
 public class GearBonus : MonoBehaviour
 {

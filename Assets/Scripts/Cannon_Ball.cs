@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Authors: Andrea De Seta
- *          Thomas Voce
- */
+ *  Class: Cannon_Ball
+ *  
+ *  Description:
+ *  This script handles the cannon ball behaviour.
+ *  
+ *  Author: Andrea De Seta, Thomas Voce
+*/
 public class Cannon_Ball : MonoBehaviour
 {
     public float speed = 0.1f;
@@ -22,7 +26,7 @@ public class Cannon_Ball : MonoBehaviour
     {
         transform.Translate(0,0,speed * Time.deltaTime);
 
-        // if I'm over the limit distance from where I shoot, I explode
+        // if I'm over the limit distance from where I shoot, I explode (Andrea)
         if (Vector3.Distance(originPos, transform.position) > maxDistance)
             Explode();
     }
@@ -32,11 +36,11 @@ public class Cannon_Ball : MonoBehaviour
         if (other.isTrigger)
             return;
 
-        // if the gameobject hitted is the player, damage him
+        // if the gameobject hitted is the player, damage him (Andrea)
         if (other.GetComponent<PlayerStatistics>() != null)
             PlayerStatistics.instance.hurt(DeathEvent.HITTED);
 
-        // if the gameobject hitted can be hitted, damage him
+        // if the gameobject hitted can be hitted, damage him (Thomas)
         else if (other.GetComponent<IHittable>() != null)
             other.GetComponent<IHittable>().hit();
 
