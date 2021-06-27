@@ -47,6 +47,7 @@ public class SlidingMovement : MonoBehaviour
         this.TimePassed = 0;
         this.durationTime = 1.0f * distance;
         this.once = true;
+        this.triggerPopUp = false;
         this.isScaling = false;
     }
 
@@ -139,15 +140,15 @@ public class SlidingMovement : MonoBehaviour
     void OnTriggerEnter(Collider coll) {
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
             player.transform.SetParent(this.transform);
-        } else if (this.type == Type.PopUp) {
+        } else if (this.type == Type.PopUp && coll.gameObject.tag == "Player") {
             this.triggerPopUp = true;
         }
     }
 
-    void OnTriggerExit(Collider coll) {
+    void OnTriggerExit(Collider coll) { 
         if(coll.gameObject.tag == "Player" && this.type != Type.PopUp) {
             player.transform.parent = playerParent.transform;
-        } else if(this.type == Type.PopUp) {
+        } else if(this.type == Type.PopUp && coll.gameObject.tag == "Player") {
             this.TimePassed = 0.0f;
         }
     }
