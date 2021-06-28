@@ -4,6 +4,14 @@ using UnityEngine.AI;
 using UnityEngine;
 using PathCreation;
 
+/*
+ *  Class: BoulderPath
+ *  
+ *  Description:
+ *  Script to handle the boulder that chase the player in the level 2  
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public class BoulderPath : MonoBehaviour, IResettable
 {
     private bool _isActive;
@@ -44,6 +52,7 @@ public class BoulderPath : MonoBehaviour, IResettable
         endpoint = pathCreator.path.GetPoint(pathCreator.path.NumPoints - 1);
     }
 
+    //The boulder will travel a distance and with the help of the PathCreator will set position and rotation untile it reach the endpoint
     void Update()
     {
         if (isActive)
@@ -58,6 +67,7 @@ public class BoulderPath : MonoBehaviour, IResettable
         }
     }
 
+    //If the player die, on its respawn the boulder will be resetted
     public void Reset()
     {
         isActive = false;
@@ -67,6 +77,7 @@ public class BoulderPath : MonoBehaviour, IResettable
     }
 
 
+    //When the boulder go forward along its path can kill every enemy that run in it and the player
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
             collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.MASHED,true);

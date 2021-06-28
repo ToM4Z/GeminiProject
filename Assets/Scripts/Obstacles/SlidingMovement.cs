@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+/*
+ *  Class: SlidingMovement
+ *  
+ *  Description:
+ *  Script to handle platform behaviour: vertical translation, horizontal translation, pop-up mode 
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public class SlidingMovement : MonoBehaviour
 {
+    //direction of the platform
     public enum LeftOrRight {
         Left = -1, Default = 0, Right = 1
     }
-
+    //type of the platform
     public enum Type {
         Slider = 0, Elevator = 1, PopUp = 2
     }
@@ -26,7 +35,7 @@ public class SlidingMovement : MonoBehaviour
     private bool once;
     private bool isScaling;
     private float TimePassed;
-    public MeshCollider childWithColl;
+    public MeshCollider childWithColl; //mesh of the child object to disable after the animation
     public bool platformActivated = false;
     private float durationTime;
     private float startTime = 0;
@@ -51,7 +60,15 @@ public class SlidingMovement : MonoBehaviour
         this.isScaling = false;
     }
 
-    // Update is called once per frame
+    /*
+    * After a platform get activated it will be handled under this function, which let the platform behave in order to its type.
+    * For type elevator and slider the platform will just go back&forward or up&down (riga 71 e riga 74) and change direction to translate
+    * when it covers the distance according to the statement at riga 114 and riga 121
+    * About the type PopUp, the platform after the trigger will start to shake for 2s and then lerp the platform to scale to 0 
+    * and disable the mesh in child. 
+    * It will run then the coroutine at riga 175 to turn true the variable isScaling and let the platform come back scaling from 0 to 1
+    * and do this again if you step again on the platform.
+    */
     void FixedUpdate()
     {
 
@@ -165,6 +182,9 @@ public class SlidingMovement : MonoBehaviour
         this.once = true;
     }
 
+    /*
+    * Turn on/off the platform to let the platform do/not do his behaviour
+    */
     public void SetPlatformActivated(bool activated) {
         this.platformActivated = activated;
     }

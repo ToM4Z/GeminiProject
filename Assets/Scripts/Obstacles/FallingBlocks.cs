@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: FallingBlocks
+ *  
+ *  Description:
+ *  Script to handle this obstacle that can be triggered every X second or when you walk under it   
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public class FallingBlocks : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -15,8 +23,10 @@ public class FallingBlocks : MonoBehaviour
     private bool descending;
     public float speed;
     public bool isTimed;
-    [SerializeField] private BoxCollider FallingBoxCollider;
+    [SerializeField] private BoxCollider FallingBoxCollider; //falling 
     AudioSource _audio;
+
+    //the ray in the start is used to calculate how much the block has to travel
     void Start()
     {
         this.startPos = transform.position;
@@ -34,7 +44,7 @@ public class FallingBlocks : MonoBehaviour
         _audio = this.GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
+    //the obstacle is handled by LerpBlocks function every deltaFall seconds, if timed, or when you step under it 
     void Update() {
         if (triggered) {
             LerpBlocks();
@@ -46,6 +56,11 @@ public class FallingBlocks : MonoBehaviour
         }
     }
 
+
+    /*
+    * If the block is able to descend, it will lerp to the endPos and it will enable the hitbox in order to hit the player is he is below it.
+    * The block will go back in its original position, but slowly 
+    */
     private void LerpBlocks() {
         if(descending) {
                 FallingBoxCollider.enabled = true;
@@ -68,6 +83,8 @@ public class FallingBlocks : MonoBehaviour
             timePassed = 0;
         }
     }
+
+    //If the mode of the block is not isTimed then the block now is able to descend 
     private void OnTriggerEnter(Collider coll) {
         if(transform.position == startPos && !isTimed) {
             triggered = true;

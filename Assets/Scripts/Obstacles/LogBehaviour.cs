@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: LogBehaviour
+ *  
+ *  Description:
+ *  Script to handle the log obstacle generated from the script LogController
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public class LogBehaviour : MonoBehaviour
 {
     private Vector3 startPos;
@@ -24,13 +32,14 @@ public class LogBehaviour : MonoBehaviour
         this.startTime = 0;
     }
 
-    // Update is called once per frame
+    //The object is translated using Lerp function until it reach endPos
     void Update()
     {
         this.transform.position = Vector3.Lerp(startPos,endPos,startTime/durationTime);
         startTime += Time.deltaTime * speed;
     }
 
+    //If the player is hitted by the log it will be hurt (only 1hp removed)
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
             collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.HITTED,false);

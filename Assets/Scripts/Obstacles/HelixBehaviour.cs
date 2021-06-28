@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: HelixBehaviour
+ *  
+ *  Description:
+ *  Script to handle the helix obstacle  
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public class HelixBehaviour : MonoBehaviour
 {
     public enum ClockVerse {
@@ -23,7 +31,7 @@ public class HelixBehaviour : MonoBehaviour
         endRot.eulerAngles = new Vector3(transform.rotation.eulerAngles.x,(int)clockVerse*45,transform.rotation.eulerAngles.z);
     }
 
-    // Update is called once per frame
+    //To rotate the helix permanently using Quaternion.Lerp the end rotation point is calculated every 45 degree, otherwise strange behaviour can happen
     void Update()
     {
         this.transform.rotation = Quaternion.Lerp(startRot,endRot,startTime/durationTime);
@@ -40,6 +48,7 @@ public class HelixBehaviour : MonoBehaviour
         return Mathf.Abs(a-b) <= 0.1f;
     }
 
+    //If the player is hitted by the log it will be hurt (only 1hp removed)
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
             collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.HITTED,false);
