@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/*
+ *  Class: PlayerSaveSystem
+ *  
+ *  Description:
+ *  Class to save player progress
+ *  
+ *  Author: Gianfranco Sapia, Thomas Voce
+*/
+
 public static class PlayerSaveSystem
 {
     public static void Save() {
@@ -32,6 +41,7 @@ public static class PlayerSaveSystem
         public List<int> dialoguesDone;
     }
 
+    // methods to convert dictionary<int int> to array and viceversa (Thomas)
     public static int[] DictionaryToArray(Dictionary<int,int> d)
     {
         int[] array = new int[ Mathf.Max(new List<int>(d.Keys).ToArray()) + 1 ];

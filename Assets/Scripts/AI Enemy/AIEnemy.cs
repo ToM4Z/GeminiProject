@@ -124,6 +124,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         animVarSpawn = "Spawn",
         animVarSpeed = "Speed";
 
+    // All winged enemies have to fall down when die,
+    // this variables are used to make this and to reset the position when respawn
     private Transform model;
     private Vector3 originModelPos;
     private Quaternion originModelRot;
@@ -137,11 +139,15 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     // the third will be used to idle clips which have to loop
     [SerializeField] protected AudioClip spawnClip, idleClip, walkClip, attackClip, deathClip;
 
-    [SerializeField]
-    private AttackTrigger[] attackTriggers;
+    // the attack triggers are used to hit player with melee attacks
+    [SerializeField] private AttackTrigger[] attackTriggers;
 
+    // an enemy can hit player with different type of attack
+    // all not elemental enemies attack player with HITTED type but
+    // the enemy bat use an attack trigger to hit player, so this variable is needed
     [SerializeField] protected DeathEvent typeAttack = DeathEvent.HITTED;
 
+    // all enemies can drop gear when they die, but the spawned enemies mustn't do it 
     [SerializeField] public bool canDropItem = true;
 
     // General Start Method in which the enemy start from IDLE state
@@ -171,9 +177,8 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
             animator.SetTrigger(animVarSpawn);
         }
         else
-            SetEnableColliders(false);
+            SetEnableColliders(false);  // an enemy in INACTIVE status don't have to be collidable
 
-        //agent.autoBraking = false;
         idleTimer = -1; // this will cause a call to newRandomDestination
 
         model = transform.GetChild(0);
@@ -188,7 +193,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     {
         animStateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        switch (status)                                 // in base of the status, I execute the relative method
+        switch (status)
         {
             case Status.INACTIVE: 
                 inactiveIdle(); 
@@ -428,7 +433,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         ChangeStatus(Status.IDLE);
     }
 
-    // With this method, the player can hit and kill the enemy
+    // Implemented by hittable, this method kill enemy
     public bool hit()
     {
         if (status == Status.DEAD || status == Status.INACTIVE)
@@ -455,6 +460,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
 
         if (canDropItem)
         {
+            // When drop gear, I activate gravity to make a little animation
             GameObject gear = Instantiate(Managers.Enemies.DropItem, new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), Quaternion.identity);
             gear.GetComponent<Gear>().ActivateFallDown();
             Managers.Collectables.AddGearDropped(gear);
@@ -589,12 +595,14 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         agent.SetDestination(destination);
     }
 
+    // this method generate a random destination not a lot distance from origin point
     private void setRandomDestination()
     {
         randomDestination = GenerateRandomPosition(originPos, maxDistancePatrol*.8f, NavMesh.AllAreas);
         SetNavDestination(randomDestination);
     }
 
+    // I search a valid position, if it cannot create it, probably the enemy is not positioned on a nav mesh area
     public static Vector3 GenerateRandomPosition(Vector3 origin, float dist, int layermask)
     {
         bool find;
@@ -648,16 +656,19 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         status = initialStatus;
     }
 
+    // is used from AwakeEnemyTrigger to awake an enemy in INACTIVE status
     public void AwakeEnemy()
     {
         spawn = true;
     }
 
+    // if I setted from inspector a wrong status, in the start, I throw an exception
     protected virtual bool isInitialStatusAcceptable(Status s)
     {
         return s == Status.IDLE || s == Status.INACTIVE;
     }
 
+    // methods called by ReceiveEventAnimations
     public virtual void PlaySpawnSound()
     {
         soundSource[0].PlayOneShot(spawnClip);
@@ -683,6 +694,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
         soundSource[0].PlayOneShot(deathClip);
     }
 
+    // When dead animation ends, wait few seconds and then start despawn animation 
     public void StartDespawn()
     {
         StartCoroutine(StartDespawnDelayed());
@@ -691,7 +703,7 @@ public class AIEnemy : MonoBehaviour, IHittable, IResettable
     private IEnumerator StartDespawnDelayed()
     {
         yield return new WaitForSeconds(2.5f);
-        if (status == Status.DEAD)  // if the enemy is still dead (during this 2.5 seconds the player should be die) 
+        if (status == Status.DEAD)  // if the enemy is still dead (during this 2.5 seconds the player should be die and this enemy could be alive) 
         {
             animator.SetTrigger("Despawn"); // I start Despawn
         }

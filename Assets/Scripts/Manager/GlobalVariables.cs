@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
  *  Class: GlobalVariables
  *  
  *  Description:
- *  This class contain some constants and global variables
+ *  This class contains constants and global variables
  *  
  *  Author: Thomas Voce
 */
@@ -50,8 +50,10 @@ public static class GlobalVariables
         }
     }
 
+    // After player arrive to gameover screen, I reset lives to this variable
     public static int PlayerLivesToReset = 3;
 
+    // Actual Player lives
     private static int _playerLives = 3;
     public static int PlayerLives
     {
@@ -59,14 +61,17 @@ public static class GlobalVariables
         set {_playerLives = value; }
     }
 
+    // constant messages
     public const string DEATH = "DEATH";
     public const string RESET = "RESET";
     public const string ENABLE_INPUT = "ENABLE_INPUT";
     public const string TOGGLE_AUDIO_ON_OFF = "TOGGLE_AUDIO_ON_OFF";
     public const string AUDIO_SETTINGS_CHANGED = "AUDIO_SETTINGS_CHANGED";
 
+    // Dictionary containing level scores
     public static Dictionary<int, int> scores = new Dictionary<int, int>();
 
+    // score assigned for each gear / gearBonus
     public static int GearScore = 10, GearBonusScore = 50;
 
     public static int ACTUAL_SCENE => SceneManager.GetActiveScene().buildIndex;
@@ -93,6 +98,7 @@ public static class GlobalVariables
         PATH_MUSIC + "HUB OST",
     };
 
+    // methods that return the music of actual level (if it has)
     public static string GetLevelMusic() 
     { 
         return (ACTUAL_SCENE < 1 || ACTUAL_SCENE > 4) ?
@@ -101,6 +107,7 @@ public static class GlobalVariables
             LEVEL_MUSICS[ ACTUAL_SCENE - 1 ]; 
     }
 
+    // list of indices of dialogues already triggered
     public static List<int> dialoguesAlreadyDone = new List<int>();
 
     public static bool isDialogueDone(int x) { return dialoguesAlreadyDone.Contains(x); }

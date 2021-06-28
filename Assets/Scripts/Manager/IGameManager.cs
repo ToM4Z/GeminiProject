@@ -1,6 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+
+/*
+ *  Class: IGameManager
+ *  
+ *  Description:
+ *  Interface for all GameManagers
+ *  
+ *  Author: Carmelo Macrì (wrote by Thomas Voce)
+*/
 
 public interface IGameManager
 {

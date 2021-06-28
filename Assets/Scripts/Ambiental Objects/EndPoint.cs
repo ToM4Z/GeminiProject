@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
+/*
+ *  Class: EndPoint
+ *  
+ *  Description:
+ *  Is the script of the end level. It handles the animation of victory.
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class EndPoint : MonoBehaviour
 {
+    // The endpoint activate a camera to see better final animation
     [SerializeField] public CinemachineVirtualCamera vrcam;
+    
+    // during animation, the player must be moved to a fixed position 
     private PatrolPath patrolPath;
     private GameObject player;
 
     private bool activated = false;
+    // is used to understand which position the player have to move
     private int pathIndex = 0;
 
     private void Start()
@@ -17,11 +30,11 @@ public class EndPoint : MonoBehaviour
         patrolPath = GetComponentInChildren<PatrolPath>();
     }
 
+    // if activated, I move player towards the final position, following a path
     void Update()
     {
         if (activated)
         {
-
             if (pathIndex != patrolPath.GetPathLength())
             {
                 player.transform.rotation = Quaternion.Slerp(player.transform.rotation, transform.rotation, Time.deltaTime * 3f);
@@ -34,6 +47,7 @@ public class EndPoint : MonoBehaviour
         }
     }
 
+    // when player enter in trigger, I start player win animation, victory screen, endpoint animation, and start to move player to final destination
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -46,12 +60,12 @@ public class EndPoint : MonoBehaviour
             GetComponentInChildren<Animator>().SetTrigger("EndScene");
             vrcam.Priority = 20;
 
-
             player = other.gameObject;
             pathIndex = GetClosestPatrolNode(player.transform.position);
         }
     }
 
+    // return the closest player patrol node 
     protected int GetClosestPatrolNode(Vector3 target)
     {
         int closestPathNodeIndex = 0;
