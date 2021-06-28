@@ -111,7 +111,7 @@ public static class GlobalVariables
     public static readonly string[] Dialogues = new string[]
     {
         // [0, 1] testo per visualizzare il punteggio
-        "Records: ", 
+        "Record: ", 
         "Non hai fatto ancora nessun punteggio!\nDatti una mossa!!",
 
         // [2, 7] Hub, D1 all'inizio della partita

@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 6735776566415034481}
   - component: {fileID: 6735776566415034483}
   - component: {fileID: 7023620470530813464}
+  - component: {fileID: 1766339932995733660}
   m_Layer: 0
   m_Name: Falling Blocks
   m_TagString: MAST_Holder
@@ -220,6 +221,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1766339932995733660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6735776566415034478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 611951f460bb8cd4fb0005c4f9b26151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7851640721891938395
 GameObject:
   m_ObjectHideFlags: 0
