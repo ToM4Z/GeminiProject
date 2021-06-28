@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -8,13 +10,20 @@ using UnityEngine;
 public class AudioSourcePauseManager : MonoBehaviour
 {
 
+    AudioSource[] sources;
+
+    private void Start()
+    {
+        sources = GetComponents<AudioSource>();
+    }
+
     private void TogglePlayResume(bool isEnabled)
     {
         if(isEnabled)
-            foreach (AudioSource sfx in GetComponents<AudioSource>())
+            foreach (AudioSource sfx in sources)
                 sfx.UnPause();
         else
-            foreach (AudioSource sfx in GetComponents<AudioSource>())
+            foreach (AudioSource sfx in sources)
                 sfx.Pause();
     }
 

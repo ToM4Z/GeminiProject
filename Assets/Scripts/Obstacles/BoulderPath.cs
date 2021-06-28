@@ -6,7 +6,21 @@ using PathCreation;
 
 public class BoulderPath : MonoBehaviour, IResettable
 {
-    public bool isActive;
+    private bool _isActive;
+    public bool isActive
+    {
+        get { return _isActive; }
+        set
+        {
+            _isActive = value;
+            animator.SetBool("Move", isActive);
+            if (isActive)
+                _audio.Play();
+            else
+                _audio.Stop();
+        }
+    }
+
     private Vector3 originPos;
     private Quaternion originRot;
     public PathCreator pathCreator;
@@ -18,6 +32,9 @@ public class BoulderPath : MonoBehaviour, IResettable
 
     void Start()
     {
+        animator = this.GetComponentInChildren<Animator>();
+        _audio = this.GetComponent<AudioSource>();
+
         isActive = false;
 
         originPos = transform.position;
@@ -25,26 +42,18 @@ public class BoulderPath : MonoBehaviour, IResettable
 
         transform.position = pathCreator.path.GetPointAtDistance(0);
         endpoint = pathCreator.path.GetPoint(pathCreator.path.NumPoints - 1);
-
-        animator = this.GetComponentInChildren<Animator>();
-        _audio = this.GetComponent<AudioSource>();
     }
 
     void Update()
     {
-        animator.SetBool("Move",isActive);
         if (isActive)
         {
-            if(!_audio.isPlaying) {
-                _audio.Play();
-            }
             distanceTravelled += speed * Time.deltaTime;
             transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled);
             transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled);
 
             if (Vector3.Distance(transform.position, endpoint) < 2) {
                 isActive = false;
-                _audio.Stop();
             }
         }
     }
@@ -52,7 +61,6 @@ public class BoulderPath : MonoBehaviour, IResettable
     public void Reset()
     {
         isActive = false;
-        _audio.Stop();
         transform.position = originPos;
         transform.rotation = originRot;
         distanceTravelled = 0;
