@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+
 /*
  *  Class: PatrolPath
  *  
@@ -9,12 +10,12 @@ using UnityEngine;
  *  
  *  Author: Thomas Voce
 */
+
 public class PatrolPath : MonoBehaviour
 {
 
     [Tooltip("The Nodes making up the path")]
     public List<Transform> PathNodes = new List<Transform>();
-
 
     public float GetDistanceToNode(Vector3 origin, int destinationNodeIndex)
     {
@@ -49,7 +50,7 @@ public class PatrolPath : MonoBehaviour
 
     public int GetPathLength() { return PathNodes.Count; }
 
-    // draw patrol path 
+    // draw patrol path in editor view
     void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;

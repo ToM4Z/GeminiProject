@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: AudioManager
+ *  
+ *  Description:
+ *  This manager handle music, audio listener, music and sound volumes and the general audio clip Tin
+ *  
+ *  Author: Thomas Voce, Carmelo Macrì
+*/
+
 public class AudioManager : MonoBehaviour, IGameManager
 {
     public ManagerStatus status { get; private set; }
@@ -17,9 +26,9 @@ public class AudioManager : MonoBehaviour, IGameManager
         musicSource.ignoreListenerVolume = true;
         musicSource.ignoreListenerPause = true;
 
-        UpdateVariables();
+        UpdateVariables();  // update variables from global variables
 
-        PlayLevelMusic();
+        PlayLevelMusic();   // play level music
 
         status = ManagerStatus.Started;
     }
@@ -66,12 +75,6 @@ public class AudioManager : MonoBehaviour, IGameManager
         soundSource.PlayOneShot(clip);
     }
 
-    private void PlayMusic(AudioClip clip)
-    {
-        musicSource.clip = clip;
-        musicSource.Play();
-    }
-
     public void PlayLevelMusic()
     {
         PlayMusic(LevelMusic == null ? LevelMusic = (AudioClip)Resources.Load(GlobalVariables.GetLevelMusic()) : LevelMusic);
@@ -89,6 +92,12 @@ public class AudioManager : MonoBehaviour, IGameManager
         PlayMusic(VictoryMusic == null ? VictoryMusic = (AudioClip)Resources.Load(GlobalVariables.VICTORY_MUSIC) : VictoryMusic);
     }
 
+    private void PlayMusic(AudioClip clip)
+    {
+        musicSource.clip = clip;
+        musicSource.Play();
+    }
+
     public void StopMusic()
     {
         musicSource.Stop();
@@ -104,7 +113,6 @@ public class AudioManager : MonoBehaviour, IGameManager
         {
             adjustedVolume -= startVolume * Time.deltaTime / FadeTime;
             audioSource.volume = adjustedVolume;
-            //Debug.Log(adjustedVolume);
             yield return null;
         }
 
@@ -112,7 +120,7 @@ public class AudioManager : MonoBehaviour, IGameManager
         audioSource.volume = startVolume;
     }
 
-    // da testare
+    // This method create a smoothly fade in of the sound (not used)
     public static IEnumerator FadeIn(AudioSource audioSource, float FadeTime)
     {
         float originVolume = audioSource.volume;

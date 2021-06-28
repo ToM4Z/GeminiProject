@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * This script allow to pause and unpause all audiosource in a go when player pause the game.
- * 
- * Author: Thomas Voce 
- */
+ *  Class: AudioSourcePauseManager
+ *  
+ *  Description:
+ *  This script allow to pause and unpause all audiosource in a go when player pause the game.
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class AudioSourcePauseManager : MonoBehaviour
 {
 

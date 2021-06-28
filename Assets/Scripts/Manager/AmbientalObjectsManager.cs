@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: AmbientalObjectsManager
+ *  
+ *  Description:
+ *  this manager handle ambiental object reset such as: Boulder and Destroyable wall
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class AmbientalObjectsManager : MonoBehaviour, IGameManager
 {
     public ManagerStatus status { get; private set; }
@@ -15,6 +24,7 @@ public class AmbientalObjectsManager : MonoBehaviour, IGameManager
         status = ManagerStatus.Started;
     }
 
+    // I reset this objects every time the player die
     public void ResetObjects()
     {
         foreach(GameObject o in resettables )

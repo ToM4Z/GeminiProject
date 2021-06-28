@@ -5,7 +5,7 @@ using System.Collections;
  *  Class: AttackTrigger
  *  
  *  Description:
- *  This is a script used to detect if the character's hand/foot hit other one
+ *  This is a script used to detect if the entity's hand/foot hit other one
  *  
  *  Author: Thomas Voce
 */
@@ -21,26 +21,30 @@ public class AttackTrigger : MonoBehaviour
     [SerializeField]
     public string collisionTag = "Player";
 
+    Collider _collider;
 
     private void Start()
     {
         if (!(collisionTag.Equals("Player") || collisionTag.Equals("Enemy")))
             throw new System.Exception("Tag not valid");
+
+        _collider = GetComponent<Collider>();
     }
 
+    // entity enable the attack trigger only when he attacks
     public void EnableTrigger()
     {
-        GetComponent<Collider>().enabled = true;
+        _collider.enabled = true;
     }
 
     public void DisableTrigger()
     {
-        GetComponent<Collider>().enabled = false;
+        _collider.enabled = false;
         hitted = null;
         EnteredTrigger = false;
     }
 
-
+    // If I collide another entity with collisionTag, I register it and the entity will handles to call 'hit' method on it
     void OnTriggerEnter(Collider other)
     {
         if (other.isTrigger)

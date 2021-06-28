@@ -2,7 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AwakeEnemy : MonoBehaviour
+/*
+ *  Class: AwakeEnemyTrigger
+ *  
+ *  Description:
+ *  This script is used to awake enemies which are in INACTIVE status
+ *  
+ *  Author: Thomas Voce
+*/
+
+public class AwakeEnemyTrigger : MonoBehaviour
 {
     [SerializeField] List<AIEnemy> enemies;
 

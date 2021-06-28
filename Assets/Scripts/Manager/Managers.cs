@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
  *  Class: Managers
  *  
  *  Description:
  *  This manager starts all other managers.
  *  
- *  Author: Prof
+ *  Author: Carmelo Macrì 
+ *      (edited by:
+ *          Thomas Voce, 
+ *          Gianfranco Sapia: only ColletctablesManager
+ *      )
 */
 
 [RequireComponent(typeof(EnemiesManager))]
@@ -15,7 +20,6 @@ using UnityEngine;
 [RequireComponent(typeof(AudioManager))]
 [RequireComponent(typeof(CollectablesManager))]
 [RequireComponent(typeof(AmbientalObjectsManager))]
-//[RequireComponent(typeof())]
 public class Managers : MonoBehaviour
 {
     public static EnemiesManager Enemies { get; private set; }

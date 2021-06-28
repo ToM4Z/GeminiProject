@@ -1,6 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+
+/*
+ *  Class: ManagerStatus
+ *  
+ *  Description:
+ *  Enum of manager status
+ *  
+ *  Author: Carmelo Macrì (wrote by Thomas Voce)
+*/
 
 public enum ManagerStatus 
 {

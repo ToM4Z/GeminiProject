@@ -33,6 +33,7 @@ public class FOVDetection : MonoBehaviour
     private PlayerStatistics player;
     public Vector3 lastPlayerPositionKnown { get;  private set; }
 
+    // When Enemy is in WARNED status, his FOV can increase, this variables are used to reset FOV
     private float originVA, originVR;
 
     void Start()
@@ -52,7 +53,7 @@ public class FOVDetection : MonoBehaviour
             return isPlayerVisible = false;
         }
 
-        Vector3 myPosition = transform.position;                    // to avoid collisions with terrain, I move up the position check
+        Vector3 myPosition = transform.position; // to avoid collisions with terrain, I move up the position check
         myPosition.y += 0.5f;
         Collider[] targetsInViewRadius = Physics.OverlapSphere(myPosition, viewRadius, targetMask);
 
@@ -68,7 +69,6 @@ public class FOVDetection : MonoBehaviour
                     lastPlayerPositionKnown = player.transform.position;
                     return isPlayerVisible = true;
                 }
-                //print(hit.collider.gameObject.name);
             }
         }
         return isPlayerVisible = false;
@@ -107,15 +107,4 @@ public class FOVDetection : MonoBehaviour
         viewAngle = originVA;
         viewRadius = originVR;
     }
-
-
-    //public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal)
-    //{
-    //    if (!angleIsGlobal)
-    //    {
-    //        angleInDegrees += transform.eulerAngles.y;
-    //    }
-    //    return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-    //}
-
 }
