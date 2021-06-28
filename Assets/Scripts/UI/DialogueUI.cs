@@ -54,6 +54,8 @@ public class DialogueUI : MonoBehaviour
             }
         } else if (Input.GetButtonDown("Escape"))
         {
+            if (coroutine != null)
+                StopCoroutine(coroutine);
             StartCoroutine(DelayEnableInput());
             DialogueBox.SetActive(false);
         }
