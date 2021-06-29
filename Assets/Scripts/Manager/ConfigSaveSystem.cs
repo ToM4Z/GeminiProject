@@ -3,8 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+/*
+ *  Class: ConfigSaveSystem
+ *  
+ *  Description:
+ *  this manager handle the savesystem for the config of the game
+ *  
+ *  Author: Gianfranco Sapia
+*/
 public static class ConfigSaveSystem
 {
+    //A custom class is saved in a json
     public static void Save() {
         SaveObject saveObject = new SaveObject {
             soundVolume = GlobalVariables.SoundVolume,
@@ -14,6 +23,7 @@ public static class ConfigSaveSystem
         File.WriteAllText(Application.dataPath + "/config.txt",json);
     }
 
+    //A custom class is loaded from a json is the file exist
     public static void Load() {
         if (File.Exists(Application.dataPath + "/config.txt"))
         {
