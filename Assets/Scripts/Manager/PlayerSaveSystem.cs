@@ -14,6 +14,7 @@ using UnityEngine;
 
 public static class PlayerSaveSystem
 {
+    //A custom class is saved in a json
     public static void Save() {
         SaveObject saveObject = new SaveObject {
             lifes = GlobalVariables.PlayerLives,
@@ -24,6 +25,7 @@ public static class PlayerSaveSystem
         File.WriteAllText(Application.dataPath + "/player.txt",json);
     }
 
+    //A custom class is loaded from a json
     public static void Load() {
         if(File.Exists(Application.dataPath + "/player.txt")) {
             string saveString = File.ReadAllText(Application.dataPath + "/player.txt");
@@ -35,6 +37,7 @@ public static class PlayerSaveSystem
         }
     }
 
+    //Player progress to be saved
     private class SaveObject {
         public int lifes;
         public int[] scores;

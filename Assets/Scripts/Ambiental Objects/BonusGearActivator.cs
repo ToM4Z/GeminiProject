@@ -33,6 +33,7 @@ public class BonusGearActivator : MonoBehaviour
     {
         
     }
+    
     void OnTriggerEnter(Collider other) {
         //It will be activated only the first time that the player jumps under it
         anim.Play("BonusBlockActivation");
@@ -43,13 +44,18 @@ public class BonusGearActivator : MonoBehaviour
                 firstTime = false;
                 activationSFX.Play();
                 timerSFX.Play();
-                Destroy(timerSFX, timeStay);
+                StartCoroutine(PlaySound());
+                //Destroy(timerSFX, timeStay);
                 spawnBonusGears();
             }
         }
         
     }
 
+    private IEnumerator PlaySound(){
+        yield return new WaitForSeconds(timeStay);
+        timerSFX.Stop();
+    }
     public void spawnBonusGears(){
 
         //Activate a particle to make nicer the activation
