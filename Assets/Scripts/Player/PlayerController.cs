@@ -108,6 +108,8 @@ public class PlayerController : MonoBehaviour
     // I have different animation for the same actions and are choosen randomly
     private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
 
+    private readonly int AnimLayerBase = 0, AnimLayerArms = 2, AnimLayerAllDirection = 1;
+
     // When I in a cave, I can rotate player to all direction
     [HideInInspector]
     public bool rotateToDirection = false;
@@ -206,7 +208,7 @@ public class PlayerController : MonoBehaviour
     public void ActivateRotateToDirection(bool _activate)
     {
         rotateToDirection = _activate;
-        anim.SetLayerWeight(2, _activate ? 1 : 0);
+        anim.SetLayerWeight(AnimLayerAllDirection, _activate ? 1 : 0);
     }
 
     // dis/activate trail renderers 
@@ -274,7 +276,9 @@ public class PlayerController : MonoBehaviour
                     _vertSpeed = minFall;
 
                     // here I manage idles animation, If I do nothing, after 5 seconds, I perform one idle animation
-                    if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && anim.GetCurrentAnimatorStateInfo(1).IsName("Empty") && input == Vector3.zero)
+                    if (anim.GetCurrentAnimatorStateInfo(AnimLayerBase).IsName("Idle - Run H") && 
+                        anim.GetCurrentAnimatorStateInfo(AnimLayerArms).IsName("Empty") && 
+                        input == Vector3.zero)
                     {
                         idleTimer -= Time.deltaTime;
                         if (idleTimer <= 0)
@@ -289,8 +293,8 @@ public class PlayerController : MonoBehaviour
                         idleTimer = idleTime;
 
                     // if I move or attack, I stop animation
-                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && 
-                        (input != Vector3.zero || !anim.GetCurrentAnimatorStateInfo(1).IsName("Empty")))
+                    if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(AnimLayerBase).IsName("Idle "+idleAnimIndex) && 
+                        (input != Vector3.zero || !anim.GetCurrentAnimatorStateInfo(AnimLayerArms).IsName("Empty")))
                     {
                         idleAnimIndex = 0;
                         anim.Play("Idle - Run H");
@@ -604,7 +608,7 @@ public class PlayerController : MonoBehaviour
                 case Status.IDLE:   // if I'm in IDLE status
                     {
                         // If animation end, I stop attack
-                        if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
+                        if (!anim.GetCurrentAnimatorStateInfo(AnimLayerArms).IsName(comboAttacks[attackIndex]))
                         {
                             stopAttack();
                         }
@@ -621,7 +625,7 @@ public class PlayerController : MonoBehaviour
                     }
                 case Status.FALLING:   // same logic of before
                     {
-                        if (!anim.GetCurrentAnimatorStateInfo(0).IsName(comboAttacks[attackIndex]))
+                        if (!anim.GetCurrentAnimatorStateInfo(AnimLayerBase).IsName(comboAttacks[attackIndex]))
                         {
                             stopAttack();
                         }
@@ -638,7 +642,7 @@ public class PlayerController : MonoBehaviour
                 case Status.SLIDE:
                     {
                         // the slide will be stopped or here or by animation event
-                        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Slide"))
+                        if (!anim.GetCurrentAnimatorStateInfo(AnimLayerBase).IsName("Slide"))
                         {
                             StopSlide();
                         }

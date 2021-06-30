@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Managers">
+    <Position X="7" Y="11.25" Width="1.5" />
+    <AssociationLine Name="Enemies" Type="EnemiesManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="11.988" />
+        <Point X="8.75" Y="11.988" />
+        <Point X="8.75" Y="11" />
+        <Point X="8.125" Y="11" />
+        <Point X="8.125" Y="9.531" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Audio" Type="AudioManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="12.938" />
+        <Point X="12.75" Y="12.938" />
+        <Point X="12.75" Y="12.482" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="Collectables" Type="CollectablesManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="11.5" />
+        <Point X="5.688" Y="11.5" />
+        <Point X="5.688" Y="10.492" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="ResetSceneObjects" Type="AmbientalObjectsManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.5" Y="12.312" />
+        <Point X="10.5" Y="12.312" />
+        <Point X="10.5" Y="8.761" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAIAACAAAAAAAAAAEAAAAABAUAAAAAAEAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Manager\Managers.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Enemies" />
+      <Property Name="Respawn" />
+      <Property Name="Audio" />
+      <Property Name="Collectables" />
+      <Property Name="ResetSceneObjects" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="AudioManager">
+    <Position X="12" Y="6.5" Width="1.5" />
+    <AssociationLine Name="status" Type="ManagerStatus" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="12.75" Y="6.5" />
+        <Point X="12.75" Y="4.438" />
+        <Point X="8.75" Y="4.438" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AASBBAAAQACAAOAAABABABUACAAAIgAAiBAAICAAAkA=</HashCode>
+      <FileName>Assets\Scripts\Manager\AudioManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AmbientalObjectsManager">
+    <Position X="9.75" Y="6.5" Width="1.5" />
+    <AssociationLine Name="status" Type="ManagerStatus" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.5" Y="6.5" />
+        <Point X="10.5" Y="5.125" />
+        <Point X="8.75" Y="5.125" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAAAAAAAAAAAAACAAAAAIAAAIAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Manager\AmbientalObjectsManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CollectablesManager">
+    <Position X="5" Y="6.5" Width="1.5" />
+    <AssociationLine Name="status" Type="ManagerStatus" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.312" Y="6.5" />
+        <Point X="6.312" Y="6.125" />
+        <Point X="7.438" Y="6.125" />
+        <Point X="7.438" Y="5.239" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>IAQBAAAgAAIAAgAAIAQAgAAAAABAIAAAAACAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Manager\CollectablesManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EnemiesManager">
+    <Position X="7.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAgAAAAgAAAAAAAAAAAAAAIAABACAgAIAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Manager\EnemiesManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RespawnManager">
+    <Position X="2.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AFQBAAAAAgAAAAAAAAAAAAAAJBAAIAABAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Manager\RespawnManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="IGameManager">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Manager\IGameManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="status" />
+    </ShowAsAssociation>
+  </Interface>
+  <Enum Name="ManagerStatus">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAQAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Manager\ManagerStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
