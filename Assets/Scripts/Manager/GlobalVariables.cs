@@ -51,7 +51,9 @@ public static class GlobalVariables
     }
 
     // After player arrive to gameover screen, I reset lives to this variable
-    public static int PlayerLivesToReset = 3;
+    public static readonly int PlayerLivesToReset = 3;
+    // max HP to reset when player respawn
+    public static readonly int PlayerHPToReset = 3;
 
     // Actual Player lives
     private static int _playerLives = 3;
@@ -107,7 +109,7 @@ public static class GlobalVariables
             LEVEL_MUSICS[ ACTUAL_SCENE - 1 ]; 
     }
 
-    // list of indices of dialogues already triggered
+    // list of dialogue identifiers already triggered
     public static List<int> dialoguesAlreadyDone = new List<int>();
 
     public static bool isDialogueDone(int x) { return dialoguesAlreadyDone.Contains(x); }

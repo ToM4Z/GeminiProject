@@ -1,6 +1,16 @@
 using Cinemachine;
 using UnityEngine;
 
+/*
+ *  Class: DisableCamera
+ *  
+ *  Description:
+ *  This script is used to manage manually the Input Axis for the FreeLook camera
+ *  So, when receive ENABLE_INPUT message with value false, I disable the input for the camera
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class DisableCamera : MonoBehaviour, IResettable
 {
     private bool enableInput = true;

@@ -37,6 +37,7 @@ public class AttackTrigger : MonoBehaviour
         _collider.enabled = true;
     }
 
+    // entity disable the attack trigger when he finish to attack
     public void DisableTrigger()
     {
         _collider.enabled = false;
@@ -57,6 +58,7 @@ public class AttackTrigger : MonoBehaviour
         }
     }
 
+    // on trigger exit, I reset variables
     void OnTriggerExit(Collider other)
     {
         if (other.isTrigger)
