@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="UIManager">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <AssociationLine Name="blackFadeScreen" Type="BlackFadeScreen" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="4.75" Y="1.938" />
+        <Point X="3" Y="1.938" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="gameOverScreen" Type="GameOverScreen" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.25" Y="5.375" />
+        <Point X="8.875" Y="5.375" />
+        <Point X="8.875" Y="5.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.29" Y="0.085" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="hud" Type="HUDScript" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.75" Y="5.125" />
+        <Point X="2.5" Y="5.125" />
+        <Point X="2.5" Y="6" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="pauseMenu" Type="PauseMenu" FixedFromPoint="true">
+      <Path>
+        <Point X="5.562" Y="5.492" />
+        <Point X="5.562" Y="6" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="victoryScreen" Type="VictoryScreen" FixedToPoint="true">
+      <Path>
+        <Point X="6.25" Y="1.562" />
+        <Point X="8.25" Y="1.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AiQgAAhACCAAAAAABAAAAAAEGABAAMAgAAAAAAAIAGA=</HashCode>
+      <FileName>Assets\Scripts\UI\UIManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="blackFadeScreen" />
+      <Field Name="gameOverScreen" />
+      <Field Name="hud" />
+      <Field Name="pauseMenu" />
+      <Field Name="victoryScreen" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BlackFadeScreen">
+    <Position X="1.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAACAAAEAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\BlackFadeScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameOverScreen">
+    <Position X="8.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAACAgAAACBAKAAAAAAABAAAAAEAAQAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\UI\GameOverScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HUDScript">
+    <Position X="1.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAQImqAAgCBQAABAAAAAAAAABAAAABAAABAACA=</HashCode>
+      <FileName>Assets\Scripts\UI\HUDScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PauseMenu">
+    <Position X="4.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAIQCCAAAAAAAAAAAIFEAAABEkgACEQAAAAEhUU=</HashCode>
+      <FileName>Assets\Scripts\UI\PauseMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VictoryScreen">
+    <Position X="8.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAACAgAsACAAKIAABAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\UI\VictoryScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
