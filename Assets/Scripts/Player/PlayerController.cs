@@ -88,9 +88,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float crouchedHeightCollider;
     [SerializeField] private Vector3 crouchedCenterCollider;
 
-    // boolean used in level 2 to invert direction respect to camera
-    public bool InvertDirectionRespectToCamera = false;
-
     // particle of varius damage type
     [SerializeField] private GameObject burnFX, freezeFX;
     [SerializeField] private ParticleSystem hitFX;
@@ -111,7 +108,12 @@ public class PlayerController : MonoBehaviour
     // I have different animation for the same actions and are choosen randomly
     private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
 
+    // When I in a cave, I can rotate player to all direction
+    [HideInInspector]
     public bool rotateToDirection = false;
+
+    // in level 2, rotateToDirection will set on for all time
+    [SerializeField] private bool startWithRotateDirection = false;
 
     private void Start()
     {
@@ -128,7 +130,8 @@ public class PlayerController : MonoBehaviour
         footStepSoundJustPlayed[0] = false;
         footStepSoundJustPlayed[1] = false;
 
-        rotateToDirection = false;
+        if (startWithRotateDirection)
+            ActivateRotateToDirection(true);
         hitFX.Stop();
         idleTimer = idleTime;
         status = Status.IDLE;
@@ -146,7 +149,11 @@ public class PlayerController : MonoBehaviour
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
         // and I reset variables
-        rotateToDirection = false;
+        if (startWithRotateDirection)
+            ActivateRotateToDirection(true);
+        else
+            ActivateRotateToDirection(false);
+
         materialHandler.resetMaterials();
         SetNormalCollider();
         deathEvent = 0;
@@ -246,8 +253,6 @@ public class PlayerController : MonoBehaviour
 
         // if InvertDirectionRespectToCamera is true, I invert input on horizontal axis
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
-        if (InvertDirectionRespectToCamera)
-            input.x *= -1;
         Vector3 movement = input;
 
         bool isGrounded = checkIsGrounded();
@@ -320,7 +325,8 @@ public class PlayerController : MonoBehaviour
                     {
                         SetCrouchedCollider();
 
-                        if (GetAxis("Vertical") <= 0.3f)
+                        // if rotateDirection is enable, I can perform a slide to back 
+                        if( ! (GetAxis("Vertical") > 0.2f || (rotateToDirection && GetAxis("Vertical") < -0.2f)) )
                         {
                             anim.Play("Idle - Run H");
                             anim.SetBool("Crouch", true);
@@ -508,7 +514,7 @@ public class PlayerController : MonoBehaviour
         // If I move player, move player in base of camera look's direction 
         if(input.magnitude > 0)
         {
-            Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward * (InvertDirectionRespectToCamera ? -1 : 1), Vector3.up);
+            Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
             Quaternion rotationToCamera = Quaternion.LookRotation(projectCameraForward, Vector3.up);
 
             movement = rotationToCamera * movement;
