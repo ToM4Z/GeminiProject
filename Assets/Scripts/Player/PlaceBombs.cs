@@ -10,6 +10,7 @@ using UnityEngine;
  *  
  *  Author: Thomas Voce
 */
+
 public class PlaceBombs : MonoBehaviour
 {
     PlayerStatistics statistics;
@@ -24,6 +25,8 @@ public class PlaceBombs : MonoBehaviour
         statistics = PlayerStatistics.instance;
     }
 
+    // if I click UseObject button and I have almost one bomb and there isn't a bomb already placed 
+    // I place a bomb in front of player
     void Update()
     {
         if (canPlaceBomb() && player.GetButtonDown("UseObject") && statistics.bombCount > 0 && lastBomb == null)
@@ -37,6 +40,7 @@ public class PlaceBombs : MonoBehaviour
         }
     }
 
+    // I can place a bomb only if I'm in the following status
     private bool canPlaceBomb()
     {
         return player.status == PlayerController.Status.IDLE

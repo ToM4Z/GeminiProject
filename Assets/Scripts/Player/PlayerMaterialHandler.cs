@@ -5,19 +5,20 @@ using UnityEngine;
  *  Class: PlayerMaterialHandler
  *  
  *  Description:
- *  This script handles the player material to apply some cool effects to him.
+ *  This script handles the player material to apply some cool effects on him.
  *  
  *  Author: Thomas Voce
 */
 public class PlayerMaterialHandler : MonoBehaviour
 {
+    // this material are used to reset the materials at the end of an animation
     [SerializeField] private List<Material> originMaterials;
 
     private List<Material> materials = new List<Material>();
 
-    [SerializeField]
-    private Material burnMat, iceMat;
+    [SerializeField] private Material burnMat, iceMat;
 
+    // first of all, I load all materials of the player
     private void Start()
     {
         foreach(Renderer r in GetComponentsInChildren<Renderer>())
@@ -25,6 +26,7 @@ public class PlayerMaterialHandler : MonoBehaviour
                 materials.Add(m);
     }
 
+    // when player receive a BURN attack, I lerp materials with burn material
     public void burnMaterials()
     {
         foreach (Material m in materials)
@@ -33,6 +35,7 @@ public class PlayerMaterialHandler : MonoBehaviour
         }
     }
 
+    // when player receive a FROZEN attack, I lerp materials with frozen material
     public void frozenMaterials()
     {
         foreach (Material m in materials)
@@ -41,6 +44,7 @@ public class PlayerMaterialHandler : MonoBehaviour
         }
     }
 
+    // when player is in invulnerability state, I change the alpha materials
     public void setTransparencyAlpha(float alpha)
     {
         foreach (Material m in materials)
@@ -51,6 +55,7 @@ public class PlayerMaterialHandler : MonoBehaviour
         }
     }
 
+    // at the end of an animation, I reset the material copying properties from the original material
     public void resetMaterials()
     {
         for(int i = 0; i < materials.Count; ++i) 
@@ -62,6 +67,7 @@ public class PlayerMaterialHandler : MonoBehaviour
                 }
     }
 
+    // I have to change mode material (changing some property of the material) in order to apply transparency (change alpha)
     public void ToFadeMode()
     {
         foreach (Material m in materials)
@@ -69,6 +75,8 @@ public class PlayerMaterialHandler : MonoBehaviour
             ToFadeMode(m);
         }
     }
+
+    // this method is not more required because resetting the material, the opaque mode will be automatically resetted 
 
     //private static void ToOpaqueMode(Material _material)
     //{
@@ -79,6 +87,7 @@ public class PlayerMaterialHandler : MonoBehaviour
     //    _material.renderQueue = -1;
     //}
 
+    // change mode material to FADE manually
     private static void ToFadeMode(Material _material)
     {
         _material.SetOverrideTag("RenderType", "Transparent");
@@ -87,19 +96,4 @@ public class PlayerMaterialHandler : MonoBehaviour
         _material.EnableKeyword("_ALPHABLEND_ON");
         _material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
     }
-
-    //private void Reset()
-    //{
-    //    resetMaterials();
-    //}
-
-    //private void Awake()
-    //{
-    //    Messenger.AddListener(GlobalVariables.RESET, Reset);
-    //}
-
-    //private void OnDestroy()
-    //{
-    //    Messenger.RemoveListener(GlobalVariables.RESET, Reset);
-    //}
 }

@@ -10,7 +10,8 @@ using UnityEngine.UI;
  *  Description:
  *  This script manages the Main Menu GUI.
  *  
- *  Author: Andrea De Seta
+ *  Author: Andrea De Seta,
+ *          Thomas Voce (some little settings)
 */
 public class MainMenu : MonoBehaviour
 {
@@ -30,11 +31,11 @@ public class MainMenu : MonoBehaviour
         ConfigSaveSystem.Load();
         Cursor.visible = true;
 
-        //Set the values of the sliders basing on the values volume of the enitre.
+        //Set the values of the sliders basing on the values volume of the enitre. (Thomas)
         soundSlider.value = GlobalVariables.SoundVolume;
         musicSlider.value = GlobalVariables.MusicVolume;
 
-        //If a save file doesn't exists, the Load Button will be interactable.
+        //If a save file doesn't exists, the Load Button will be interactable. (Thomas)
         if (!File.Exists(Application.dataPath + "/player.txt"))
         {
             loadGameButton.interactable = false;
@@ -44,7 +45,7 @@ public class MainMenu : MonoBehaviour
     //New game starts a new game. It will overwrite the old saves.
     public void NewGame()
     {
-        PlayerSaveSystem.Save();    // resetto il salvataggio
+        PlayerSaveSystem.Save();    // I reset the savedata, if there is one (Thomas)
         LevelLoader.instance.LoadLevel(GlobalVariables.HUB_SCENE);
     }
 

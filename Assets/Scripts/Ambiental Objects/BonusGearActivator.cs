@@ -45,7 +45,6 @@ public class BonusGearActivator : MonoBehaviour
                 activationSFX.Play();
                 timerSFX.Play();
                 StartCoroutine(PlaySound());
-                //Destroy(timerSFX, timeStay);
                 spawnBonusGears();
             }
         }
@@ -56,6 +55,7 @@ public class BonusGearActivator : MonoBehaviour
         yield return new WaitForSeconds(timeStay);
         timerSFX.Stop();
     }
+
     public void spawnBonusGears(){
 
         //Activate a particle to make nicer the activation

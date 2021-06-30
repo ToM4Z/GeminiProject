@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 /*
  *  Class: PlayerInputModelController
  *  
@@ -11,17 +10,18 @@ using UnityEngine;
  *  
  *  Author: Thomas Voce
 */
+
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
     public enum Status
     {
-        IDLE,
-        CROUCH,
+        IDLE,       // still or in movement
+        CROUCH,     // still or in movement crouched
         FALLING,
         SLIDE,
         DEATH,
-        RESPAWN,
+        RESPAWN,    // is used as middle status between DEATH and IDLE, so, in that status, the update method will not perform and position will not be modify during that phase
         VICTORY
     }
 
@@ -36,21 +36,31 @@ public class PlayerController : MonoBehaviour
     public float minFall = -1.5f;
     public float gravity = -9.81f;
 
+    private float _vertSpeed;
+
+    // this variable disable user input 
     private bool enableInput = true;
 
+    // this variables define invulnerability period of time
     public bool Invulnerability { get; private set; } = false;
     [SerializeField] private float InvulnerabilityTime = 3f;
     private float invulnerabilityTimer = 0f;
 
     private CharacterController charController;
     private Animator anim;
-    private float _vertSpeed;
+
+    // direction where i performed slide and his actual speed
     private Vector3 directionSlide;
     private float actualSlideSpeed = 0f;
 
+    // is player performing an attack
     private bool attacking = false;
+
+    // index of which attack I performed
     private int attackIndex = 0;
     private string[] comboAttacks = { "Arms.Punch Left", "Arms.Punch Right", "Main.Air Attack"};
+
+    // the air attack have to be performed one time for jump
     private bool airAttackJustDone = false;
 
     private ControllerColliderHit _contact;
@@ -60,34 +70,46 @@ public class PlayerController : MonoBehaviour
     private PlayerMaterialHandler materialHandler;
     private DeathEvent deathEvent;
 
+    // follow target has to be de-parented by player when he fall in the vacuum
     [SerializeField] private GameObject followTarget;
+    // when respawn I have to reparent it to this go and replace it to the original position
     private Vector3 originFollowTargetPos;
 
+    // attack trigger that is actual activated
     private AttackTrigger armActualAttack = null;
     [SerializeField] private AttackTrigger[] hands, foots;
 
+    // trail renderer to be activated when quick movement are performed
     [SerializeField] private List<TrailRenderer> trails;
 
+    // when player will crouch I change character controller height
     private float heightCollider;
     private Vector3 centerCollider;
     [SerializeField] private float crouchedHeightCollider;
     [SerializeField] private Vector3 crouchedCenterCollider;
 
+    // boolean used in level 2 to invert direction respect to camera
     public bool InvertDirectionRespectToCamera = false;
 
+    // particle of varius damage type
     [SerializeField] private GameObject burnFX, freezeFX;
     [SerializeField] private ParticleSystem hitFX;
 
+    // audioclips
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] footStepSFX, missingHitSFX, boingSFX, hitSFX;
     [SerializeField] private AudioClip slideSFX, jumpSFX, landedSFX, mashedSFX, fall_vacuumSFX, burnSFX, freezeSFX;
     private bool[] footStepSoundJustPlayed = new bool[2];
 
+    // timer used to play different idle animation every 5 seconds 
     private readonly float idleTime = 5f;
     private float idleTimer = 0f;
     private int idleAnimIndex = 0;
-    private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
+    // i play different idle animation sequentially
     private int lastIdleAnimPlayed = 0;
+
+    // I have different animation for the same actions and are choosen randomly
+    private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
 
     private void Start()
     {
@@ -110,15 +132,17 @@ public class PlayerController : MonoBehaviour
         _vertSpeed = minFall;
     }
 
+    // when player must be reset
     private void Reset()
     {
+        // If I was dead by falling in vacuum, I re-parent follow target to me
         if (deathEvent == DeathEvent.FALLED_IN_VACUUM)
         {
             followTarget.transform.SetParent(this.transform);
             followTarget.transform.localPosition = originFollowTargetPos;
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
-
+        // and I reset variables
         materialHandler.resetMaterials();
         SetNormalCollider();
         deathEvent = 0;
@@ -127,6 +151,9 @@ public class PlayerController : MonoBehaviour
         idleAnimIndex = lastIdleAnimPlayed = 0;
         anim.Play("Idle - Run H");
         idleTimer = idleTime;
+
+        // finally, I wait one second before pass to IDLE state,
+        // in this way, RespawnManager can reset player position without this update method change position too
         status = Status.RESPAWN;
         StartCoroutine(Respawn());
     }
@@ -149,33 +176,50 @@ public class PlayerController : MonoBehaviour
         return enableInput ? Input.GetAxis(button) : 0;
     }
 
+    // reset normal character controller collider size
     private void SetNormalCollider()
     {
         charController.height = heightCollider;
         charController.center = centerCollider;
     }
 
+    // set character controller collider size for crouched status
     private void SetCrouchedCollider()
     {
         charController.height = crouchedHeightCollider;
         charController.center = crouchedCenterCollider;
     }
 
+
+    // dis/activate trail renderers 
     private void SetTrailOnOff(bool b)
     {
         foreach (TrailRenderer t in trails)
             t.enabled = b;
     }
 
+    // this method had to do ground detection because when i open pause, the charController
+    // not detect ground more. Unfortunately, this method lock player jump on platform movement, so I removed this check
+    private bool checkIsGrounded()
+    {
+        return charController.isGrounded;
+        //if (charController.isGrounded)
+        //    return true;
+        //return Physics.Raycast(transform.position, Vector3.down, out _, 0.0175f, LayerMask.GetMask("Static", "Default"));
+    }
+
     private void Update()
     {
-        if (status == Status.RESPAWN || status == Status.VICTORY || GlobalVariables.isPaused) return;
+        // if I'm in other status or the game is in pause or I'm in particular type of death, I don't execute update
+        if (
+            status == Status.RESPAWN || 
+            status == Status.VICTORY || 
+            GlobalVariables.isPaused ||
+                (status == Status.DEATH && (deathEvent == DeathEvent.FROZEN || deathEvent == DeathEvent.BURNED))
+            ) return;
 
-        if (status == Status.DEATH &&
-            (deathEvent == DeathEvent.FROZEN || deathEvent == DeathEvent.BURNED))
-            return;
-
-        if (Invulnerability)
+        // if I'm Invulnerable, I make transparency animation
+        if (Invulnerability && invulnerabilityTimer > 0)
         {
             invulnerabilityTimer -= Time.deltaTime;
             materialHandler.setTransparencyAlpha(Mathf.PingPong(Time.time, 0.5f) / 0.5f);
@@ -189,14 +233,18 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // if InvertDirectionRespectToCamera is true, I invert input on horizontal axis
         Vector3 input = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
         if (InvertDirectionRespectToCamera)
             input.x *= -1;
         Vector3 movement = input;
 
+        bool isGrounded = checkIsGrounded();
+
+        // update animation variable 
         anim.SetFloat("MoveV", movement.z, 1f, Time.deltaTime * 10f);
         anim.SetFloat("MoveH", movement.x, 1f, Time.deltaTime * 10f);
-        anim.SetBool("IsOnGround", charController.isGrounded);
+        anim.SetBool("IsOnGround", isGrounded);
         PlayFootStepSound();
 
         checkAttack();
@@ -209,6 +257,7 @@ public class PlayerController : MonoBehaviour
 
                     _vertSpeed = minFall;
 
+                    // here I manage idles animation, If I do nothing, after 5 seconds, I perform one idle animation
                     if (anim.GetCurrentAnimatorStateInfo(0).IsName("Idle - Run H") && anim.GetCurrentAnimatorStateInfo(1).IsName("Empty") && input == Vector3.zero)
                     {
                         idleTimer -= Time.deltaTime;
@@ -223,6 +272,7 @@ public class PlayerController : MonoBehaviour
                     else
                         idleTimer = idleTime;
 
+                    // if I move or attack, I stop animation
                     if (idleAnimIndex != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Idle "+idleAnimIndex) && 
                         (input != Vector3.zero || !anim.GetCurrentAnimatorStateInfo(1).IsName("Empty")))
                     {
@@ -230,7 +280,8 @@ public class PlayerController : MonoBehaviour
                         anim.Play("Idle - Run H");
                     }
 
-                    if (!charController.isGrounded)
+                    // if I'm not touching ground, I'm falling
+                    if (!isGrounded)
                     {
                         anim.Play("Falling");
                         stopAttack();
@@ -240,6 +291,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // If press Jump, player jump
                     if (GetButtonDown("Jump"))
                     {
                         _vertSpeed = jumpSpeed;
@@ -252,6 +304,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // if press crouch while move towards front, I perform a slide, otherwise I crouch
                     if (GetButtonDown("Crouch"))
                     {
                         SetCrouchedCollider();
@@ -288,7 +341,8 @@ public class PlayerController : MonoBehaviour
 
                     _vertSpeed = minFall;
 
-                    if (!charController.isGrounded)
+                    // if I'm not touching ground, I'm falling
+                    if (!isGrounded)
                     {
                         SetNormalCollider();
                         anim.Play("Falling");
@@ -299,6 +353,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // If press Jump, player jump
                     if (GetButtonDown("Jump"))
                     {
                         SetNormalCollider();
@@ -312,6 +367,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // If press crouch, player stand up
                     if (GetButtonDown("Crouch"))
                     {
                         SetNormalCollider();
@@ -321,6 +377,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // If press attack, player stand up and attack
                     if (GetButtonDown("Attack"))
                     {
                         SetNormalCollider();
@@ -335,17 +392,21 @@ public class PlayerController : MonoBehaviour
                 }
             case Status.FALLING:
                 {
-                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed); /// 1.5f;
+                    movement = Vector3.ClampMagnitude(movement * playerSpeed, playerSpeed);
 
                     _vertSpeed += gravity * 5 * Time.deltaTime;
                     if (_vertSpeed < terminalVelocity)
                         _vertSpeed = terminalVelocity;
 
-
-                    if (charController.isGrounded)
+                    // if I touch ground
+                    if (isGrounded)
                     {
+                        // stop air attack (if he was doing it)
                         stopAttack();
 
+                        // If I landed on an trampoline, I rejump higher
+                        // If I landed on an enemy, I hit him and rejump
+                        // otherwise I landed
                         string layer = "";
                         if(_contact != null)
                             layer = LayerMask.LayerToName(_contact.gameObject.layer);
@@ -377,6 +438,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // if I attack, I start air attack
                     if (GetButtonDown("Attack"))
                         attack(status);
 
@@ -384,13 +446,16 @@ public class PlayerController : MonoBehaviour
                 }
             case Status.SLIDE:
                 {
+                    // decrease slide speed
                     actualSlideSpeed = Mathf.Lerp(actualSlideSpeed, 0f, 4f * Time.deltaTime);
 
                     _vertSpeed = minFall;
 
-                    // I will change status from StopSlide method
+                    // I will change status normally (when animation finish) by StopSlide method
 
-                    if (!charController.isGrounded)
+
+                    // if I'm not touching ground, I'm falling
+                    if (!isGrounded)
                     {
                         StopSlide();
 
@@ -400,6 +465,7 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // If press Jump, player jump
                     if (GetButtonDown("Jump"))
                     {
                         StopSlide();
@@ -412,21 +478,23 @@ public class PlayerController : MonoBehaviour
                         break;
                     }
 
+                    // player move towards direction where slide began
                     movement = directionSlide * actualSlideSpeed;
 
                     break;
                 }
             case Status.DEATH:
                 {
+                    // In death status, if I wasn't falling in vacuum, I set vertSpeed to 0
                     if(deathEvent != DeathEvent.FALLED_IN_VACUUM)
                         _vertSpeed = 0;
                     break;
                 }
-
         }
 
         movement.y = _vertSpeed;
         
+        // If I move player, move player towards camera look's direction 
         if(input.magnitude > 0)
         {
             Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward * (InvertDirectionRespectToCamera ? -1 : 1), Vector3.up);
@@ -435,12 +503,15 @@ public class PlayerController : MonoBehaviour
 
             movement = rotationToCamera * movement;
         }
+        // move player
         movement *= Time.deltaTime;
         charController.Move(movement);
     }
 
+    // called by update method, when I press attack button
     private void attack(Status s)
     {
+        // If I'm already attacking, don't begin again
         if (attacking)
             return;
 
@@ -448,6 +519,7 @@ public class PlayerController : MonoBehaviour
 
         switch (s)
         {
+            // if I'm in idle status, I attack with one hand alternating 
             case Status.IDLE:
                 {
                     attackIndex = (attackIndex + 1) % (comboAttacks.Length - 1); // -1 because the last attack is the air attack
@@ -457,6 +529,7 @@ public class PlayerController : MonoBehaviour
                     PlayClip(ref missingHitSFX);
                     break;
                 }
+                // if I'm falling, I can start only air attack
             case Status.FALLING:
                 {
                     if (!airAttackJustDone)
@@ -468,6 +541,7 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 }
+                // Start slide attack
             case Status.SLIDE:
                 {
                     anim.Play("Slide");
@@ -481,6 +555,7 @@ public class PlayerController : MonoBehaviour
         attacking = true;
     }
 
+    // stop attack, called in update method or checkAttack
     private void stopAttack()
     {
         if (!attacking)
@@ -493,20 +568,22 @@ public class PlayerController : MonoBehaviour
         attacking = false;
     }
 
+    // check attack is called every frame in update method
     private void checkAttack()
     {
-        if (attacking)
+        if (attacking)  // If I'm attacking
         {
             switch (status)
             {
-                case Status.IDLE:
+                case Status.IDLE:   // if I'm in IDLE status
                     {
+                        // If animation end, I stop attack
                         if (!anim.GetCurrentAnimatorStateInfo(1).IsName(comboAttacks[attackIndex]))
                         {
                             stopAttack();
                         }
                         else
-                        {
+                        {   // I hand's AttackTrigger hit enemy, I hit it
                             if (hands[attackIndex].EnteredTrigger)
                             {
                                 if(hands[attackIndex].hitted.GetComponent<IHittable>().hit())
@@ -516,7 +593,7 @@ public class PlayerController : MonoBehaviour
 
                         break;
                     }
-                case Status.FALLING:
+                case Status.FALLING:   // same logic of before
                     {
                         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(comboAttacks[attackIndex]))
                         {
@@ -554,6 +631,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // when player die, I start the right animation, depending by deathEvent value
     private void OnDeath(DeathEvent deathEvent)
     {
         Invulnerability = true;
@@ -601,6 +679,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // when player win, he start a random win animation 
     public void OnVictory()
     {
         if (status == Status.VICTORY)
@@ -611,6 +690,7 @@ public class PlayerController : MonoBehaviour
         status = Status.VICTORY;
     }
 
+    // this method allow to check the y position of the player foot and, If they just lean foot on the ground, I play footstep clip
     private void PlayFootStepSound()
     {
         if(status == Status.IDLE || status == Status.CROUCH)
@@ -626,11 +706,13 @@ public class PlayerController : MonoBehaviour
                         footStepSoundJustPlayed[i] = false;
     }
 
+    // return the object where I stay on
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _contact = hit;
     }
 
+    // If player get hurt, start invulnerability timer and play hurt animation depending by deathEvent value
     public void Hurt(DeathEvent deathEvent)
     {
         Invulnerability = true;
@@ -677,11 +759,13 @@ public class PlayerController : MonoBehaviour
         Messenger.RemoveListener(GlobalVariables.RESET, Reset);
     }
 
+    // when receive enable input message, I enable or disable input
     private void EnableInput(bool b)
     {
         enableInput = b;
     }
 
+    // method called by animation event in slide animation
     public void StopSlide()
     {
         stopAttack();

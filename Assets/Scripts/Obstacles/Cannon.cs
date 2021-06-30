@@ -60,7 +60,6 @@ public class Cannon : MonoBehaviour
                 GameObject hitObject = hit.transform.gameObject;
                 Debug.Log(hit.collider.gameObject.name);
                     if (hitObject.GetComponent<PlayerStatistics>()) {
-                        //If 
                         if (canShoot){             
                             Shoot();
                         }

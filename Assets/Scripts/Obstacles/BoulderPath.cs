@@ -10,7 +10,7 @@ using PathCreation;
  *  Description:
  *  Script to handle the boulder that chase the player in the level 2  
  *  
- *  Author: Gianfranco Sapia
+ *  Author: Gianfranco Sapia, Thomas Voce
 */
 public class BoulderPath : MonoBehaviour, IResettable
 {
@@ -52,7 +52,7 @@ public class BoulderPath : MonoBehaviour, IResettable
         endpoint = pathCreator.path.GetPoint(pathCreator.path.NumPoints - 1);
     }
 
-    //The boulder will travel a distance and with the help of the PathCreator will set position and rotation untile it reach the endpoint
+    //The boulder will travel a distance and with the help of the PathCreator will set position and rotation until it reach the endpoint (Thomas, Gianfranco)
     void Update()
     {
         if (isActive)
@@ -67,7 +67,7 @@ public class BoulderPath : MonoBehaviour, IResettable
         }
     }
 
-    //If the player die, on its respawn the boulder will be resetted
+    //If the player die, on its respawn the boulder will be resetted (Thomas)
     public void Reset()
     {
         isActive = false;
@@ -77,7 +77,7 @@ public class BoulderPath : MonoBehaviour, IResettable
     }
 
 
-    //When the boulder go forward along its path can kill every enemy that run in it and the player
+    //When the boulder go forward along its path can kill every enemy that run in it and the player (Gianfranco)
     private void OnTriggerEnter(Collider collision) {
         if(collision.gameObject.tag == "Player") {
             collision.GetComponent<PlayerStatistics>().hurt(DeathEvent.MASHED,true);

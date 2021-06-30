@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+ *  Class: DialogueScoreUI
+ *  
+ *  Description:
+ *  This script manages the DialogueScoreUI (available only in HUB scene)
+ *  This script is very similar to DialogueUI, but I needed a dialogueUI only to display scores (the logic is different)
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class DialogueScoreUI : MonoBehaviour
 {
     #region Singleton
@@ -31,6 +41,7 @@ public class DialogueScoreUI : MonoBehaviour
         textComponent.text = string.Empty;
     }
 
+    // if I press submit or cancel, I close dialogue score ui
     void Update()
     {
         if (!DialogueBox.activeSelf)
@@ -43,7 +54,7 @@ public class DialogueScoreUI : MonoBehaviour
                 ExitImg.SetActive(false);
                 DialogueBox.SetActive(false);
                 StartCoroutine(DelayEnableInput());
-                StartCoroutine(DelayEnableScoreUI());
+                StartCoroutine(DelayEnableScoreUI());   // I delayed disactive of this object because when player press submit he can reopen this dialogue
             }
             else
             {
@@ -55,11 +66,15 @@ public class DialogueScoreUI : MonoBehaviour
         }
     }
 
+    // when player is in the dialogueScoreTrigger, I show image
     public void ShowButton(bool active)
     {
         InteractImage.SetActive(active);
     }
 
+    // this method is called by DialogueScoreTrigger and pass level id,
+    // if the level score is differnt by zero, I display score
+    // otherwise, I display another message
     public void ShowScores(int level)
     {
         if (!activable)
@@ -76,6 +91,7 @@ public class DialogueScoreUI : MonoBehaviour
             coroutine = StartCoroutine(TypeLine(text = GlobalVariables.Dialogues[1]));
     }
 
+    // same animation of DialogueUI
     IEnumerator TypeLine(string x)
     {
         foreach (char c in x.ToCharArray())

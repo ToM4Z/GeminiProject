@@ -6,9 +6,12 @@ using UnityEngine;
  *  Class: PlayerStatisticsController
  *  
  *  Description:
- *  This script contains the player'statistics, the number of objects, and manage the invulnerability time.
+ *  This script contains the player's statistics, the number of objects
+ *  All variables contained here, are showed by HUD
+ *  This script is also used to access quickly with singleton to player
  *  
- *  Author: Thomas Voce, Andrea De Seta
+ *  Author: Thomas Voce (hp, lives, hurt and death method) 
+ *          Andrea De Seta (collectables managing)
 */
 public class PlayerStatistics : MonoBehaviour
 {
@@ -25,23 +28,27 @@ public class PlayerStatistics : MonoBehaviour
 
     #endregion
 
-
+    // actual hp
     private int hp;
-    [SerializeField] private int maxHP;
 
+    // counter of gears
     public int normalGearCount;
 
     //This variable is used to calculate the score, because the normal count will be setted to 0 when we have
     //100 of them and so we will avoid to calculate the final score with 0.
     public int normalGearCountToCalculateScore;
+
+    // counter of gear bonus
     public int bonusGearCount;
+
+    // counter of bombs
     public int bombCount;
 
     private PlayerController playerController;
 
     void Start()
     {
-        hp = maxHP;
+        hp = GlobalVariables.PlayerHPToReset;
         normalGearCount = 0;
         normalGearCountToCalculateScore = 0;
         bonusGearCount = 0;
@@ -49,9 +56,10 @@ public class PlayerStatistics : MonoBehaviour
         playerController = GetComponent<PlayerController>();
     }
 
+    // when player respawn, I reset HP and update HUD (T)
     private void Reset()
     {
-        hp = maxHP;
+        hp = GlobalVariables.PlayerHPToReset;
         UIManager.instance.GetHUD().updateHpBattery(hp);
     }
 
@@ -94,15 +102,21 @@ public class PlayerStatistics : MonoBehaviour
     public int getHP() { return hp; }
 
     public void increaseHP(){
-        if(hp + 1 <= maxHP)
+        if(hp + 1 <= GlobalVariables.PlayerHPToReset)
         {
             hp++;
             UIManager.instance.GetHUD().updateHpBattery(hp);
         }
     }
 
+    // if somebody calls this method with fatal = true, kill player instantly (T)
+    // otherwise, remove one HP and if HP = 0, player die
+    // before this, If I'm changing scene, I cannot receive damage
     public void hurt(DeathEvent deathEvent, bool fatal = false)
     {
+        if (LevelLoader.instance.isChangingScene)
+            return;
+
         if (!fatal)
         {
             if (playerController.Invulnerability || isDeath())
@@ -114,7 +128,7 @@ public class PlayerStatistics : MonoBehaviour
                 death(deathEvent);
             else
             {
-                print("HP: " + hp);
+                //print("HP: " + hp);
                 playerController.Hurt(deathEvent);
             }
 
@@ -123,15 +137,16 @@ public class PlayerStatistics : MonoBehaviour
             death(deathEvent);
     }
 
+    // when player die (T)
     private void death(DeathEvent deathEvent)
     {
         hp = 0;
         UIManager.instance.GetHUD().updateHpBattery(hp);
-        if (GlobalVariables.PlayerLives > 0)
+        if (GlobalVariables.PlayerLives > 0)        // if Lives > 0, decrease one Life and update HUD (T)
             decreaseLives();
         else
-            GlobalVariables.PlayerLives--;
-        print("DEATH BY " + deathEvent.ToString());
+            GlobalVariables.PlayerLives--;          // otherwise, this was the last life, so I decrease one life and send DEATH message, so the respawn manager can activate gameover screen (T)
+        //print("DEATH BY " + deathEvent.ToString());
         Messenger<DeathEvent>.Broadcast(GlobalVariables.DEATH, deathEvent);
         
     }

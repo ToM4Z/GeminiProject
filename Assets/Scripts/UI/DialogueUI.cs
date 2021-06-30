@@ -3,6 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/*
+ *  Class: DialogueUI
+ *  
+ *  Description:
+ *  This script manages DIalogue System
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class DialogueUI : MonoBehaviour
 {
 
@@ -24,6 +33,7 @@ public class DialogueUI : MonoBehaviour
 
     private int index, endIndex;
 
+    // disable all objects on start
     void Start()
     {
         DialogueBox.SetActive(false);
@@ -32,6 +42,9 @@ public class DialogueUI : MonoBehaviour
         textComponent.text = string.Empty;
     }
 
+    // if a dialogue is open and I click on submit,
+    // I stop text animation and with another click I go to the next string or I close dialogue
+    // If I click Escape (optionally) I immediately close dialogue
     void Update()
     {
         if (!DialogueBox.activeSelf)
@@ -56,11 +69,12 @@ public class DialogueUI : MonoBehaviour
         {
             if (coroutine != null)
                 StopCoroutine(coroutine);
-            StartCoroutine(DelayEnableInput());
+            StartCoroutine(DelayEnableInput()); // I delay enable input because player still receive input (is not in pause)
             DialogueBox.SetActive(false);
         }
     }
 
+    // If this is the last string I show the exit image, otherwise I show the next image
     private void ShowNextImg()
     {
         if (index == endIndex)
@@ -69,6 +83,7 @@ public class DialogueUI : MonoBehaviour
             NextImg.SetActive(true);
     }
 
+    // called by DialogueTrigger, it say me which strings I'd show to player
     public void StartDialogue(int startIndex, int endIndex)
     {
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, false);
@@ -80,14 +95,10 @@ public class DialogueUI : MonoBehaviour
         coroutine = StartCoroutine(TypeLine());
     }
 
+    // this coroutine apply a text animation
     IEnumerator TypeLine()
     {
-        return TypeLine(GlobalVariables.Dialogues[index]);
-    }
-
-    IEnumerator TypeLine(string x)
-    {
-        foreach (char c in x.ToCharArray())
+        foreach (char c in GlobalVariables.Dialogues[index].ToCharArray())
         {
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
@@ -95,6 +106,7 @@ public class DialogueUI : MonoBehaviour
         ShowNextImg();
     }
 
+    // if this was the last string I close Dialogue, otherwise I'll show the next string
     void NextLine()
     {
         if (index < endIndex)

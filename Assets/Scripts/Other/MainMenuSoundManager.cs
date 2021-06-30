@@ -2,6 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ *  Class: MainMenuSoundManager
+ *  
+ *  Description:
+ *  It's used in the main menu to change audio source volume in that scene
+ *  
+ *  Author: Thomas Voce
+*/
+
 public class MainMenuSoundManager : MonoBehaviour
 {
 

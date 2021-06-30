@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
         Messenger<bool>.Broadcast(GlobalVariables.TOGGLE_AUDIO_ON_OFF, true, MessengerMode.DONT_REQUIRE_LISTENER);
         GlobalVariables.isPaused = false;
-        ConfigSaveSystem.Save();
+        ConfigSaveSystem.Save();        // save configs because the player could modify volumes
         Cursor.visible = false;
     }
 
