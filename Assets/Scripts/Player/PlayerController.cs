@@ -111,6 +111,8 @@ public class PlayerController : MonoBehaviour
     // I have different animation for the same actions and are choosen randomly
     private readonly int maxIdleAnim = 2, maxDeathAnim = 2, maxVictoryAnim = 3;
 
+    public bool rotateToDirection = false;
+
     private void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -126,6 +128,7 @@ public class PlayerController : MonoBehaviour
         footStepSoundJustPlayed[0] = false;
         footStepSoundJustPlayed[1] = false;
 
+        rotateToDirection = false;
         hitFX.Stop();
         idleTimer = idleTime;
         status = Status.IDLE;
@@ -143,6 +146,7 @@ public class PlayerController : MonoBehaviour
             followTarget.transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
         // and I reset variables
+        rotateToDirection = false;
         materialHandler.resetMaterials();
         SetNormalCollider();
         deathEvent = 0;
@@ -190,6 +194,13 @@ public class PlayerController : MonoBehaviour
         charController.center = crouchedCenterCollider;
     }
 
+    // this method is called by ActivateVirtualCamera (when player enter in a cave), player rotate towards direction
+    // and I change layer weight in animator because animation have to be ever use 'running' animation in all directions
+    public void ActivateRotateToDirection(bool _activate)
+    {
+        rotateToDirection = _activate;
+        anim.SetLayerWeight(2, _activate ? 1 : 0);
+    }
 
     // dis/activate trail renderers 
     private void SetTrailOnOff(bool b)
@@ -494,14 +505,23 @@ public class PlayerController : MonoBehaviour
 
         movement.y = _vertSpeed;
         
-        // If I move player, move player towards camera look's direction 
+        // If I move player, move player in base of camera look's direction 
         if(input.magnitude > 0)
         {
             Vector3 projectCameraForward = Vector3.ProjectOnPlane(Camera.main.transform.forward * (InvertDirectionRespectToCamera ? -1 : 1), Vector3.up);
             Quaternion rotationToCamera = Quaternion.LookRotation(projectCameraForward, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToCamera, 310f * Time.deltaTime);
 
             movement = rotationToCamera * movement;
+
+            // if rotate direction is true, I rotate player towards input direction
+            // otherwise I rotate player towards camera look's direction
+            if (rotateToDirection)
+            {
+                Quaternion rotateToMoveDirection = Quaternion.LookRotation(new Vector3(movement.x, 0, movement.z), Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotateToMoveDirection, 310f * Time.deltaTime);
+            }
+            else
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationToCamera, 310f * Time.deltaTime);
         }
         // move player
         movement *= Time.deltaTime;

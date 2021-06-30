@@ -8,9 +8,10 @@ using Cinemachine;
  *  
  *  Description:
  *  When player is inside this trigger, I change the main camera with another, this is useful
- *  in little are where the main camera is not adapt to rotate.
+ *  in little area where the main camera is not adapt to rotate.
  *  So, in that cases, I change main camera with a camera that show better the area where player is.
  *  This change is performed by setting an higher priority on this camera.
+ *  Moreover I use ActivateRotateToDirection so player is free to rotate in every direction
  *  
  *  Author: Thomas Voce
 */
@@ -23,6 +24,7 @@ public class ActivateVirtualCamera : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            other.GetComponent<PlayerController>().ActivateRotateToDirection(true);
             vrcam.Priority = 11;
         }
     }
@@ -31,6 +33,7 @@ public class ActivateVirtualCamera : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            other.GetComponent<PlayerController>().ActivateRotateToDirection(false);
             vrcam.Priority = 0;
         }
     }

@@ -9135,6 +9135,7 @@ MonoBehaviour:
   fall_vacuumSFX: {fileID: 8300000, guid: faac0f05685855b4daf866ae1d92d6a8, type: 3}
   burnSFX: {fileID: 8300000, guid: e07181b4f7283994a98dfc3fda1acc6a, type: 3}
   freezeSFX: {fileID: 8300000, guid: 2bb0e8cd37492494e936b4d3e9688d7f, type: 3}
+  rotateToDirection: 0
 --- !u!114 &2872015548208122909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9147,7 +9148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a303ebb45920a14c8a45d663c366c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 3
   normalGearCount: 0
   normalGearCountToCalculateScore: 0
   bonusGearCount: 0
