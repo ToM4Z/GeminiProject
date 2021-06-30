@@ -29,10 +29,13 @@ public class DialogueTrigger : MonoBehaviour
     private bool IsConditionTrue() { return IsConditionTrue(condition); }
     private bool IsConditionTrue(int x)
     {
+        if (GlobalVariables.isDialogueDone(DialogueStart)) // I place this check here because player can trigger this go even before start (or awake) method is runned (strange but true)
+            return false;
+
         switch (x)
         {
             case 1: return GlobalVariables.scores.Keys.Count == 3;
-            default: return !GlobalVariables.isDialogueDone(DialogueStart); // I place this check here because player can trigger this go even before start (or awake) method is runned (strange but true)
+            default: return true;
         }
     }
 
