@@ -141,7 +141,7 @@ public static class GlobalVariables
         "Ma dato che non hai ottenuto abbastanza pezzi di ricambio, mi sa che dovrai rimanere li.",
         "Non verro' di certo io a riprenderti!",
         "Buona permanenza!!",
-        "Ah un'altra cosa... Il Gemini team ti ringrazia per aver giocato il gioco!",
+        "Ah un'altra cosa... Il Gemini team ti ringrazia per aver giocato!",
         "Crediti:\nThomas Voce\nGianfranco Sapia\nAndrea De Seta",
 
         // [16, 18] Level 1, D4, all'inizio
