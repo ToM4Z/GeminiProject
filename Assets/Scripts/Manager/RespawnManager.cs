@@ -45,6 +45,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
 
         if (GlobalVariables.PlayerLives >= 0)   
         {
+            GlobalVariables.isRespawning = true;
             UIManager.instance.GetBlackFadeScreen().startFade();
             StartCoroutine(Respawn());
         }
@@ -80,6 +81,7 @@ public class RespawnManager : MonoBehaviour, IGameManager
 
         Messenger.Broadcast(GlobalVariables.RESET, MessengerMode.DONT_REQUIRE_LISTENER);
         Messenger<bool>.Broadcast(GlobalVariables.ENABLE_INPUT, true);
+        GlobalVariables.isRespawning = false;
     }
 
     private void Awake()

@@ -40,6 +40,7 @@ public class PauseMenu : MonoBehaviour
         if(Input.GetButtonDown("Escape") 
             && !GlobalVariables.Win 
             && !GlobalVariables.GameOver 
+            && !GlobalVariables.isRespawning
             && !LevelLoader.instance.isChangingScene 
             && !DialogueUI.instance.DialogueBox.activeSelf
             && !(DialogueScoreUI.instance != null && DialogueScoreUI.instance.DialogueBox.activeSelf)

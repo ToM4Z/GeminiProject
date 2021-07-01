@@ -14,6 +14,7 @@ public static class GlobalVariables
 {
 
     public static bool isPaused = false;
+    public static bool isRespawning = false;
     public static bool Win = false;
     public static bool GameOver = false;
 

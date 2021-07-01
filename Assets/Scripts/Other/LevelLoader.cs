@@ -18,7 +18,7 @@ public class LevelLoader : MonoBehaviour
 
     // this variable is used by player because when I'm changing scene
     // player can receive damage
-    public bool isChangingScene = false;
+    public bool isChangingScene = true;
 
     public Animator transition;
     public float transitionTime = 1;
@@ -29,7 +29,19 @@ public class LevelLoader : MonoBehaviour
     {
         instance = this;        
         Cursor.visible = false;
-        GlobalVariables.GameOver = GlobalVariables.Win = false;
+        GlobalVariables.isRespawning = GlobalVariables.GameOver = GlobalVariables.Win = false;
+    }
+
+    private void Start()
+    {
+        StartCoroutine(ChangedScene());
+    }
+
+    // with this method, the player should not open pause during the entry animation
+    private IEnumerator ChangedScene()
+    {
+        yield return new WaitForSeconds(2f);
+        isChangingScene = false;
     }
 
     // this method is called by 'Retry' button of gameover and victory screen
