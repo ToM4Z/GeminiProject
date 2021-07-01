@@ -50,7 +50,7 @@ public class DialogueUI : MonoBehaviour
         if (!DialogueBox.activeSelf)
             return;
 
-        if (Input.GetButtonDown("Submit"))
+        if (Input.GetButtonDown("Submit") || Input.GetButtonDown("Jump"))
         {
             if(textComponent.text == GlobalVariables.Dialogues[index])
             {
