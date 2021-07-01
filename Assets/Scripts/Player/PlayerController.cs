@@ -89,8 +89,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 crouchedCenterCollider;
 
     // particle of varius damage type
-    [SerializeField] private GameObject burnFX, freezeFX;
-    [SerializeField] private ParticleSystem hitFX;
+    [SerializeField] private GameObject burnFX, freezeFX, hitFX;
+
+    // head where to attach hitFX
+    [SerializeField] private Transform head;
 
     // audioclips
     private AudioSource audioSource;
@@ -134,7 +136,6 @@ public class PlayerController : MonoBehaviour
 
         if (startWithRotateDirection)
             ActivateRotateToDirection(true);
-        hitFX.Stop();
         idleTimer = idleTime;
         status = Status.IDLE;
         _vertSpeed = minFall;
@@ -249,7 +250,6 @@ public class PlayerController : MonoBehaviour
                 Invulnerability = false;
                 invulnerabilityTimer = 0f;
                 materialHandler.resetMaterials();
-                hitFX.Stop();
             }
         }
 
@@ -754,7 +754,7 @@ public class PlayerController : MonoBehaviour
             case DeathEvent.HITTED:
             {
                 PlayClip(ref hitSFX);
-                hitFX.Play();
+                Instantiate(hitFX, head);
                 break;
             }
             case DeathEvent.BURNED:
