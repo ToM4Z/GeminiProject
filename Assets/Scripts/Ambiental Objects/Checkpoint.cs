@@ -18,6 +18,10 @@ public class Checkpoint : MonoBehaviour
     private Renderer myRenderer;
     private bool activated = false;
 
+    // this ID is needed to keep track of the last checkpoint activated
+    // In the scene, these id must start by 1; 0 is the initial position.
+    [SerializeField] int CheckPointID;
+
     private void Start()
     {
         myRenderer = GetComponentInChildren<Renderer>();
@@ -36,7 +40,7 @@ public class Checkpoint : MonoBehaviour
         Instantiate(Managers.Collectables.eventFX, pos, Quaternion.identity);
 
         Managers.Audio.PlayTin();
-        Managers.Respawn.setRespawn(transform.position, transform.rotation);
+        Managers.Respawn.setRespawn(CheckPointID, transform.position, transform.rotation);
     }
 
     private void OnTriggerEnter(Collider other)

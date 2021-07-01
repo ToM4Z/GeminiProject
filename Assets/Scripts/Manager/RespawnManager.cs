@@ -17,6 +17,10 @@ public class RespawnManager : MonoBehaviour, IGameManager
     private Vector3 respawnPos;
     private Quaternion respawnRot;
 
+    // is used to keep track of which last checkpoint is activated
+    // 0 is the initial player position
+    public int CheckPointID { get; private set; } = 0;
+
     public ManagerStatus status { get; private set; }
 
     public void Startup()
@@ -53,8 +57,9 @@ public class RespawnManager : MonoBehaviour, IGameManager
 
     // every time player arrive on a checkpoint, this method is called
     // here respawn position change and enemies and collectables until now are deleted
-    public void setRespawn(Vector3 pos, Quaternion rot)
+    public void setRespawn(int lastCheckpointID, Vector3 pos, Quaternion rot)
     {
+        CheckPointID = lastCheckpointID;
         respawnPos = pos;
         respawnRot = rot;
         Managers.Enemies.ClearEnemyDeadList();
