@@ -37,7 +37,7 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         //When I press "ESC", the Pause appears or diseappers
-        if(Input.GetButtonDown("Escape") && !GlobalVariables.Win && !GlobalVariables.GameOver){
+        if(Input.GetButtonDown("Escape") && !GlobalVariables.Win && !GlobalVariables.GameOver && !LevelLoader.instance.isChangingScene){
             if (GlobalVariables.isPaused)
                 Unpause();
             else
